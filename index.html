@@ -294,6 +294,71 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 /* ---- v3 additions ---- */
 .otsep{font:800 9px/12px var(--num);color:var(--r-gold);padding:0 4px;margin:0 2px;border-radius:3px;background:rgba(228,174,57,.14);align-self:center}
 .mapn.ot{color:var(--r-gold);font-weight:700}
+
+/* hub */
+.hub .hubhero{padding-top:44px}
+.hub .hubhero h1{font-size:clamp(46px,15vw,92px)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;padding:14px;border-radius:18px;min-height:118px;overflow:hidden;
+  background:radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,var(--acc) 26%,transparent),transparent 60%),var(--panel);box-shadow:inset 0 0 0 1px var(--line);transition:transform .15s var(--out),box-shadow .2s}
+.tile:hover{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--acc) 60%,transparent),0 12px 30px -18px var(--acc)}
+.tile:active{transform:scale(.97)}
+.tile:first-child{grid-column:1/-1;min-height:96px;flex-direction:row;align-items:center}
+.ticon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--acc) 18%,var(--raise));color:var(--acc);flex:none}
+.ticon svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tile b{display:block;font:800 18px/1.15 var(--display)}
+.tile small{display:block;color:var(--muted);font-size:12.5px;margin-top:3px;line-height:1.3}
+.backhub{position:absolute;top:14px;left:16px;z-index:2}
+.home .gname{color:var(--acc);font-size:clamp(38px,11vw,72px);text-wrap:balance}
+.nbaseg button{font:800 15px/1 var(--num)}
+@media (min-width:900px){.hub{display:block}.tiles{grid-template-columns:repeat(3,1fr)}.tile:first-child{grid-column:auto;flex-direction:column;align-items:flex-start;min-height:118px}
+  .hub .me{max-width:520px;margin:0 auto 6px}.hub .hubhero{padding-top:40px;margin-bottom:6px}}
+/* other-game match feed */
+.feed2 .dl2{font-size:13.5px;padding:4px 2px;border-bottom:1px solid var(--line);animation:slidein .25s var(--out)}
+.feed2 .dl2:first-child{font-weight:600}
+.feed2 .dl2 i{font-style:normal;color:var(--muted);font-size:12px;margin:0 3px}
+.hp{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.hp i{display:block;height:8px;border-radius:99px;background:var(--t);transition:width .25s ease;width:100%}
+.hp i+i{background:var(--ct);justify-self:end}
+/* reveals for the other games */
+.stage.reeling .rv{opacity:1}
+.rv{position:absolute;inset:0;z-index:3;border-radius:22px;overflow:hidden;pointer-events:none;display:grid;place-items:center;opacity:0}
+.stage.rs-walkout.reeling .pcard{visibility:visible;animation:silh calc(1100ms) linear both}
+@keyframes silh{0%,62%{filter:brightness(0) drop-shadow(0 0 18px var(--rc))}100%{filter:none}}
+.rv-walk{background:transparent}
+.rv-walk .flash{position:absolute;inset:-40%;background:radial-gradient(circle,rgba(255,255,255,.95),rgba(255,255,255,0) 60%);opacity:0;animation:flash .5s ease-out calc(var(--rd,0ms) + 560ms) both}
+@keyframes flash{0%{opacity:0;transform:scale(.4)}30%{opacity:1}100%{opacity:0;transform:scale(1.4)}}
+.rv-lights{background:#07090e;display:flex;gap:12px;justify-content:center;align-items:center}
+.rv-lights i{width:34px;height:34px;border-radius:50%;background:#2a0d0d;box-shadow:inset 0 0 0 3px #111;animation:redon .1s linear calc(var(--rd,0ms) + var(--d)) both,redoff .1s linear calc(var(--rd,0ms) + 900ms) both}
+.rv-lights i:nth-child(1){--d:80ms}.rv-lights i:nth-child(2){--d:230ms}.rv-lights i:nth-child(3){--d:380ms}.rv-lights i:nth-child(4){--d:530ms}.rv-lights i:nth-child(5){--d:680ms}
+@keyframes redon{to{background:#ff2b2b;box-shadow:0 0 22px #ff2b2b,inset 0 0 0 3px #400}}
+@keyframes redoff{to{background:#2a0d0d;box-shadow:inset 0 0 0 3px #111}}
+.rv-crate{background:#0a0d14}
+.crate{position:relative;width:150px;height:120px;animation:shake .5s ease-in-out var(--rd,0ms) 2}
+.crate .box{position:absolute;left:0;right:0;bottom:0;height:96px;border-radius:8px;background:repeating-linear-gradient(90deg,#7a4a22 0 28px,#6a3f1c 28px 30px);box-shadow:inset 0 0 0 4px #4a2a10}
+.crate .lid{position:absolute;left:-8px;right:-8px;top:0;height:26px;border-radius:6px;background:#8a5628;box-shadow:inset 0 0 0 4px #4a2a10;transform-origin:10% 100%;animation:lid .45s cubic-bezier(.5,0,.6,1) calc(var(--rd,0ms) + 640ms) both}
+@keyframes lid{to{transform:translate(-60px,-120px) rotate(-70deg);opacity:0}}
+.rv-asm{background:transparent}
+.rv-asm i{position:absolute;width:33.4%;height:33.4%;background:linear-gradient(135deg,color-mix(in srgb,var(--rc) 40%,#1a2131),#121722);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--rc) 60%,transparent);
+  animation:piece .5s var(--out) calc(var(--rd,0ms) + var(--k) * 55ms) both,fadeout .2s ease calc(var(--rd,0ms) + 980ms) forwards}
+@keyframes piece{from{transform:translate(var(--dx),var(--dy)) rotate(var(--rt)) scale(.6);opacity:0}}
+.rv-cap{background:#0a0d14}
+.cap{position:relative;width:110px;height:110px;animation:wobble .5s ease-in-out var(--rd,0ms) 1}
+.cap b{position:absolute;left:0;right:0;height:55px}
+.cap .top{top:0;border-radius:55px 55px 0 0;background:linear-gradient(#ff8fc1,#e2508f);box-shadow:inset 0 -3px 0 rgba(0,0,0,.25);animation:capup .45s var(--out) calc(var(--rd,0ms) + 560ms) both}
+.cap .bot{bottom:0;border-radius:0 0 55px 55px;background:linear-gradient(#f2f4f8,#c9cfdb);animation:capdown .45s var(--out) calc(var(--rd,0ms) + 560ms) both}
+@keyframes capup{to{transform:translateY(-140px) rotate(-25deg);opacity:0}}
+@keyframes capdown{to{transform:translateY(140px) rotate(15deg);opacity:0}}
+@keyframes wobble{25%{transform:rotate(-12deg)}50%{transform:rotate(10deg)}75%{transform:rotate(-6deg)}}
+.rv-door{background:transparent}
+.rv-door b{position:absolute;top:0;bottom:0;width:50.5%;background:repeating-linear-gradient(0deg,#0c1220 0 18px,#101a2e 18px 20px);box-shadow:inset 0 0 0 1px #24324d}
+.rv-door .dl{left:0;border-right:2px solid #ff3d55;box-shadow:inset 0 0 0 1px #24324d,6px 0 18px -4px #ff3d55;animation:doorl .5s cubic-bezier(.6,0,.3,1) calc(var(--rd,0ms) + 520ms) both}
+.rv-door .dr{right:0;border-left:2px solid #4cc3ff;box-shadow:inset 0 0 0 1px #24324d,-6px 0 18px -4px #4cc3ff;animation:doorr .5s cubic-bezier(.6,0,.3,1) calc(var(--rd,0ms) + 520ms) both}
+@keyframes doorl{to{transform:translateX(-102%)}}
+@keyframes doorr{to{transform:translateX(102%)}}
+.stage.rs-door .pcard,.stage.rs-assemble .pcard{visibility:visible}
+.stage.reeling.rs-door .pcard,.stage.reeling.rs-assemble .pcard{visibility:visible}
+.flagw{fill:#e9eef5;opacity:.35}
 /* map backgrounds */
 .mapbg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .mapbg .ml{position:absolute;inset:0;opacity:0;transition:opacity 1s ease}
@@ -310,7 +375,7 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 
 
 .avw{position:relative;display:inline-grid;flex:none}
-.ttag{position:absolute;right:-9px;bottom:-3px;font:800 9px/1 var(--num);letter-spacing:.02em;padding:3px 4px;border-radius:6px;background:#0b0f17;color:var(--ink);box-shadow:0 0 0 1.5px color-mix(in srgb,var(--rc,#8b97ad) 80%,transparent);white-space:nowrap}
+.ttag{position:absolute;right:-9px;bottom:-3px;font:800 9.5px/1 var(--display);letter-spacing:.02em;padding:3px 4px;border-radius:6px;background:#0b0f17;color:var(--ink);box-shadow:0 0 0 1.5px color-mix(in srgb,var(--rc,#8b97ad) 80%,transparent);white-space:nowrap}
 .avw.lg .ttag{font-size:11px;padding:4px 6px;right:-14px;bottom:0}
 .avw.sm .ttag{font-size:7px;padding:2px 3px;right:-7px;bottom:-3px}
 .avw.sm{margin-right:6px}
@@ -457,9 +522,10 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 <script>
 'use strict';
 /* ================= rules & data ================= */
-const BUDGET=20,SLOTS=5,GIVES=2,SKIPS=3,TURN_MS=15000,FLIP_MS=1600,SOLD_MS=1400,AUTO_MS=1500,REVEAL_MS=1100;
+const BUDGET=20,GIVES=2,SKIPS=3,TURN_MS=15000,FLIP_MS=1600,SOLD_MS=1400,AUTO_MS=1500,REVEAL_MS=1100;
 // [nick, role, country, HLTV Rating 3.0 for the player's time on that team (hltv.org team pages, Nov 2026)]
-const TEAMS=[
+let SLOTS=5;
+const TEAMS_CS2=[
  ['Vitality',[['apEX','IGL','FR',1.00],['ZywOo','AWP','FR',1.32],['flameZ','Entry','IL',1.14],['mezii','Rifler','GB',1.06],['ropz','Rifler','EE',1.16]]],
  ['MOUZ',[['torzsi','AWP','HU',1.12],['xertioN','IGL','IL',1.13],['Spinx','Rifler','IL',1.12],['xelex','Rifler','HU',1.06],['PR','Rifler','CZ',1.06]]],
  ['FURIA',[['yuurih','Rifler','BR',1.14],['KSCERATO','Rifler','BR',1.19],['FalleN','IGL','BR',0.97],['molodoy','AWP','KZ',1.15],['YEKINDAR','Entry','LV',1.09]]],
@@ -481,20 +547,20 @@ const TEAMS=[
  ['Chinggis Warriors',[['ROUX','Rifler','MN',1.06],['sk0R','Rifler','MN',1.14],['fury5k','Rifler','MN',0.98],['tikuak','Rifler','MN',1.17],['cool4st','Rifler','MN',1.03]]],
  ['5star',[['ariucle','Rifler','MN',0.95],['clouden','Rifler','MN',1.03],['hoolig4n','Rifler','MN',1.07],['NEUZ','Rifler','MN',1.04],['rate','Rifler','MN',1.08]]],
  ['The Huns',[['Bart4k','Rifler','MN',0.95],['controlez','Rifler','MN',1.00],['bexyz','Rifler','MN',0.97],['Cozen','Rifler','MN',0.99],['DarkMeister','Rifler','MN',1.00]]]];
-const P=[];TEAMS.forEach(([team,ps],ti)=>ps.forEach(a=>P.push({id:P.length,nick:a[0],team,role:a[1],cc:a[2],hl:a[3],hc:Math.round(a[3]*100)})));
+let P=[],TEAMS=[],PRIME=-1;   // set by useGame()
 // Rare card: s1mple at his 2021 peak (HLTV Top 20 of 2021: 1.41 rating). Shows up in PRIME_CHANCE of drafts.
 const PRIME_CHANCE=.05,GOAT_MS=2600;
-const PRIME=P.length;P.push({id:PRIME,nick:'s1mple',tag:'prime',team:'NAVI 2021',role:'AWP',cc:'UA',hl:1.41,hc:141,special:true});
-const pName=p=>p.nick+(p.special?' (prime)':'');
+const pName=p=>(p.en&&DB.last.lang==='en'?p.en:p.nick)+(p.special?' (prime)':'');
 // rarity colour from rating (CS2 item grades)
-const rarOf=hc=>hc>=125?'gold':hc>=115?'cov':hc>=110?'cla':hc>=105?'res':hc>=100?'mil':'ind';
+const rarOf=hc=>{const t=(GM||{rar:[125,115,110,105,100]}).rar;return hc>=t[0]?'gold':hc>=t[1]?'cov':hc>=t[2]?'cla':hc>=t[3]?'res':hc>=t[4]?'mil':'ind';};
 // neutral placeholder avatar (no real photos): silhouette tinted by rarity
 // short team tag shown on the avatar (text only, no real logos)
 const TAG={'Vitality':'VIT','MOUZ':'MZ','FURIA':'FUR','Spirit':'TS','Aurora':'AUR','Falcons':'FAL','NAVI':'NAVI','FUT':'FUT','The MongolZ':'MGZ','G2':'G2','PARIVISION':'PARI','Legacy':'LGC','Liquid':'TL','FaZe':'FAZE','9z':'9Z','BC.Game':'BCG','100 Thieves':'100T','TYLOO':'TYL','Chinggis Warriors':'CW','5star':'5S','The Huns':'HUNS','NAVI 2021':'NAVI'};
-const avatar=(p,size='')=>`<span class="avw ${size}" aria-hidden="true"><span class="ava ${size}"><svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7.5"/><path d="M5 40c1.5-9 7.5-14 15-14s13.5 5 15 14z"/></svg></span>${size==='xs'?'':`<i class="ttag">${TAG[p.team]||''}</i>`}</span>`;
+const avatar=(p,size='')=>`<span class="avw ${size}" aria-hidden="true"><span class="ava ${size}"><svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7.5"/><path d="M5 40c1.5-9 7.5-14 15-14s13.5 5 15 14z"/></svg></span>${size==='xs'?'':`<i class="ttag">${esc(GM?GM.tag(p):'')}</i>`}</span>`;
 const rcls=p=>'r-'+rarOf(p.hc)+(p.special?' goat':'');
 const miniCard=p=>`<div class="mini ${rcls(p)}">${avatar(p)}<b>${esc(pName(p))}</b><span class="r num">${fmtR(p.hl)}</span></div>`;
-const fmtR=x=>(+x).toFixed(2);
+const fmtR=x=>(+x).toFixed(GM?GM.dec:2);
+const fmtAvg=x=>(+x).toFixed(GM&&GM.dec?3:1);
 const DIFFS=['easy','mid','hard'];
 /* ================= language (Mongolian / English) ================= */
 const ord=n=>n+(n===1?'st':n===2?'nd':n===3?'rd':'th');
@@ -506,7 +572,7 @@ mn:{
   mCpu:'Компьютерын эсрэг',mCpuSub:'Хялбар, дунд, хэцүү түвшин',
   mLocal:'2 хүн нэг утсан дээр',mLocalSub:'Утсаа ээлжлэн дамжуулж үнэ хаялцана',
   mOnline:'Онлайн',mOnlineSub:'4 тэмдэгттэй кодоор найзтайгаа',
-  howTo:'Тоглох заавар',allPlayers:'Бүх тамирчид',
+  howTo:'Тоглох заавар',allPlayers:'Бүх карт',
   wins:'ялалт',losses:'ялагдал',streakShort:'дараалсан',
   needName:'Эхлээд нэрээ бичнэ үү',back:'Буцах',player:'Тоглогч',
   cpuLevel:'Компьютерын түвшин',start:'Эхлэх',
@@ -515,7 +581,7 @@ mn:{
   localFine:'Ээлжтэй хүний өнгө дэлгэц дээр тодорно. Утсаа түүнд өгөөрэй.',
   cpuName:'Компьютер',
   avgArrow:(a,b)=>`Таны дундаж ${a} → ${b}`,
-  mateHint:(team,n,pct)=>`${team}-ийн ${n} дахь тамирчин: +${pct}%`,
+  mateHint:(team,n,pct)=>`${team}: ${n} дахь нь, +${pct}%`,
   iglHint:pct=>`IGL: багийн бусад тамирчид +${pct}%`,
   iglHave:'Танд IGL аль хэдийн байгаа',
   clutchHint:pct=>`Андердог: ганцаараа үлдэхэд +${pct}%`,
@@ -555,6 +621,35 @@ mn:{
   rare:'Ховор карт',dropChance:p=>`гарах магадлал ${p}%`,noneFound:'Ийм тамирчин олдсонгүй',
   quitQ:'Тоглоомоос гарах уу?',quitSub:'Энэ draft дуусахгүй, ялалт ялагдал бүртгэгдэхгүй.',keep:'Үргэлжлүүлэх',
   code4:'4 тэмдэгттэй код оруулна уу',copied:'Холбоос хуулагдлаа',lang:'Хэл',
+  hubLede:'Тоглоомоо сонгоод $20-оор багаа цуглуул.',chooseGame:'Тоглоом сонгох',gameL:'Тоглоом',format:'Формат',
+  g_cs2:'CS2',g_f1:'F1',g_nba:'NBA',g_fifa:'FIFA',g_food:'Монгол хоол',g_anime:'Аниме',g_marvel:'Marvel',
+  gsub_cs2:n=>`${n} тамирчин, 5v5, HLTV rating`,gsub_f1:n=>`${n} нисгэгч, хүн бүр 2 нисгэгчтэй`,gsub_nba:n=>`${n} тоглогч, 3x3 ба 5x5, NBA 2K27`,
+  gsub_fifa:n=>`${n} тоглогч, 5v5, EA FC 27`,gsub_food:n=>`${n} хоол, 5v5, шүүгчид шийднэ`,gsub_anime:n=>`${n} дүр, 5v5 тулаан`,gsub_marvel:n=>`${n} баатар, 5v5 тулаан`,
+  lede_cs2:n=>`CS2-ын ${n} тамирчнаас $20-оор 5 хүнтэй баг цуглуулж, 13 раунд тоглуул.`,
+  lede_f1:n=>`${n} нисгэгчээс $20-оор 2 нисгэгчтэй баг бүрдүүлж, 15 тойргийн уралдаанд оруул.`,
+  lede_nba:n=>`${n} NBA тоглогчоос $20-оор 3x3 эсвэл 5x5 баг цуглуулж, тоглолт хийлгэ.`,
+  lede_fifa:n=>`${n} хөлбөмбөгчнөөс $20-оор 5 хүнтэй баг цуглуулж, 90 минут тоглуул.`,
+  lede_food:n=>`${n} монгол хоолноос $20-оор 5 хоолтой цэс бүрдүүлж, шүүгчдэд үнэлүүл.`,
+  lede_anime:n=>`${n} аниме дүрээс $20-оор 5 хүнтэй баг цуглуулж, 1v1 тулаанд оруул.`,
+  lede_marvel:n=>`${n} Marvel баатраас $20-оор 5 хүнтэй баг цуглуулж, 1v1 тулаанд оруул.`,
+  rl_cs2:'Rating',rl_f1:'OVR',rl_nba:'OVR',rl_fifa:'OVR',rl_food:'Амт',rl_anime:'Хүч',rl_marvel:'Хүч',
+  match_cs2:'Тоглолт',match_f1:'Уралдаан',match_nba:'Тоглолт',match_fifa:'Тоглолт',match_food:'Шүүлт',match_anime:'Тулаан',match_marvel:'Тулаан',
+  goal_cs2:'',goal_f1:'P1 25, P2 18, P3 15, P4 12 оноо',goal_nba:'Их оноо авсан нь ялна',goal_fifa:'Тэнцвэл пенальти',goal_food:'5 хоолноос 3-ыг нь хожсон нь ялна',goal_anime:'5 тулаанаас 3-ыг хожсон нь ялна',goal_marvel:'5 тулаанаас 3-ыг хожсон нь ялна',
+  feed_cs2:'',feed_f1:'Уралдааны явц',feed_nba:'Оноо авалт',feed_fifa:'Тоглолтын үйл явдал',feed_food:'Шүүгчдийн санал',feed_anime:'Тулааны явц',feed_marvel:'Тулааны явц',
+  ctag_meat:'МАХ',ctag_soup:'ШӨЛ',ctag_dairy:'ИДЭЭ',ctag_pastry:'ГУРИЛ',ctag_drink:'УНДАА',cat_meat:'Махан хоол',cat_soup:'Шөл',cat_dairy:'Цагаан идээ',cat_pastry:'Гурилан',cat_drink:'Ундаа',
+  side_H:'Баатар',side_V:'Хорон санаат',side_N:'Хоёрдмол',
+  ptsShort:'оноо',pensShort:'пен',lapN:(l,L)=>`${l}/${L} тойрог`,grid:'Гараа',lightsOut:'Гараа!',passes:'гүйцэж түрүүлэв',pits:'пит-стоп хийв',winsRace:'түрүүлэв',
+  assist:'дамжуулалт',saves:'хамгаалж авав, цохисон нь',halftime:'Завсарлага',fulltime:'Тоглолт дууслаа',penScored:'пенальти оруулав',penMissed:'пенальти алдав',pens:'Пенальти',
+  courseN:n=>`${n}-р хоол`,judgeN:n=>`Шүүгч ${n}`,winsCourse:'хожив',fightN:n=>`${n}-р тулаан`,winsFight:'ялав',
+  nbaNeed:r=>`Танд ${r} байхгүй`,nbaPG:'PG: алдаа багасна, шидэлт +2%',nbaC:'C: самбар, хамгаалалт сайжирна',
+  gkHave:'Танд хаалгач аль хэдийн байгаа',gkNeed:'Хаалгачгүй бол хаалга тань сул',foodNew:'Шинэ төрөл: цэс олон янз болно',
+  rulesCommon:['Хоёулаа $20 мөнгөтэй эхэлнэ. Карт нэг нэгээр гарч, ээлжлэн нээнэ.','Нээх ээлжтэй үедээ $1-ээр нээнэ эсвэл өрсөлдөгчдөө үнэгүй өгнө (2 удаа). Нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.','Мөнгө дуусвал өрсөлдөгч $0-оор өгнө. Нэг талын баг бүрдвэл нөгөө нь $1-ээр авна эсвэл алгасна. Ээлж бүрт 15 секунд.'],
+  rules_f1:['Хүн бүр 2 нисгэгчтэй баг бүрдүүлнэ. Rating нь 2026 оны улирлын оноогоор тооцсон.','Дөрвөн машин 15 тойрог уралдана: гараа, пит-стоп, гүйцэж түрүүлэлт, ховор DNF бий. Хурд нь rating-ээс шалтгаална.','Байр: P1 25, P2 18, P3 15, P4 12 оноо. Нийт оноо их баг ялна. Нэг багийн 2 нисгэгч +3%.'],
+  rules_nba:['3x3 бол 3 тоглогч, 5x5 бол 5 тоглогч. Rating нь NBA 2K27.','5x5: 4 үе, тэнцвэл нэмэлт цаг. 3x3: 21 оноо түрүүлж авсан нь ялна, дотроос 1, гаднаас 2 оноо.','Үүрэг чухал: PG алдааг багасгаж шидэлтийг сайжруулна, C самбар болон хамгаалалтыг сайжруулна. Шидэгчийг rating болон үүргээр сонгоно.'],
+  rules_fifa:['5 хүнтэй баг (futsal шиг). Rating нь EA FC 27.','90 минутад довтолгоо бүрийн боломжийг довтлогч, хагас хамгаалагчийн хүч хамгаалалтынхтай харьцуулж тооцно. Хаалгачгүй бол хамгийн сул тоглогч хаалга хамгаална.','Тэнцвэл пенальти цохино. Нэг клубын тоглогчид +3% ба түүнээс дээш.'],
+  rules_food:['5 хоолтой цэс бүрдүүлнэ. Амтны оноо нь Draftly-н үнэлгээ.','Хоолнууд дарааллаараа нэг нэгээрээ өрсөлдөнө. 5 шүүгч тус бүр санал өгнө, амт сайн нь илүү санал авах магадлалтай.','Цэс олон янз байвал (4-5 төрөл) хоол бүрт нэмэлт оноо. 5 хоолноос 3-ыг хожсон нь ялна.'],
+  rules_anime:['5 дүртэй баг. Хүчний үнэлгээ нь Draftly-н фэн үнэлгээ.','Дүрүүд дарааллаараа 1v1 тулалдана. Цохилт бүрийн магадлалыг хүчээр тооцно, заримдаа CRIT гарна.','5 тулаанаас 3-ыг хожсон нь ялна. Нэг цувралын дүрүүд +3% ба түүнээс дээш.'],
+  rules_marvel:['5 баатартай баг. Хүчний үнэлгээ нь Draftly-н фэн үнэлгээ.','Баатрууд дарааллаараа 1v1 тулалдана. Цохилт бүрийн магадлалыг хүчээр тооцно, заримдаа CRIT гарна.','5 тулаанаас 3-ыг хожсон нь ялна. Нэг багийн (Avengers, X-Men гэх мэт) баатрууд +3% ба түүнээс дээш.'],
   rules:x=>[
     'Хоёулаа $20 мөнгөтэй, 5 хоосон суудалтай эхэлнэ. Мөнгө нь виртуал.',
     'Тамирчдын карт санамсаргүй дарааллаар нэг нэгээр гарна. Карт бүрийг та хоёр ээлжлэн нээнэ.',
@@ -577,7 +672,7 @@ en:{
   mCpu:'Vs computer',mCpuSub:'Easy, medium or hard',
   mLocal:'2 players, 1 phone',mLocalSub:'Pass the phone and bid in turns',
   mOnline:'Online',mOnlineSub:'Play a friend with a 4-letter code',
-  howTo:'How to play',allPlayers:'All players',
+  howTo:'How to play',allPlayers:'All cards',
   wins:'wins',losses:'losses',streakShort:'streak',
   needName:'Type your name first',back:'Back',player:'Player',
   cpuLevel:'Computer level',start:'Start',
@@ -586,7 +681,7 @@ en:{
   localFine:'The player whose turn it is lights up. Hand them the phone.',
   cpuName:'Computer',
   avgArrow:(a,b)=>`Your average ${a} → ${b}`,
-  mateHint:(team,n,pct)=>`${ord(n)} ${team} player: +${pct}%`,
+  mateHint:(team,n,pct)=>`${team} #${n}: +${pct}%`,
   iglHint:pct=>`IGL: teammates +${pct}%`,
   iglHave:'You already have an IGL',
   clutchHint:pct=>`Underdog: +${pct}% when last alive`,
@@ -626,6 +721,35 @@ en:{
   rare:'Rare card',dropChance:p=>`drop chance ${p}%`,noneFound:'No players found',
   quitQ:'Quit the game?',quitSub:'This draft will not finish and will not count as a win or loss.',keep:'Keep playing',
   code4:'Enter a 4-character code',copied:'Link copied',lang:'Language',
+  hubLede:'Pick a game and build your team with $20.',chooseGame:'Choose a game',gameL:'Game',format:'Format',
+  g_cs2:'CS2',g_f1:'F1',g_nba:'NBA',g_fifa:'FIFA',g_food:'Mongolian food',g_anime:'Anime',g_marvel:'Marvel',
+  gsub_cs2:n=>`${n} pros, 5v5, HLTV rating`,gsub_f1:n=>`${n} drivers, 2 per team`,gsub_nba:n=>`${n} players, 3x3 and 5x5, NBA 2K27`,
+  gsub_fifa:n=>`${n} players, 5v5, EA FC 27`,gsub_food:n=>`${n} dishes, 5v5, judged`,gsub_anime:n=>`${n} characters, 5v5 battles`,gsub_marvel:n=>`${n} heroes, 5v5 battles`,
+  lede_cs2:n=>`Build a 5-player team from ${n} CS2 pros with $20, then play it out to 13 rounds.`,
+  lede_f1:n=>`Sign 2 of ${n} drivers with $20 and send them into a 15-lap race.`,
+  lede_nba:n=>`Build a 3x3 or 5x5 team from ${n} NBA players with $20 and play the game.`,
+  lede_fifa:n=>`Build a 5-a-side team from ${n} footballers with $20 and play 90 minutes.`,
+  lede_food:n=>`Put together a 5-dish menu from ${n} Mongolian dishes with $20 and let the judges taste it.`,
+  lede_anime:n=>`Build a 5-character team from ${n} anime characters with $20 and fight 1v1.`,
+  lede_marvel:n=>`Build a 5-hero team from ${n} Marvel heroes with $20 and fight 1v1.`,
+  rl_cs2:'Rating',rl_f1:'OVR',rl_nba:'OVR',rl_fifa:'OVR',rl_food:'Taste',rl_anime:'Power',rl_marvel:'Power',
+  match_cs2:'Match',match_f1:'Race',match_nba:'Game',match_fifa:'Match',match_food:'Tasting',match_anime:'Battle',match_marvel:'Battle',
+  goal_cs2:'',goal_f1:'P1 25, P2 18, P3 15, P4 12 points',goal_nba:'Most points wins',goal_fifa:'Penalties if level',goal_food:'Win 3 of 5 dishes',goal_anime:'Win 3 of 5 fights',goal_marvel:'Win 3 of 5 fights',
+  feed_cs2:'',feed_f1:'Race feed',feed_nba:'Scoring',feed_fifa:'Match events',feed_food:'Judges’ votes',feed_anime:'Fight feed',feed_marvel:'Fight feed',
+  ctag_meat:'MEAT',ctag_soup:'SOUP',ctag_dairy:'DAIRY',ctag_pastry:'BAKE',ctag_drink:'DRINK',cat_meat:'Meat dish',cat_soup:'Soup',cat_dairy:'Dairy',cat_pastry:'Pastry',cat_drink:'Drink',
+  side_H:'Hero',side_V:'Villain',side_N:'Antihero',
+  ptsShort:'pts',pensShort:'pens',lapN:(l,L)=>`Lap ${l}/${L}`,grid:'Grid',lightsOut:'Lights out!',passes:'passes',pits:'pits',winsRace:'wins the race',
+  assist:'assist',saves:'saves from',halftime:'Half-time',fulltime:'Full-time',penScored:'scores the penalty',penMissed:'misses the penalty',pens:'Penalties',
+  courseN:n=>`Dish ${n}`,judgeN:n=>`Judge ${n}`,winsCourse:'wins',fightN:n=>`Fight ${n}`,winsFight:'wins',
+  nbaNeed:r=>`You have no ${r}`,nbaPG:'PG: fewer turnovers, +2% shooting',nbaC:'C: rebounds and defense',
+  gkHave:'You already have a goalkeeper',gkNeed:'Without a goalkeeper your goal is weak',foodNew:'New type: a more varied menu',
+  rulesCommon:['You both start with $20. Cards come up one at a time and you take turns opening them.','On your turn, open at $1 or give the card to your opponent for free (twice per game). The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.','If you run out of money your opponent can hand you cards for $0. If one side is full, the other takes the card for $1 or skips it. 15 seconds per turn.'],
+  rules_f1:['Each of you signs 2 drivers. Ratings come from 2026 season points.','The four cars race 15 laps with a start, pit stops, overtakes and the odd DNF. Pace depends on rating.','P1 25, P2 18, P3 15, P4 12 points. Most team points wins. Two drivers from the same team get +3%.'],
+  rules_nba:['3x3 uses 3 players, 5x5 uses 5. Ratings are NBA 2K27.','5x5: four quarters, overtime if tied. 3x3: first to 21, 1 point inside and 2 outside.','Roles matter: a PG cuts turnovers and helps shooting, a C helps rebounds and defense. Shooters are picked by rating and role.'],
+  rules_fifa:['5-a-side teams. Ratings are EA FC 27.','Over 90 minutes, each attack’s chance comes from your forwards and midfield against their defense. Without a goalkeeper your weakest player goes in goal.','Penalties if level. Players from the same club get +3% and up.'],
+  rules_food:['Build a 5-dish menu. Taste scores are Draftly ratings.','Dishes face off in order. 5 judges each vote, and tastier dishes are more likely to get the vote.','A varied menu (4 or 5 types) adds bonus points to every dish. Win 3 of 5 dishes.'],
+  rules_anime:['5-character teams. Power ratings are Draftly fan ratings.','Characters fight 1v1 in order. Each hit’s chance comes from power, with the odd CRIT.','Win 3 of 5 fights. Characters from the same series get +3% and up.'],
+  rules_marvel:['5-hero teams. Power ratings are Draftly fan ratings.','Heroes fight 1v1 in order. Each hit’s chance comes from power, with the odd CRIT.','Win 3 of 5 fights. Heroes from the same team (Avengers, X-Men and so on) get +3% and up.'],
   rules:x=>[
     'You both start with $20 and 5 empty seats. The money is virtual.',
     'Player cards come up one at a time in random order. You take turns opening them.',
@@ -719,6 +843,62 @@ function setMap(key){
   requestAnimationFrame(()=>requestAnimationFrame(()=>nl.classList.add('in')));
   layers.forEach(l=>{if(l!==nl){l.classList.remove('in');setTimeout(()=>l.remove(),1100);}});
 }
+/* ================= themed backgrounds for the other games (original generic art) ================= */
+Object.assign(MAPCOL,{f1:'#ff4a3d',nba:'#ff8a2e',fifa:'#46d17a',food:'#ffb547',anime:'#ff7eb6',marvel:'#ff3d55'});
+Object.assign(MAPART,{
+  f1(){
+    const stand=(x,w,h)=>`M${x} ${GY}V${GY-h}L${x+w} ${GY-h-30}V${GY}Z`;
+    const far=stand(0,520,120)+stand(900,540,130)+bx(560,300,70);
+    const car=(x,y=GY-6)=>`M${x} ${y}h150l-6-14h-30l-10-12h-44l-8 12h-40l-14 6z`+`M${x+18} ${y}a14 14 0 1 0 28 0a14 14 0 1 0-28 0z`+`M${x+110} ${y}a14 14 0 1 0 28 0a14 14 0 1 0-28 0z`+`M${x+138} ${y-20}h22v-8h-22z`+`M${x-14} ${y-18}h16v-10h-16z`;
+    const near=bx(0,1440,8)+bx(560,10,170)+bx(860,10,170)+bx(540,350,34,GY-170)+car(260)+car(980)+bx(1250,6,190);
+    const lights=Array.from({length:5},(_,k)=>`<circle class="lit" cx="${600+k*62}" cy="${GY-187}" r="11"/>`).join('');
+    const flag=Array.from({length:12},(_,k)=>`<rect class="${(k+Math.floor(k/4))%2?'lit':'flagw'}" x="${1256+(k%4)*16}" y="${GY-190+Math.floor(k/4)*14}" width="16" height="14"/>`).join('');
+    const kerb=Array.from({length:36},(_,k)=>`<rect class="${k%2?'lit':'flagw'}" x="${k*40}" y="${GY-8}" width="40" height="5"/>`).join('');
+    return {far,near,extra:lights+flag+kerb,lit:''};
+  },
+  nba(){
+    const far=`M0 ${GY-110}Q720 ${GY-260} 1440 ${GY-110}V${GY}H0Z`;
+    const hoop=(x,flip)=>{const s=flip?-1:1;return `M${x} ${GY}V${GY-230}h${s*70}v8h${-s*62}V${GY}z`+`M${x+s*62} ${GY-290}h${s*14}v110h${-s*14}z`;};
+    const near=hoop(120,false)+hoop(1320,true)+bx(0,1440,10);
+    const net=(cx)=>`<path class="stk thin" d="M${cx-26} ${GY-226}h52M${cx-24} ${GY-226}l10 40M${cx} ${GY-226}v40M${cx+24} ${GY-226}l-10 40M${cx-16} ${GY-206}h32"/>`;
+    const ball=`<circle class="near" cx="720" cy="${GY-70}" r="58"/><path class="lit" style="opacity:.35;fill:none;stroke:var(--mc);stroke-width:4" d="M662 ${GY-70}h116M720 ${GY-128}v116M680 ${GY-112}q40 42 0 84M760 ${GY-112}q-40 42 0 84"/>`;
+    const lights=Array.from({length:9},(_,k)=>`<circle class="lit" cx="${180+k*135}" cy="${GY-205+Math.abs(4-k)*12}" r="5"/>`).join('');
+    return {far,near,extra:net(229)+net(1211)+ball+lights,lit:''};
+  },
+  fifa(){
+    const stand=`M0 ${GY-60}L200 ${GY-150}H1240L1440 ${GY-60}V${GY}H0Z`;
+    const tower=(x)=>bx(x,12,300)+`M${x-34} ${GY-300}h80v-46h-80z`;
+    const near=tower(80)+tower(1340)+`M420 ${GY}V${GY-150}h600V${GY}h-10V${GY-140}H430V${GY}z`+bx(0,1440,8);
+    const net=Array.from({length:12},(_,k)=>`<path class="stk thin" style="opacity:.55" d="M${440+k*50} ${GY-140}V${GY}"/>`).join('')+Array.from({length:5},(_,k)=>`<path class="stk thin" style="opacity:.55" d="M430 ${GY-120+k*26}H1010"/>`).join('');
+    const lamps=[80,1340].map(x=>Array.from({length:8},(_,k)=>`<rect class="lit" x="${x-28+(k%4)*18}" y="${GY-340+Math.floor(k/4)*18}" width="12" height="12" rx="2"/>`).join('')).join('');
+    const ball=`<circle class="near" cx="300" cy="${GY-30}" r="26"/>`;
+    return {far:stand,near,extra:net+lamps+ball,lit:''};
+  },
+  food(){
+    const far=`M0 ${GY-80}L180 ${GY-200}L330 ${GY-110}L520 ${GY-240}L700 ${GY-120}L900 ${GY-220}L1080 ${GY-100}L1260 ${GY-210}L1440 ${GY-90}V${GY}H0Z`;
+    const ger=(x,w)=>`M${x} ${GY}V${GY-w*.42}L${x+w/2} ${GY-w*.72}L${x+w} ${GY-w*.42}V${GY}Z`;
+    const near=ger(120,220)+ger(400,170)+ger(1000,240)+ger(1290,150)+bx(0,1440,10)+`M640 ${GY}l20-60h120l20 60z`;
+    const doors=[[210,GY-60,40,60],[465,GY-46,30,46],[1100,GY-64,42,64],[1350,GY-40,28,40]].map(([x,y,w,h])=>`<rect class="lit" x="${x}" y="${y}" width="${w}" height="${h}" rx="3"/>`).join('');
+    const steam=[680,720,760].map((x,k)=>`<path class="stk thin" style="stroke:var(--mc);opacity:.35" d="M${x} ${GY-70}q-14 -30 0 -60q14 -30 0 -60"/>`).join('');
+    return {far,near,extra:doors+steam,lit:''};
+  },
+  anime(){
+    const far=[[60,140],[160,220],[260,170],[1120,240],[1230,180],[1330,260]].map(([x,h])=>bx(x,80,h)).join('')+`M700 ${GY}V${GY-280}h6V${GY}z`;
+    const torii=`M520 ${GY}V${GY-190}h26V${GY}zM894 ${GY}V${GY-190}h26V${GY}zM470 ${GY-205}h500v22H470zM450 ${GY-240}q270 -26 540 0v20q-270 -18 -540 0zM700 ${GY-205}h40v-35h-40z`;
+    const tree=`M1050 ${GY}q10 -90 -20 -170l12 -4q34 80 22 174z`+[[1030,170,60],[1090,200,70],[980,210,55],[1060,250,58],[1140,250,48]].map(([x,y,r])=>`M${x-r} ${GY-y}a${r} ${r} 0 1 0 ${2*r} 0a${r} ${r} 0 1 0 ${-2*r} 0z`).join('');
+    const near=torii+tree+bx(0,1440,10);
+    const petals=Array.from({length:16},(_,k)=>`<ellipse class="lit" cx="${(k*97)%1440}" cy="${GY-60-(k*53)%220}" rx="5" ry="3" style="opacity:.55"/>`).join('');
+    const lanterns=[300,380,1250].map(x=>`<rect class="lit" x="${x}" y="${GY-130}" width="18" height="26" rx="8"/>`).join('');
+    return {far,near,extra:petals+lanterns,lit:''};
+  },
+  marvel(){
+    const far=[[0,180],[90,260],[200,210],[300,320],[420,240],[540,290],[880,300],[990,230],[1100,340],[1230,250],[1330,300]].map(([x,h])=>bx(x,100,h)).join('');
+    const near=bx(0,520,120)+bx(60,90,60,GY-120)+`M70 ${GY-180}h70l-6-28h-58z`+bx(1000,440,140)+bx(1180,30,90,GY-140)+bx(0,1440,8);
+    const beams=`<path class="lit" style="opacity:.08" d="M300 ${GY-120}L120 0H260Z"/><path class="lit" style="opacity:.08" d="M1200 ${GY-140}L1300 0H1440Z"/>`;
+    const dots=Array.from({length:60},(_,k)=>`<circle class="lit" cx="${(k%15)*96+40}" cy="${40+Math.floor(k/15)*34}" r="${2+(k%3)}" style="opacity:.12"/>`).join('');
+    const wins=Array.from({length:40},(_,k)=>`<rect class="lit" x="${(k*137)%1400+20}" y="${GY-60-(k*61)%200}" width="6" height="9" style="opacity:.5"/>`).join('');
+    return {far,near,extra:beams+dots+wins,lit:''};
+  }});
 
 const LANG=()=>DB.last&&DB.last.lang==='en'?'en':'mn';
 const T=(k,...a)=>{const v=I18N[LANG()][k]!==undefined?I18N[LANG()][k]:I18N.mn[k];return typeof v==='function'?v(...a):v;};
@@ -740,8 +920,9 @@ const KEY='cs2d20.v1';/* keep: older records still count */let MEM={};
 function loadDB(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return MEM;}}
 function saveDB(){MEM=DB;try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}}
 const DB=loadDB();DB.rec=DB.rec||{};DB.last=DB.last||{};
-const recOf=n=>DB.rec[n]||{w:0,l:0,s:0,b:0};
-function record(n,r){const x=DB.rec[n]||(DB.rec[n]={w:0,l:0});x[r]=(x[r]||0)+1;x.s=r==='w'?(x.s||0)+1:0;x.b=Math.max(x.b||0,x.s);saveDB();}
+const rk=n=>GK==='cs2'?n:GK+':'+n;
+const recOf=n=>DB.rec[rk(n)]||{w:0,l:0,s:0,b:0};
+function record(n,r){const x=DB.rec[rk(n)]||(DB.rec[rk(n)]={w:0,l:0});x[r]=(x[r]||0)+1;x.s=r==='w'?(x.s||0)+1:0;x.b=Math.max(x.b||0,x.s);saveDB();}
 function ssGet(k,d){try{const v=sessionStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function ssSet(k,v){try{sessionStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 const PID=ssGet('cs2d.pid',null)||rid(10);ssSet('cs2d.pid',PID);
@@ -755,8 +936,8 @@ const openerOf=g=>((g.cardNo-1)%2)^g.first;
 function newGame(mode,names,diff){
   const deck=shuffle(P.filter(p=>!p.special).map(p=>p.id));
   // the rare card goes into the first 10 cards, which are always drawn, so its chance is exactly PRIME_CHANCE per draft
-  if(Math.random()<PRIME_CHANCE||(typeof FORCE_PRIME!=='undefined'&&FORCE_PRIME))deck.splice(1+Math.floor(Math.random()*9),0,PRIME);
-  const g={mode,gid:rid(8),names,diff:diff||'mid',map:MAPKEYS[Math.floor(Math.random()*MAPKEYS.length)],first:Math.random()<.5?0:1,deck,ptr:0,cur:null,cardNo:0,streak:[0,0],
+  if(PRIME>=0&&(Math.random()<PRIME_CHANCE||(typeof FORCE_PRIME!=='undefined'&&FORCE_PRIME)))deck.splice(1+Math.floor(Math.random()*Math.min(9,SLOTS*2-1)),0,PRIME);
+  const g={mode,gid:rid(8),names,diff:diff||'mid',game:GK,sub:GM.sub,map:GK==='cs2'?MAPKEYS[Math.floor(Math.random()*MAPKEYS.length)]:GK,first:Math.random()<.5?0:1,deck,ptr:0,cur:null,cardNo:0,streak:[0,0],
     money:[BUDGET,BUDGET],rost:[[],[]],gives:[GIVES,GIVES],skips:[SKIPS,SKIPS],phase:'offer',kind:'normal',actor:0,bid:0,hi:-1,
     deadline:0,log:[],seq:0,res:null,sold:null,autoTo:-1,startedAt:Date.now()};
   nextCard(g,FLIP_MS);
@@ -766,7 +947,7 @@ function nextCard(g,extra=0){
   g.seq++;g.sold=null;g.bid=0;g.hi=-1;g.cur=null;
   if((slotsLeft(g,0)===0&&slotsLeft(g,1)===0)||g.ptr>=g.deck.length){toMatch(g);return;}
   g.cur=g.deck[g.ptr++];g.cardNo++;
-  if(g.cur===PRIME)extra+=GOAT_MS;
+  if(PRIME>=0&&g.cur===PRIME)extra+=GOAT_MS;
   const o=openerOf(g),x=1-o,now=Date.now(),bo=canBid(g,o),bx=canBid(g,x);
   g.deadline=now+TURN_MS+extra+REVEAL_MS;g.cardAt=now+extra;
   if(bo&&bx){g.phase='offer';g.kind='normal';g.actor=o;}
@@ -830,7 +1011,7 @@ function teamCounts(ids){const c={};ids.forEach(i=>{const t=P[i].team;c[t]=(c[t]
 const LEAD=.03,CLUTCH=.20,UNDERDOG=100;
 const isIGL=p=>/IGL/.test(p.role);
 const leaderOf=ids=>ids.find(i=>isIGL(P[i]));
-const buffOf=(ids,i)=>{const l=leaderOf(ids);return BUFF[Math.min(5,teamCounts(ids)[P[i].team]||0)]+(l!=null&&l!==i?LEAD:0);};
+const buffOf=(ids,i)=>{if(GK!=='cs2')return GM.syn==='group'?BUFF[Math.min(5,teamCounts(ids)[P[i].team]||0)]:0;const l=leaderOf(ids);return BUFF[Math.min(5,teamCounts(ids)[P[i].team]||0)]+(l!=null&&l!==i?LEAD:0);};
 const effOf=ids=>ids.map(i=>P[i].hl*(1+buffOf(ids,i)));
 // chance that a player with effective rating a wins a 1v1 against b
 const duelP=(a,b)=>{const x=Math.pow(a,DUEL_K),y=Math.pow(b,DUEL_K);return x/(x+y);};
@@ -861,21 +1042,372 @@ function playMatch(g){
 }
 // decode one round string back to [winner,[[a,b,p,w,c],…]]
 const decR=s=>[+s[0],Array.from({length:(s.length-1)/6},(_,k)=>{const q=s.substr(1+k*6,6);return [+q[0],+q[1],+q.substr(2,2),+q[4],+q[5]];})];
-function toMatch(g){g.phase='match';g.actor=-1;g.cur=null;g.res=playMatch(g);g.seq++;}
+function toMatch(g){g.phase='match';g.actor=-1;g.cur=null;g.res=(g.game||'cs2')==='cs2'?playMatch(g):playOther(g);g.seq++;}
+
+/* ================= other games: data ================= */
+// F1: 2026 drivers' championship points after 20 races (formula1points.com). Rating = 75 + 24·√(points / leader's points).
+const F1_DATA=[
+ ['Mercedes','MER',[['Kimi Antonelli','IT',390,1],['George Russell','GB',262,3]]],
+ ['Ferrari','FER',[['Lewis Hamilton','GB',261,4],['Charles Leclerc','MC',249,5]]],
+ ['McLaren','MCL',[['Lando Norris','GB',246,6],['Oscar Piastri','AU',152,7]]],
+ ['Red Bull','RBR',[['Max Verstappen','NL',279,2],['Isack Hadjar','FR',122,8]]],
+ ['Racing Bulls','RB',[['Liam Lawson','NZ',89,9],['Arvid Lindblad','GB',38,11]]],
+ ['Alpine','ALP',[['Pierre Gasly','FR',42,10],['Franco Colapinto','AR',27,12]]],
+ ['Haas','HAA',[['Oliver Bearman','GB',23,13],['Esteban Ocon','FR',7,16]]],
+ ['Audi','AUD',[['Gabriel Bortoleto','BR',14,14],['Nico Hülkenberg','DE',14,15]]],
+ ['Aston Martin','AMR',[['Fernando Alonso','ES',7,17],['Lance Stroll','CA',0,22]]],
+ ['Williams','WIL',[['Carlos Sainz','ES',7,18],['Alexander Albon','TH',5,19]]],
+ ['Cadillac','CAD',[['Valtteri Bottas','FI',0,23],['Sergio Pérez','MX',0,24]]]];
+// NBA: NBA 2K27 launch ratings (nba.com). Positions are the players' usual positions.
+const NBA_DATA=[['Shai Gilgeous-Alexander','PG','CA',97],['Victor Wembanyama','C','FR',97],['Nikola Jokić','C','RS',97],['Luka Dončić','PG','SI',96],['Jalen Brunson','PG','US',96],
+ ['Giannis Antetokounmpo','PF','GR',96],['Anthony Edwards','SG','US',95],['Cade Cunningham','PG','US',94],['Stephen Curry','PG','US',93],['Kevin Durant','SF','US',93],
+ ['Kawhi Leonard','SF','US',93],['Jayson Tatum','SF','US',93],['Donovan Mitchell','SG','US',93],['Karl-Anthony Towns','C','DO',93],['Tyrese Maxey','PG','US',92],
+ ['LeBron James','SF','US',91],['Jaylen Brown','SG','US',91],['Joel Embiid','C','CM',91],['Devin Booker','SG','US',91],['Tyrese Haliburton','PG','US',90],
+ ['Anthony Davis','PF','US',90],['Jamal Murray','PG','CA',89],['Scottie Barnes','SF','CA',88],['OG Anunoby','SF','GB',88],['Deni Avdija','SF','IL',88],
+ ['Austin Reaves','SG','US',88],['Paolo Banchero','PF','US',87],['Jalen Johnson','SF','US',87],['Bam Adebayo','C','US',87],['Pascal Siakam','PF','CM',87],
+ ['James Harden','PG','US',87],['Evan Mobley','PF','US',87],['Alperen Şengün','C','TR',87],['Stephon Castle','SG','US',87],['Trae Young','PG','US',87],
+ ['Kyrie Irving','PG','US',87],['Cooper Flagg','SF','US',87],['Lauri Markkanen','PF','FI',86],['LaMelo Ball','PG','US',86],['Jaren Jackson Jr.','PF','US',86],
+ ['Amen Thompson','SF','US',86],['Chet Holmgren','C','US',86],['Damian Lillard','PG','US',86],['Jalen Duren','C','US',85],['Jalen Williams','SG','US',85],
+ ['Jimmy Butler','SF','US',85],['Trey Murphy III','SF','US',85],['Franz Wagner','SF','DE',85],['Michael Porter Jr.','SF','US',85],['Zion Williamson','PF','US',85],
+ ['Dylan Harper','SG','US',85],['Jaden McDaniels','SF','US',85],['Ausar Thompson','SF','US',85],['Tyler Herro','SG','US',85],['Domantas Sabonis','C','LT',85],
+ ['Jarrett Allen','C','US',85],['Brandon Miller','SF','US',85],["De'Aaron Fox",'PG','US',84],['Rudy Gobert','C','FR',84],['Ja Morant','PG','US',84]];
+// Football: EA SPORTS FC 27 launch ratings (top 27 men + top goalkeepers).
+const FIFA_DATA=[
+ ['Real Madrid','RMA',[['Kylian Mbappé','ST','FR',91],['Thibaut Courtois','GK','BE',90],['Jude Bellingham','CAM','GB',90],['Vinícius Júnior','LW','BR',89]]],
+ ['Manchester City','MCI',[['Erling Haaland','ST','NO',91],['Rodri','CDM','ES',90],['Gianluigi Donnarumma','GK','IT',89]]],
+ ['Paris Saint-Germain','PSG',[['Ousmane Dembélé','ST','FR',90],['Vitinha','CM','PT',90],['Khvicha Kvaratskhelia','LW','GE',89],['Nuno Mendes','LB','PT',89],['Willian Pacho','CB','EC',89],['Achraf Hakimi','RB','MA',88],['João Neves','CM','PT',88]]],
+ ['FC Bayern München','BAY',[['Harry Kane','ST','GB',90],['Michael Olise','RM','FR',90],['Joshua Kimmich','CDM','DE',88],['Luis Díaz','LM','CO',88]]],
+ ['FC Barcelona','BAR',[['Pedri','CM','ES',90],['Lamine Yamal','RW','ES',90]]],
+ ['Arsenal','ARS',[['Gabriel','CB','BR',89],['Declan Rice','CDM','GB',88],['William Saliba','CB','FR',88],['David Raya','GK','ES',88]]],
+ ['Liverpool','LIV',[['Virgil van Dijk','CB','NL',88],['Alisson','GK','BR',87]]],
+ ['Manchester United','MUN',[['Bruno Fernandes','CAM','PT',89]]],
+ ['Inter Miami','MIA',[['Lionel Messi','CAM','AR',89]]],
+ ['Atlético Madrid','ATM',[['Jan Oblak','GK','SI',88]]],
+ ['AC Milan','MIL',[['Mike Maignan','GK','FR',87]]],
+ ['Borussia Dortmund','BVB',[['Gregor Kobel','GK','CH',87]]]];
+// Mongolian food: Draftly taste scores.
+const FOOD_DATA=[
+ ['meat','МАХ',[['Хорхог','Khorkhog',96],['Бууз','Buuz',95],['Хуушуур','Khuushuur',94],['Боодог','Boodog',93],['Цуйван','Tsuivan',90],['Хонины чанасан мах','Boiled mutton',89],['Банш','Bansh',88],['Будаатай хуурга','Fried rice',84],['Мантуун бууз','Mantuun buuz',82],['Ороомог','Oroomog',80]]],
+ ['soup','ШӨЛ',[['Гурилтай шөл','Noodle soup',88],['Банштай шөл','Bansh soup',87],['Хонины шөл','Mutton soup',82],['Бантан','Bantan',80],['Ногоотой шөл','Vegetable soup',76]]],
+ ['dairy','ИДЭЭ',[['Өрөм','Urum',90],['Ааруул','Aaruul',85],['Хайлмаг','Khailmag',83],['Бяслаг','Byaslag',79],['Тараг','Tarag',78],['Шар тос','Shar tos',74]]],
+ ['pastry','ГУРИЛ',[['Ул боов','Ul boov',86],['Боорцог','Boortsog',84],['Боов','Boov',80]]],
+ ['drink','УНДАА',[['Сүүтэй цай','Milk tea',92],['Айраг','Airag',90],['Чацарганы шүүс','Sea buckthorn juice',84],['Хоормог','Khoormog',76],['Сүү','Milk',72]]]];
+// Anime and Marvel: Draftly fan power ratings (names only, no artwork).
+const ANIME_DATA=[
+ ['One Piece','OP',[['Luffy','H',96],['Shanks','H',97],['Zoro','H',92],['Mihawk','N',94],['Kaido','V',96],['Whitebeard','N',96],['Sanji','H',89],['Law','H',88],['Ace','H',86],['Boa Hancock','N',85]]],
+ ['Naruto','NAR',[['Madara','V',97],['Naruto','H',96],['Sasuke','H',95],['Pain','V',91],['Itachi','N',90],['Minato','H',88],['Kakashi','H',87],['Jiraiya','H',86],['Gaara','H',82],['Rock Lee','H',78]]],
+ ['Dragon Ball','DB',[['Goku','H',99],['Beerus','N',99],['Vegeta','H',98],['Broly','N',98],['Gohan','H',96],['Frieza','V',96],['Cell','V',92],['Trunks','H',89],['Piccolo','H',88],['Krillin','H',70]]],
+ ['Hunter x Hunter','HXH',[['Meruem','V',98],['Netero','H',95],['Chrollo','V',89],['Hisoka','N',88],['Killua','H',86],['Gon','H',85],['Kurapika','H',84],['Leorio','H',65]]],
+ ['My Hero Academia','MHA',[['All For One','V',96],['All Might','H',95],['Shigaraki','V',94],['Deku','H',93],['Bakugo','H',88],['Todoroki','H',88],['Endeavor','H',87],['Hawks','H',84]]],
+ ['Demon Slayer','KNY',[['Yoriichi','H',99],['Muzan','V',95],['Kokushibo','V',94],['Gyomei','H',92],['Akaza','V',90],['Rengoku','H',88],['Giyu','H',87],['Tanjiro','H',86],['Zenitsu','H',82],['Inosuke','H',80]]],
+ ['Jujutsu Kaisen','JJK',[['Sukuna','V',100],['Gojo','H',99],['Yuta','H',95],['Toji','N',92],['Geto','V',91],['Yuji','H',90],['Maki','H',88],['Megumi','H',85],['Todo','H',84],['Nobara','H',75]]]];
+const MARVEL_DATA=[
+ ['Avengers','AVG',[['Scarlet Witch','H',97],['Thor','H',95],['Captain Marvel','H',95],['Hulk','H',94],['Doctor Strange','H',94],['Iron Man','H',90],['Vision','H',89],['Spider-Man','H',86],['Black Panther','H',85],['Captain America','H',84],['Winter Soldier','N',80],['War Machine','H',79],['Ant-Man','H',78],['Falcon','H',75],['Black Widow','H',74],['Hawkeye','H',72]]],
+ ['X-Men','XMN',[['Jean Grey','H',98],['Magneto','N',94],['Professor X','H',90],['Storm','H',89],['Wolverine','H',88],['Deadpool','N',85],['Rogue','H',83],['Cyclops','H',82],['Gambit','H',80],['Beast','H',78]]],
+ ['Guardians','GOG',[['Gamora','H',80],['Groot','H',79],['Drax','H',78],['Nebula','N',77],['Star-Lord','H',76],['Rocket','H',74],['Mantis','H',70]]],
+ ['Fantastic Four','FF',[['Silver Surfer','H',96],['Invisible Woman','H',87],['Mr. Fantastic','H',84],['Human Torch','H',83],['The Thing','H',82]]],
+ ['Defenders','DEF',[['Ghost Rider','N',88],['Shang-Chi','H',84],['Moon Knight','N',82],['Blade','N',81],['Luke Cage','H',80],['Iron Fist','H',79],['Daredevil','H',78],['Jessica Jones','H',76]]]];
+
+const buildP=(groups,map)=>{const out=[];groups.forEach(g=>g[g.length-1].forEach(a=>out.push(Object.assign({id:out.length,team:g[0]},map(a,g)))));return out;};
+const f1r=pts=>Math.round(75+24*Math.sqrt(pts/390));
+const NBA_POS=['PG','SG','SF','PF','C'];
+const LINE=r=>r==='GK'?'G':/^(CB|LB|RB)$/.test(r)?'D':/^(ST|LW|RW)$/.test(r)?'F':'M';
+
+/* ================= game registry ================= */
+const GAMES={
+ cs2:{tile:'cs2',acc:'#F0A93E',slots:{d:5},dec:2,rar:[125,115,110,105,100],val:[95,.32],rl:'Rating',reveal:'reel',syn:'group',stepMs:0,fan:['ZywOo','donk','m0NESY'],
+   groups:()=>TEAMS_CS2,mk:()=>{const p=buildP(TEAMS_CS2.map(([t,ps])=>[t,ps]),a=>({nick:a[0],role:a[1],cc:a[2],hl:a[3],hc:Math.round(a[3]*100)}));
+     p.push({id:p.length,nick:'s1mple',tag:'prime',team:'NAVI 2021',role:'AWP',cc:'UA',hl:1.41,hc:141,special:true});return p;},
+   tag:p=>TAG[p.team]||''},
+ f1:{tile:'f1',acc:'#E8443A',slots:{d:2},dec:0,rar:[97,93,89,85,80],val:[78,.9],rl:'OVR',reveal:'lights',syn:'group',stepMs:320,fan:['Max Verstappen','Kimi Antonelli','Lewis Hamilton'],
+   groups:()=>F1_DATA.map(([t,,ps])=>[t,ps]),mk:()=>buildP(F1_DATA,(a,g)=>({nick:a[0],cc:a[1],pts:a[2],role:'P'+a[3],tg:g[1],hl:f1r(a[2]),hc:f1r(a[2])})),tag:p=>p.tg},
+ nba:{tile:'nba',acc:'#F28A2E',slots:{'5x5':5,'3x3':3},dec:0,rar:[96,93,90,87,85],val:[84,.95],rl:'OVR',reveal:'crate',syn:'role',stepMs:55,fan:['Nikola Jokić','Shai Gilgeous-Alexander','Victor Wembanyama'],
+   groups:()=>NBA_POS.map(pos=>[pos,NBA_DATA.filter(a=>a[1]===pos)]),mk:()=>buildP(NBA_POS.map(pos=>[pos,NBA_DATA.filter(a=>a[1]===pos)]),a=>({nick:a[0],role:a[1],cc:a[2],hl:a[3],hc:a[3]})),tag:p=>p.role},
+ fifa:{tile:'fifa',acc:'#3FCF6E',slots:{d:5},dec:0,rar:[91,90,89,88,87],val:[86,1.2],rl:'OVR',reveal:'walkout',syn:'group',stepMs:240,fan:['Erling Haaland','Kylian Mbappé','Lamine Yamal'],
+   groups:()=>FIFA_DATA.map(([t,,ps])=>[t,ps]),mk:()=>buildP(FIFA_DATA,(a,g)=>({nick:a[0],role:a[1],cc:a[2],hl:a[3],hc:a[3],tg:g[1]})),tag:p=>p.tg},
+ food:{tile:'food',acc:'#F2B544',slots:{d:5},dec:0,rar:[95,92,88,84,80],val:[78,.75],rl:'Taste',reveal:'assemble',syn:'none',stepMs:260,fan:['Бууз','Хорхог','Хуушуур'],
+   groups:()=>FOOD_DATA.map(([t,,ps])=>[t,ps]),mk:()=>buildP(FOOD_DATA,(a,g)=>({nick:a[0],en:a[1],role:g[1],cat:g[0],cc:'',hl:a[2],hc:a[2]})),tag:p=>T('ctag_'+p.cat)},
+ anime:{tile:'anime',acc:'#FF6FA8',slots:{d:5},dec:0,rar:[99,96,92,88,84],val:[83,.7],rl:'Power',reveal:'capsule',syn:'group',stepMs:170,fan:['Gojo','Goku','Luffy'],
+   groups:()=>ANIME_DATA.map(([t,,ps])=>[t,ps]),mk:()=>buildP(ANIME_DATA,(a,g)=>({nick:a[0],role:a[1],cc:'',hl:a[2],hc:a[2],tg:g[1]})),tag:p=>p.tg},
+ marvel:{tile:'marvel',acc:'#E23B4E',slots:{d:5},dec:0,rar:[97,94,90,86,82],val:[80,.7],rl:'Power',reveal:'door',syn:'group',stepMs:170,fan:['Thor','Scarlet Witch','Iron Man'],
+   groups:()=>MARVEL_DATA.map(([t,,ps])=>[t,ps]),mk:()=>buildP(MARVEL_DATA,(a,g)=>({nick:a[0],role:a[1],cc:'',hl:a[2],hc:a[2],tg:g[1]})),tag:p=>p.tg}};
+const GAME_KEYS=Object.keys(GAMES);
+Object.values(GAMES).forEach(g=>{g.P=g.mk();});
+let GK='cs2',GM=GAMES.cs2;
+function useGame(key,sub){
+  GK=GAMES[key]?key:'cs2';GM=GAMES[GK];
+  P=GM.P;TEAMS=GM.groups();PRIME=P.findIndex(p=>p.special);
+  const s=GM.slots;GM.sub=s[sub]?sub:Object.keys(s)[0];SLOTS=s[GM.sub];
+}
+const gsub=()=>GK==='nba'?' '+GM.sub:'';
+const roleName=p=>GK==='food'?T('cat_'+p.cat):GK==='anime'||GK==='marvel'?T('side_'+p.role):p.role;
+const teamName=p=>GK==='food'?T('cat_'+p.cat):p.team;
+
+/* ================= simulations (seeded, so host and guest replay the same match) ================= */
+const mkRng=seed=>{let a=seed>>>0;return ()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};};
+const gauss=r=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());};
+const wpick=(r,w)=>{const tot=w.reduce((a,b)=>a+b,0);let x=r()*tot;for(let i=0;i<w.length;i++){x-=w[i];if(x<=0)return i;}return w.length-1;};
+const pw=(a,b,k)=>{const x=Math.pow(a,k),y=Math.pow(b,k);return x/(x+y);};
+const grpBuff=(ids,id)=>GM.syn==='group'?BUFF[Math.min(5,teamCounts(ids)[P[id].team]||0)]:0;
+
+function simF1(R,sub,seed){
+  const r=mkRng(seed),L=15,PTS=[25,18,15,12],cars=[];
+  R.forEach((ids,t)=>ids.forEach((id,i)=>cars.push({t,i,id,pace:P[id].hl*(1+grpBuff(ids,id)),time:0,out:false,pit:6+Math.floor(r()*5),best:1e9})));
+  cars.forEach(c=>c.q=c.pace+gauss(r)*1.3);
+  const grid=cars.slice().sort((a,b)=>b.q-a.q);grid.forEach((c,k)=>{c.time=k*.45;});
+  const steps=[],ordOf=list=>list.map(c=>[c.t,c.i]);
+  const pts=order=>{const s=[0,0];order.filter(c=>!c.out).forEach((c,k)=>s[c.t]+=PTS[k]||0);return s;};
+  let order=grid.slice();steps.push({ph:['lap',0,L],ord:ordOf(order),sc:pts(order),ev:[{e:'start',a:[order[0].t,order[0].i]}]});
+  let fl=null;
+  for(let lap=1;lap<=L;lap++){
+    const ev=[];
+    cars.forEach(c=>{if(c.out)return;
+      const lt=90-(c.pace-75)*.13+gauss(r)*.42+(lap===c.pit?21:0);
+      c.time+=lt;if(lap!==c.pit&&lt<c.best){c.best=lt;if(!fl||lt<fl.t)fl={t:lt,c};}
+      if(lap===c.pit)ev.push({e:'pit',a:[c.t,c.i]});
+      if(r()<.0016){c.out=true;ev.push({e:'dnf',a:[c.t,c.i]});}});
+    const prev=order.map(c=>c.id),next=cars.filter(c=>!c.out).sort((a,b)=>a.time-b.time).concat(cars.filter(c=>c.out));
+    next.forEach((c,k)=>{if(c.out||lap===c.pit)return;const was=prev.indexOf(c.id);
+      if(was>k){const passed=order.slice(k,was).filter(x=>!x.out&&x.pit!==lap&&next.indexOf(x)>k);
+        passed.forEach(x=>ev.push({e:'pass',a:[c.t,c.i],b:[x.t,x.i],pos:k+1}));}});
+    order=next;
+    if(lap===L)ev.push({e:'finish',a:[order[0].t,order[0].i]});
+    steps.push({ph:['lap',lap,L],ord:ordOf(order),sc:pts(order),ev});
+  }
+  const sc=pts(order);let win=sc[0]===sc[1]?order.find(c=>!c.out).t:sc[0]>sc[1]?0:1;
+  if(order.every(c=>c.out))win=0;
+  const stats=[[],[]];order.forEach((c,k)=>{stats[c.t][c.i]=c.out?'DNF':'P'+(k+1);});
+  const mv=order.find(c=>c.t===win&&!c.out)||order.find(c=>c.t===win);
+  return {score:sc,win,mvp:[mv.t,mv.i],mvpS:stats[mv.t][mv.i],steps,stats,fl:fl?[fl.c.t,fl.c.i]:null};
+}
+
+function simNBA(R,sub,seed){
+  const r=mkRng(seed),three=sub==='3x3',score=[0,0],stats=[R[0].map(()=>0),R[1].map(()=>0)],steps=[];
+  const has=(t,pos)=>R[t].some(id=>P[id].role===pos);
+  const avg=t=>R[t].reduce((a,id)=>a+P[id].hl,0)/Math.max(1,R[t].length);
+  const USE={PG:1.2,SG:1.2,SF:1.1,PF:1,C:.9},P3={PG:.42,SG:.48,SF:.38,PF:.24,C:.1};
+  function poss(o,ph){
+    const d=1-o;if(!R[o].length)return;
+    if(r()<.13-(has(o,'PG')?.04:0))return;
+    for(let tries=0;tries<2;tries++){
+      const k=wpick(r,R[o].map(id=>Math.pow(Math.max(1,P[id].hl-60),2)*USE[P[id].role])),p=P[R[o][k]];
+      if(!three&&r()<.17){let v=0;for(let f=0;f<2;f++)if(r()<.74+(p.hl-85)*.006)v++;
+        if(v){score[o]+=v;stats[o][k]+=v;steps.push({ph:ph(),sc:score.slice(),ev:[{e:'ft',a:[o,k],v}]});}return;}
+      const out=r()<(three?P3[p.role]*.9:P3[p.role]);
+      let pr=(out?(three?.33:.36):(three?.5:.53))+(p.hl-avg(d))*.008+(has(o,'PG')?.02:0)+(out?0:(has(d,'C')?-.03:.02));
+      if(r()<clamp(pr,.15,.8)){const v=out?(three?2:3):(three?1:2);score[o]+=v;stats[o][k]+=v;steps.push({ph:ph(),sc:score.slice(),ev:[{e:'shot',a:[o,k],v,out}]});return;}
+      if(r()>=.24+(has(o,'C')?.06:0)-(has(d,'C')?.05:0))return;
+    }
+  }
+  if(three){let n=0;const ph=()=>['clock3',Math.max(0,600-Math.floor(n*7))];
+    while(n<160){poss(n%2,ph);n++;if(score[0]>=21||score[1]>=21)break;if(n>=110&&score[0]!==score[1])break;}
+    if(score[0]===score[1]){score[r()<.5?0:1]++;}
+  }else{
+    for(let q=1;q<=4||score[0]===score[1];q++){
+      const N=q<=4?26:6,ot=q>4;
+      for(let n=0;n<N*2;n++)poss((n+q)%2,()=>[ot?'ot':'q',ot?q-4:q,Math.max(0,(ot?300:720)-Math.floor(n*(ot?300:720)/(N*2)))]);
+      if(q>12){score[r()<.5?0:1]++;break;}
+    }
+  }
+  const win=score[0]>score[1]?0:1;let mi=0;stats[win].forEach((v,i)=>{if(v>stats[win][mi])mi=i;});
+  return {score,win,mvp:[win,mi],mvpS:stats[win][mi]+' PTS',steps,stats:stats.map(a=>a.map(v=>v+''))};
+}
+
+function simFIFA(R,sub,seed){
+  const r=mkRng(seed),score=[0,0],goals=[R[0].map(()=>0),R[1].map(()=>0)],saves=[R[0].map(()=>0),R[1].map(()=>0)],steps=[];
+  const eff=t=>R[t].map(id=>P[id].hl*(1+grpBuff(R[t],id)));
+  const E=[eff(0),eff(1)];
+  const lineAvg=(t,ls)=>{const v=R[t].map((id,i)=>ls.includes(LINE(P[id].role))?E[t][i]:null).filter(x=>x!=null);return v.length?v.reduce((a,b)=>a+b,0)/v.length:72;};
+  const gk=t=>{const i=R[t].findIndex(id=>P[id].role==='GK');return i>=0?{i,v:E[t][i]}:{i:-1,v:Math.min(...E[t])-14};};
+  const att=[lineAvg(0,['F','M']),lineAvg(1,['F','M'])],def=[lineAvg(0,['D','M']),lineAvg(1,['D','M'])],mid=[lineAvg(0,['M']),lineAvg(1,['M'])],G=[gk(0),gk(1)];
+  const shooters=t=>R[t].map((id,i)=>{const l=LINE(P[id].role);return l==='G'?0:Math.max(1,E[t][i]-70)*({F:3,M:2,D:.6}[l]);});
+  for(let m=0;m<36;m++){
+    const min=Math.min(90,Math.round((m+1)*2.5)),o=r()<pw(mid[0],mid[1],6)?0:1,d=1-o;
+    if(m===18)steps.push({ph:['min',45],sc:score.slice(),ev:[{e:'ht'}]});
+    if(r()>.24+(att[o]-def[d])*.012)continue;
+    const w=shooters(o);if(!w.some(x=>x))continue;
+    const k=wpick(r,w),pg=clamp(.3+(E[o][k]-G[d].v)*.012,.1,.62);
+    if(r()<pg){score[o]++;goals[o][k]++;const wa=shooters(o).map((x,i)=>i===k?0:x);const as=wa.some(x=>x)?wpick(r,wa):-1;
+      steps.push({ph:['min',min],sc:score.slice(),ev:[{e:'goal',a:[o,k],as:as>=0?[o,as]:null}]});}
+    else if(G[d].i>=0&&r()<.55){saves[d][G[d].i]++;steps.push({ph:['min',min],sc:score.slice(),ev:[{e:'save',a:[d,G[d].i],b:[o,k]}]});}
+  }
+  steps.push({ph:['min',90],sc:score.slice(),ev:[{e:'ft'}]});
+  let pens=null,win=score[0]>score[1]?0:score[1]>score[0]?1:-1;
+  if(win<0){pens=[0,0];const order=[0,1].map(t=>R[t].map((id,i)=>i).filter(i=>P[R[t][i]].role!=='GK').sort((a,b)=>E[t][b]-E[t][a]));
+    for(let k=0;k<30;k++){const t=k%2,n=Math.floor(k/2),list=order[t].length?order[t]:R[t].map((_,i)=>i),i=list[n%list.length];
+      const ok=r()<clamp(.76+(E[t][i]-G[1-t].v)*.008,.5,.92);if(ok)pens[t]++;
+      steps.push({ph:['pens'],sc:score.slice(),pens:pens.slice(),ev:[{e:ok?'pen':'penx',a:[t,i]}]});
+      const shot=[Math.ceil((k+1)/2),Math.floor((k+1)/2)];
+      if(k<10){const left=[5-shot[0],5-shot[1]];if(pens[0]>pens[1]+left[1]||pens[1]>pens[0]+left[0])break;}
+      else if(t===1&&pens[0]!==pens[1])break;}
+    win=pens[0]>pens[1]?0:1;}
+  let mi=0;goals[win].forEach((v,i)=>{if(v>goals[win][mi])mi=i;});
+  if(!goals[win][mi]){const g=R[win].findIndex(id=>P[id].role==='GK');if(g>=0)mi=g;}
+  const st=[0,1].map(t=>R[t].map((id,i)=>goals[t][i]?'⚽'.repeat(Math.min(3,goals[t][i]))+(goals[t][i]>3?goals[t][i]:''):P[id].role==='GK'?(saves[t][i]?saves[t][i]+'🧤':'0🧤'):'–'));
+  return {score,pens,win,mvp:[win,mi],mvpS:st[win][mi],steps,stats:st};
+}
+
+function simFood(R,sub,seed){
+  const r=mkRng(seed),score=[0,0],votes=[R[0].map(()=>0),R[1].map(()=>0)],steps=[];
+  const variety=t=>[0,0,0,1,2,3][new Set(R[t].map(id=>P[id].cat)).size]||0,V=[variety(0),variety(1)];
+  for(let k=0;k<SLOTS;k++){
+    const a=R[0][k],b=R[1][k];
+    if(a==null||b==null){const w=a==null?1:0;score[w]++;steps.push({ph:['course',k+1],sc:score.slice(),ev:[{e:'course',w,k}]});continue;}
+    const pa=1/(1+Math.exp(-((P[a].hl+V[0])-(P[b].hl+V[1]))/5)),c=[0,0];
+    steps.push({ph:['course',k+1],sc:score.slice(),ev:[{e:'serve',k}]});
+    for(let j=1;j<=5;j++){const t=r()<pa?0:1;c[t]++;votes[t][k]++;steps.push({ph:['course',k+1],sc:score.slice(),ev:[{e:'vote',j,t,k,c:c.slice()}]});}
+    const w=c[0]>c[1]?0:1;score[w]++;steps.push({ph:['course',k+1],sc:score.slice(),ev:[{e:'course',w,k,c}]});
+  }
+  const win=score[0]>score[1]?0:1;let mi=0;votes[win].forEach((v,i)=>{if(v>votes[win][mi])mi=i;});
+  return {score,win,mvp:[win,mi],mvpS:votes[win][mi]+'/5',steps,stats:votes.map(a=>a.map(v=>v+'/5')),variety:V};
+}
+
+function simBattle(R,sub,seed){
+  const r=mkRng(seed),score=[0,0],steps=[],res=[R[0].map(()=>'–'),R[1].map(()=>'–')],dmgSum=[R[0].map(()=>0),R[1].map(()=>0)];
+  const E=[0,1].map(t=>R[t].map(id=>P[id].hl*(1+grpBuff(R[t],id))));
+  for(let k=0;k<SLOTS;k++){
+    const a=R[0][k],b=R[1][k];
+    if(a==null||b==null){const w=a==null?1:0;score[w]++;steps.push({ph:['fight',k+1],sc:score.slice(),ev:[{e:'ko',w,k}]});continue;}
+    const hp=[100,100],p=pw(E[0][k],E[1][k],4);
+    steps.push({ph:['fight',k+1],sc:score.slice(),hp:hp.slice(),ev:[{e:'vs',k}]});
+    for(let n=0;n<40&&hp[0]>0&&hp[1]>0;n++){
+      const t=r()<p?0:1,crit=r()<.12,d=Math.round((12+r()*16)*(crit?1.6:1));
+      hp[1-t]=Math.max(0,hp[1-t]-d);dmgSum[t][k]+=d;
+      steps.push({ph:['fight',k+1],sc:score.slice(),hp:hp.slice(),ev:[{e:'hit',t,k,d,crit}]});
+    }
+    const w=hp[0]>0?0:1;score[w]++;res[w][k]='W';res[1-w][k]='L';
+    steps.push({ph:['fight',k+1],sc:score.slice(),hp:hp.slice(),ev:[{e:'ko',w,k}]});
+  }
+  const win=score[0]>score[1]?0:1;let mi=0;dmgSum[win].forEach((v,i)=>{if(res[win][i]==='W'&&(res[win][mi]!=='W'||v>dmgSum[win][mi]))mi=i;});
+  return {score,win,mvp:[win,mi],mvpS:dmgSum[win][mi]+' DMG',steps,stats:res};
+}
+const SIMS={f1:simF1,nba:simNBA,fifa:simFIFA,food:simFood,anime:simBattle,marvel:simBattle};
+function playOther(g){
+  const seed=(Math.random()*4294967296)>>>0,d=SIMS[g.game](g.rost,g.sub,seed);
+  return {seed,score:d.score,win:d.win,mvp:d.mvp,mvpS:d.mvpS,pens:d.pens||null};
+}
+
+/* ================= match screen for the other games ================= */
+function phText(ph){
+  if(!ph)return '';
+  switch(ph[0]){
+    case 'lap':return ph[1]?T('lapN',ph[1],ph[2]):T('grid');
+    case 'q':return `Q${ph[1]} ${String(Math.floor(ph[2]/60)).padStart(2,'0')}:${String(ph[2]%60).padStart(2,'0')}`;
+    case 'ot':return `OT${ph[1]>1?ph[1]:''} ${String(Math.floor(ph[2]/60)).padStart(2,'0')}:${String(ph[2]%60).padStart(2,'0')}`;
+    case 'clock3':return `${String(Math.floor(ph[1]/60)).padStart(2,'0')}:${String(ph[1]%60).padStart(2,'0')}`;
+    case 'min':return ph[1]+"'";
+    case 'pens':return T('pens');
+    case 'course':return T('courseN',ph[1]);
+    case 'fight':return T('fightN',ph[1]);
+  }
+  return '';
+}
+function evHtml(ev,g){
+  const nm=([t,i])=>`<span class="${t?'tb':'ta'}">${esc(pName(P[g.rost[t][i]]))}</span>`;
+  const dish=(t,k)=>g.rost[t][k]!=null?`<span class="${t?'tb':'ta'}">${esc(pName(P[g.rost[t][k]]))}</span>`:'—';
+  switch(ev.e){
+    case 'start':return `🚦 ${T('lightsOut')} ${nm(ev.a)} P1`;
+    case 'pass':return `${nm(ev.a)} ${T('passes')} ${nm(ev.b)} → P${ev.pos}`;
+    case 'pit':return `🔧 ${nm(ev.a)} ${T('pits')}`;
+    case 'dnf':return `💥 ${nm(ev.a)} DNF`;
+    case 'finish':return `🏁 ${nm(ev.a)} ${T('winsRace')}`;
+    case 'ft':return `${nm(ev.a)} FT ${ev.v}/2 <b class="num">+${ev.v}</b>`;
+    case 'shot':return `${nm(ev.a)} ${ev.out?(GM.sub==='3x3'?'2PT':'3PT'):(GM.sub==='3x3'?'1PT':'2PT')} <b class="num">+${ev.v}</b>`;
+    case 'goal':return `⚽ ${nm(ev.a)}${ev.as?` <small>(${T('assist')} ${nm(ev.as)})</small>`:''}`;
+    case 'save':return `🧤 ${nm(ev.a)} ${T('saves')} ${nm(ev.b)}`;
+    case 'ht':return T('halftime');case 'ft':return T('fulltime');
+    case 'pen':return `✅ ${nm(ev.a)} ${T('penScored')}`;case 'penx':return `❌ ${nm(ev.a)} ${T('penMissed')}`;
+    case 'serve':return `🍽 ${dish(0,ev.k)} <i>vs</i> ${dish(1,ev.k)}`;
+    case 'vote':return `${T('judgeN',ev.j)} → ${dish(ev.t,ev.k)} <span class="muted num">${ev.c[0]}:${ev.c[1]}</span>`;
+    case 'course':return `🏆 ${dish(ev.w,ev.k)} ${T('winsCourse')}${ev.c?` <span class="muted num">${ev.c[0]}:${ev.c[1]}</span>`:''}`;
+    case 'vs':return `⚔ ${dish(0,ev.k)} <i>vs</i> ${dish(1,ev.k)}`;
+    case 'hit':return `${dish(ev.t,ev.k)} → <b class="num">−${ev.d}</b>${ev.crit?' <i class="cl">CRIT</i>':''}`;
+    case 'ko':return `💥 ${dish(ev.w,ev.k)} ${T('winsFight')}`;
+  }
+  return '';
+}
+function renderMatch2(){
+  if(ANIM){clearTimeout(ANIM.to);ANIM=null;}
+  const g=G,res=g.res,st=g.streak||[0,0],D=SIMS[g.game](g.rost,g.sub,res.seed);
+  const col=t=>`<section class="rcol ${t?'b':''}">${g.rost[t].map((id,i)=>{const p=P[id],bf=GM.syn==='group'?grpBuff(g.rost[t],id):0;
+      return `<div class="rrow ${rcls(p)}" id="p${t}-${i}" style="--i:${i}">${avatar(p,'sm')}<span class="n">${esc(pName(p))}<small>${bf?`<em class="bf">+${Math.round(bf*100)}%</em> `:''}${fmtR(p.hl)}, ${esc(roleName(p))}</small></span><b class="kd num">–</b></div>`;}).join('')}</section>`;
+  const hpbar=GK==='anime'||GK==='marvel'?`<div class="hp" id="hp"><i id="hp0"></i><i id="hp1"></i></div>`:'';
+  $('#app').innerHTML=`<main class="wrap wide">
+    <div class="top"><button class="icon" data-act="${g.mode==='online'?'leave':'home'}" aria-label="${T('quit')}">×</button><h2>${T('match_'+GK)}</h2><button class="linkbtn" data-act="skip" id="skipbtn">${T('skip')}</button></div>
+    <div class="board">
+      <div class="bteam" id="bt0"><span class="bname ta">${esc(g.names[0])} ${stk(st[0])}</span><span class="led num" id="s0">0</span></div>
+      <div class="bmid"><span class="mapchip" style="--mc:${GM.acc}">${T('g_'+GK)}${gsub()}</span><span class="vs" id="rno">${phText(D.steps[0]&&D.steps[0].ph)}</span><span class="mapn" id="half">${T('goal_'+GK)}</span></div>
+      <div class="bteam" id="bt1"><span class="bname tb">${esc(g.names[1])} ${stk(st[1])}</span><span class="led num" id="s1">0</span></div>
+    </div>
+    ${hpbar}
+    <div class="mgrid">${col(0)}<section class="feed" aria-live="off"><div class="lbl" id="ftitle">${T('feed_'+GK)}</div><ol class="duels feed2" id="duels"></ol></section>${col(1)}</div>
+    <div id="after" class="after"></div>
+  </main>`;
+  const instant=reduceMotion()||UI.animGid===g.gid;UI.animGid=g.gid;
+  let i=0;const sc=[0,0];
+  function apply(s,show){
+    [0,1].forEach(t=>{if(s.sc[t]!==sc[t]){sc[t]=s.sc[t];const el=$('#s'+t);if(el){el.textContent=sc[t]+(s.pens?` (${s.pens[t]})`:'');if(show){el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump');}}}
+      else if(s.pens){const el=$('#s'+t);if(el)el.textContent=sc[t]+` (${s.pens[t]})`;}});
+    const rn=$('#rno');if(rn)rn.textContent=phText(s.ph);
+    if(s.ord){s.ord.forEach(([t,k],pos)=>{const el=$(`#p${t}-${k} .kd`);if(el)el.textContent='P'+(pos+1);});}
+    if(s.hp){const a=$('#hp0'),b=$('#hp1');if(a)a.style.width=s.hp[0]+'%';if(b)b.style.width=s.hp[1]+'%';}
+    if(show&&s.ev){const ol=$('#duels');if(ol){s.ev.forEach(ev=>{const h=evHtml(ev,g);if(h)ol.insertAdjacentHTML('afterbegin',`<li class="dl2">${h}</li>`);});while(ol.children.length>8)ol.lastChild.remove();}}
+  }
+  function step(){if(!$('#duels'))return;
+    if(i<D.steps.length){apply(D.steps[i++],true);ANIM.to=setTimeout(step,GM.stepMs);}else ANIM.to=setTimeout(()=>finishMatch2(D),400);}
+  function rest(){const ol=$('#duels');while(i<D.steps.length){const s=D.steps[i++];apply(s,i>D.steps.length-8);}finishMatch2(D);}
+  ANIM={raf:0,to:setTimeout(step,instant?0:600),skip:()=>{clearTimeout(ANIM.to);rest();}};
+  if(instant){clearTimeout(ANIM.to);rest();}
+}
+function finishMatch2(D){
+  const g=G,res=g.res;
+  if(finished===g.gid+'|'+SCREEN&&$('#after').innerHTML)return;finished=g.gid+'|'+SCREEN;
+  [0,1].forEach(t=>{const el=$('#s'+t);if(el)el.textContent=res.score[t]+(res.pens?` (${res.pens[t]})`:'');g.rost[t].forEach((_,i)=>{const c=$(`#p${t}-${i} .kd`);if(c&&D.stats[t][i]!=null)c.textContent=D.stats[t][i];});});
+  const h=$('#half');h.textContent=T('final');h.dataset.done='1';
+  $('#s'+(1-res.win)).classList.add('dimmed');$('#bt'+res.win).classList.add('won');
+  const mv=$(`#p${res.mvp[0]}-${res.mvp[1]}`);if(mv)mv.classList.add('mvp');
+  const sb=$('#skipbtn');if(sb)sb.remove();
+  const me=g.mode==='cpu'?0:g.mode==='online'?NET.team:res.win;
+  if(res.win===me&&UI.confGid!==g.gid){UI.confGid=g.gid;confetti();}
+  refreshAfter();
+}
+
+/* ================= reveal animations ================= */
+function revealHtml(style){
+  switch(style){
+    case 'lights':return `<div class="rv rv-lights">${'<i></i>'.repeat(5)}</div>`;
+    case 'crate':return `<div class="rv rv-crate"><div class="crate"><b class="lid"></b><b class="box"></b></div></div>`;
+    case 'walkout':return `<div class="rv rv-walk"><i class="flash"></i></div>`;
+    case 'assemble':return `<div class="rv rv-asm">${Array.from({length:9},(_,k)=>`<i style="left:${(k%3)*33.3}%;top:${Math.floor(k/3)*33.3}%;--k:${k};--dx:${((k%3)-1)*90+((k*37)%40-20)}px;--dy:${(Math.floor(k/3)-1)*80+((k*53)%40-20)}px;--rt:${(k*47)%60-30}deg"></i>`).join('')}</div>`;
+    case 'capsule':return `<div class="rv rv-cap"><div class="cap"><b class="top"></b><b class="bot"></b></div></div>`;
+    case 'door':return `<div class="rv rv-door"><b class="dl"></b><b class="dr"></b></div>`;
+  }
+  return '';
+}
+function startReveal(stage,id,delay){
+  if(GM.reveal==='reel')return startReel(stage,id,delay);
+  if(!stage)return;const card=stage.querySelector('.pcard');
+  stage.style.setProperty('--rd',delay+'ms');
+  setTimeout(()=>{if(!stage.isConnected)return;stage.classList.remove('reeling');const o=stage.querySelector('.rv');if(o)o.remove();card.classList.add('land');},delay+REVEAL_MS-80);
+}
 
 /* ================= bot ================= */
 function botValue(g,t,id){
   const p=P[id],left=slotsLeft(g,t),money=g.money[t];
   if(left<=0)return 0;
-  const cur=g.rost[t].length?g.rost[t].reduce((a,i)=>a+P[i].hc,0)/g.rost[t].length:0;
-  const mates=g.rost[t].filter(i=>P[i].team===p.team).length;
-  let v=Math.max(0,(p.hc-95)*.32);                // 0.95 → $0, 1.15 → $6.4, 1.32 → $11.8
+  const cur=g.rost[t].length?g.rost[t].reduce((a,i)=>a+P[i].hc,0)/g.rost[t].length:0,near=GK==='cs2'?4:2;
+  const mates=GM.syn==='group'?g.rost[t].filter(i=>P[i].team===p.team).length:0;
+  let v=Math.max(0,(p.hc-GM.val[0])*GM.val[1]);     // cs2: 0.95 → $0, 1.32 → $11.8
   if(mates)v+=[0,1.5,2.5,3,3][mates];               // same-team boost
-  if(isIGL(p)&&leaderOf(g.rost[t])==null)v+=2.5;     // first IGL lifts the whole team
-  if(p.hc<UNDERDOG)v+=.8;                           // clutch underdog
-  if(cur&&p.hc<cur-4)v*=.6;                         // would drag the average down
+  if(GK==='cs2'){
+    if(isIGL(p)&&leaderOf(g.rost[t])==null)v+=2.5;   // first IGL lifts the whole team
+    if(p.hc<UNDERDOG)v+=.8;                         // clutch underdog
+  }else if(GK==='nba'&&!g.rost[t].some(i=>P[i].role===p.role))v+=1.2;
+  else if(GK==='fifa'&&p.role==='GK'&&!g.rost[t].some(i=>P[i].role==='GK'))v+=4;
+  else if(GK==='food'&&!g.rost[t].some(i=>P[i].cat===p.cat))v+=1;
+  if(cur&&p.hc<cur-near)v*=.6;                         // would drag the average down
   v*=clamp((money/left)/4,.6,1.5);
-  if(left===1)v=Math.max(v,money*(p.hc>=115?1:p.hc>=108?.6:.25));
+  if(left===1)v=Math.max(v,money*(p.hc>=GM.rar[1]?1:p.hc>=GM.rar[3]?.6:.25));
   v+=(Math.random()*2-1)*({easy:3,mid:1.5,hard:.6}[g.diff]||1.5);
   const reserve=g.diff==='hard'?left-1:g.diff==='mid'?Math.floor((left-1)/2):0;
   return clamp(Math.round(v),0,Math.max(0,money-reserve));
@@ -908,15 +1440,15 @@ function scheduleBot(){
 }
 
 /* ================= app state ================= */
-let SCREEN='home',G=null,ANIM=null;
+let SCREEN='hub',G=null,ANIM=null;
 const UI={diff:DB.last.diff||'mid',joinCode:'',lastCard:null,animGid:null};
 function go(s){SCREEN=s;render();}
 function render(){
   if(ANIM&&SCREEN!=='match'){cancelAnimationFrame(ANIM.raf);clearTimeout(ANIM.to);ANIM=null;}
   if(SCREEN!=='draft')document.body.dataset.side=SCREEN==='match'?'n':'';
   if(!UI.homeMap)UI.homeMap=MAPKEYS[Math.floor(Math.random()*MAPKEYS.length)];
-  setMap((SCREEN==='draft'||SCREEN==='match')&&G&&MAPS[G.map]?G.map:UI.homeMap);
-  ({home:renderHome,cpu:renderCpuSetup,local:renderLocalSetup,online:renderOnlineSetup,lobby:renderLobby,draft:renderDraft,match:renderMatch})[SCREEN]();
+  setMap(SCREEN==='hub'?UI.homeMap:(SCREEN==='draft'||SCREEN==='match')&&G&&MAPART[G.map]?G.map:GK==='cs2'?UI.homeMap:GK);
+  ({hub:renderHub,home:renderHome,cpu:renderCpuSetup,local:renderLocalSetup,online:renderOnlineSetup,lobby:renderLobby,draft:renderDraft,match:renderMatch})[SCREEN]();
   if(UI.lastScreen!==SCREEN){UI.lastScreen=SCREEN;const w=$('#app .wrap');if(w&&!reduceMotion())w.classList.add('enter');}
 }
 function tickNum(el,from,to,ms,fmt){
@@ -935,23 +1467,40 @@ function afterChange(){
 
 /* ================= home & setup ================= */
 const myName=()=>DB.last.p1||'';
+const ICON={
+  cs2:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/><circle cx="12" cy="12" r="1.2"/></svg>',
+  f1:'<svg viewBox="0 0 24 24"><path d="M5 21V3"/><path d="M5 4h14v9H5"/><path d="M8.5 4v9M12 4v9M15.5 4v9M5 8.5h14"/></svg>',
+  nba:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5v19M5.2 5.2c3 3 3 10.6 0 13.6M18.8 5.2c-3 3-3 10.6 0 13.6"/></svg>',
+  fifa:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M12 7.5l4.2 3-1.6 5h-5.2l-1.6-5z"/><path d="M12 2.5v5M16.2 10.5l4.8-1.6M14.6 15.5l2.9 4.1M9.4 15.5l-2.9 4.1M7.8 10.5L3 8.9"/></svg>',
+  food:'<svg viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0z"/><path d="M8 8c0-2 2-2 2-4M12 8c0-2 2-2 2-4M16 8c0-2 2-2 2-4"/></svg>',
+  anime:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19"/><circle cx="12" cy="12" r="3"/></svg>',
+  marvel:'<svg viewBox="0 0 24 24"><path d="M13 2L5 13.5h6L10 22l9-12.5h-6z"/></svg>'};
+function renderHub(){
+  const n=myName();
+  $('#app').innerHTML=`<main class="wrap wide hub">
+    <div class="langsw" role="group" aria-label="${T('lang')} / Language"><button data-act="lang" data-l="mn" aria-pressed="${LANG()==='mn'}">MN</button><button data-act="lang" data-l="en" aria-pressed="${LANG()==='en'}">EN</button></div>
+    <header class="hero hubhero"><h1 class="brand">Draftly</h1><p class="lede">${T('hubLede')}</p></header>
+    <section class="me"><label for="pname" class="lbl">${T('yourName')}</label>
+      <input id="pname" maxlength="16" value="${esc(n)}" placeholder="${T('namePh')}" autocomplete="off"></section>
+    <nav class="tiles" aria-label="${T('chooseGame')}">${GAME_KEYS.map(k=>`<button class="tile" data-act="game" data-g="${k}" style="--acc:${GAMES[k].acc}">
+      <span class="ticon">${ICON[k]}</span><span class="tt"><b>${T('g_'+k)}</b><small>${T('gsub_'+k,GAMES[k].P.filter(p=>!p.special).length)}</small></span></button>`).join('')}</nav>
+  </main>`;
+}
 function renderHome(){
   const n=myName(),r=recOf(n);
-  const fan=['ZywOo','donk','m0NESY'].map(k=>P.find(p=>p.nick===k)).filter(Boolean);
+  const fan=GM.fan.map(k=>P.find(p=>p.nick===k)).filter(Boolean);
   const I={cpu:'<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg>',
     local:'<svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><circle cx="10" cy="11" r="1.6"/><circle cx="14" cy="11" r="1.6"/><path d="M10 18h4"/></svg>',
     online:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.6 2.6 3.9 5.8 3.9 9.5s-1.3 6.9-3.9 9.5c-2.6-2.6-3.9-5.8-3.9-9.5S9.4 5.1 12 2.5z"/></svg>'};
-  $('#app').innerHTML=`<main class="wrap wide home">
-    <div class="langsw" role="group" aria-label="${T('lang')} / Language"><button data-act="lang" data-l="mn" aria-pressed="${LANG()==='mn'}">MN</button><button data-act="lang" data-l="en" aria-pressed="${LANG()==='en'}">EN</button></div>
+  $('#app').innerHTML=`<main class="wrap wide home" style="--acc:${GM.acc}">
+    <button class="icon backhub" data-act="hub" aria-label="${T('back')}">←</button>
     <header class="hero"><div class="fan" aria-hidden="true">${fan.map(miniCard).join('')}</div>
-      <h1 class="brand">Draftly</h1>
-      <p class="lede">${T('lede',P.length-1)}</p></header>
+      <h1 class="brand gname">${T('g_'+GK)}</h1>
+      <p class="lede">${T('lede_'+GK,P.filter(p=>!p.special).length)}</p></header>
     <div class="side">
-      <section class="me">
-        <label for="pname" class="lbl">${T('yourName')}</label>
-        <input id="pname" maxlength="16" value="${esc(n)}" placeholder="${T('namePh')}" autocomplete="off">
-        <div class="recn" id="recn">${recHtml(r)}</div>
-      </section>
+      <section class="me"><span class="lbl">${T('player')}: <b style="color:var(--ink)">${esc(n)}</b></span>
+        <div class="recn" id="recn">${recHtml(r)}</div></section>
+      ${GK==='nba'?nbaSeg():''}
       <nav class="modes" aria-label="${T('modesAria')}">
         <button class="mode" data-act="nav" data-to="cpu"><span class="mi">${I.cpu}</span><span><b>${T('mCpu')}</b><small>${T('mCpuSub')}</small></span></button>
         <button class="mode" data-act="nav" data-to="local"><span class="mi">${I.local}</span><span><b>${T('mLocal')}</b><small>${T('mLocalSub')}</small></span></button>
@@ -960,17 +1509,18 @@ function renderHome(){
       <div class="links"><button class="linkbtn" data-act="rules">${T('howTo')}</button><button class="linkbtn" data-act="players">${T('allPlayers')}</button></div>
     </div></main>`;
 }
+function nbaSeg(){return `<div class="seg two nbaseg" role="group" aria-label="${T('format')}">${['5x5','3x3'].map(k=>`<button data-act="nbasub" data-s="${k}" aria-pressed="${GM.sub===k}">${k}</button>`).join('')}</div>`;}
 function recHtml(r){
   return `<span><b class="num" style="color:var(--money)">${r.w||0}</b>${T('wins')}</span><span><b class="num" style="color:var(--loss)">${r.l||0}</b>${T('losses')}</span><span><b class="num" style="color:var(--t)">${r.s?'🔥'+r.s:'0'}</b>${T('streakShort')}</span>`;
 }
 function needName(){
   if(myName())return true;
-  go('home');const i=$('#pname');if(i){i.focus();i.classList.add('shake');}toast(T('needName'));return false;
+  go('hub');const i=$('#pname');if(i){i.focus();i.classList.add('shake');}toast(T('needName'));return false;
 }
 function topBar(title,act='home'){return `<div class="top"><button class="icon" data-act="${act}" aria-label="${T('back')}">←</button><h2>${title}</h2></div>`;}
 function renderCpuSetup(){
   $('#app').innerHTML=`<main class="wrap">${topBar(T('mCpu'))}
-    <section class="card">
+    <section class="card"><p class="who-line">${T('gameL')}: <b>${T('g_'+GK)}${gsub()}</b></p>
       <p class="who-line">${T('player')}: <b>${esc(myName())}</b></p>
       <div class="field"><label id="dl">${T('cpuLevel')}</label>
         <div class="seg" role="group" aria-labelledby="dl">${DIFFS.map(k=>`<button data-act="diff" data-d="${k}" aria-pressed="${UI.diff===k}">${T(k)}</button>`).join('')}</div></div>
@@ -980,7 +1530,7 @@ function renderCpuSetup(){
 }
 function renderLocalSetup(){
   $('#app').innerHTML=`<main class="wrap">${topBar(T('mLocal'))}
-    <section class="card">
+    <section class="card"><p class="who-line">${T('gameL')}: <b>${T('g_'+GK)}${gsub()}</b></p>
       <p class="who-line"><span class="ta">●</span> ${T('tSide')}: <b>${esc(myName())}</b></p>
       <div class="field"><label for="nm2"><span class="tb">●</span> ${T('ctSide2')}</label><input id="nm2" maxlength="16" value="${esc(DB.last.p2||'')}" placeholder="${T('player2')}" autocomplete="off"></div>
     </section>
@@ -1004,11 +1554,21 @@ function hintsFor(g,id){
   if(slotsLeft(g,t)<=0)return '';
   const out=[];
   if(r.length){const now=rosterAvg(r),nx=rosterAvg(r.concat(id)),d=nx-now;
-    out.push([d>0.0005?'good':d<-0.0005?'bad':'',T('avgArrow',now.toFixed(3),nx.toFixed(3))]);}
-  const mates=r.filter(i=>P[i].team===p.team).length;
+    out.push([d>0.0005?'good':d<-0.0005?'bad':'',T('avgArrow',fmtAvg(now),fmtAvg(nx))]);}
+  const mates=GM.syn==='group'?r.filter(i=>P[i].team===p.team).length:0;
   if(mates&&!p.special)out.push(['good',T('mateHint',esc(p.team),mates+1,Math.round(BUFF[Math.min(5,mates+1)]*100))]);
-  if(isIGL(p))out.push(leaderOf(r)==null?['good',T('iglHint',Math.round(LEAD*100))]:['',T('iglHave')]);
-  if(p.hc<UNDERDOG)out.push(['good',T('clutchHint',Math.round(CLUTCH*100))]);
+  if(GK==='cs2'){
+    if(isIGL(p))out.push(leaderOf(r)==null?['good',T('iglHint',Math.round(LEAD*100))]:['',T('iglHave')]);
+    if(p.hc<UNDERDOG)out.push(['good',T('clutchHint',Math.round(CLUTCH*100))]);
+  }else if(GK==='nba'){
+    if(!r.some(i=>P[i].role===p.role))out.push(['good',T('nbaNeed',p.role)]);
+    if(p.role==='PG'&&!r.some(i=>P[i].role==='PG'))out.push(['good',T('nbaPG')]);
+    if(p.role==='C'&&!r.some(i=>P[i].role==='C'))out.push(['good',T('nbaC')]);
+  }else if(GK==='fifa'){
+    if(p.role==='GK')out.push(r.some(i=>P[i].role==='GK')?['',T('gkHave')]:['good',T('gkNeed')]);
+  }else if(GK==='food'){
+    if(!r.some(i=>P[i].cat===p.cat))out.push(['good',T('foodNew')]);
+  }
   return out.length?`<div class="hints">${out.map(h=>`<span class="hint ${h[0]}">${h[1]}</span>`).join('')}</div>`:'';
 }
 function nameC(t){return `<span class="${t?'tb':'ta'}">${esc(G.names[t])}</span>`;}
@@ -1028,21 +1588,21 @@ function renderDraft(){
       <div class="seats" aria-label="${T('seatsAria',n)}">${Array.from({length:SLOTS},(_,i)=>`<span class="${i<n?'f':''} ${i===ns?'pop':''}"></span>`).join('')}</div>
       <div class="who">${n?g.rost[t].map(id=>{const q=P[id],bf=buffOf(g.rost[t],id);return `<span class="rp ${rcls(q)}">${avatar(q,'xs')}<i>${esc(pName(q))}</i>${bf?`<em class="bf">+${Math.round(bf*100)}%</em>`:''}<b class="num">${fmtR(q.hl)}</b></span>`;}).join(''):`<span class="muted">${T('empty')}</span>`}</div>
       <div class="meta">${T('metaAvg')} <b class="num">${n?rosterAvg(g.rost[t]).toFixed(3):'—'}</b>, ${T('metaGive')} ${g.gives[t]}${slotsLeft(g,1-t)===0?`, ${T('metaSkip')} ${g.skips[t]}`:''}</div></section>`;};
-  const goat=fresh&&showId===PRIME&&g.cur===PRIME;
+  const goat=PRIME>=0&&fresh&&showId===PRIME&&g.cur===PRIME;
   let card='';
   if(showId!=null){const p=P[showId],s=g.phase==='sold'?g.sold:null;
     const fx=s?(s.how==='skip'?'drop':'fly'+s.t):(fresh&&!reel&&motion?'land':'');
-    card=`<div class="stage ${reel?'reeling':''}" id="stage">
+    card=`<div class="stage ${reel?'reeling rs-'+GM.reveal:''}" id="stage">
       <article class="pcard ${rcls(p)} ${fx}" aria-label="${esc(pName(p))}, rating ${fmtR(p.hl)}">
-        <div class="pc-rating"><b class="num">${fmtR(p.hl)}</b><small>Rating</small></div>
-        <span class="chip pc-role role-${p.role.replace('/','')}">${p.role}</span>
+        <div class="pc-rating"><b class="num">${fmtR(p.hl)}</b><small>${T('rl_'+GK)}</small></div>
+        <span class="chip pc-role role-${String(p.role).replace('/','')}">${esc(roleName(p))}</span>
         ${avatar(p,'lg')}
         <div class="pc-nick">${esc(p.nick)}${p.special?'<small class="prime">prime</small>':''}</div>
-        <div class="pc-meta"><span>${esc(p.team)}</span><span class="chip ${p.cc==='MN'?'mn':''}">${p.cc}</span></div>
+        <div class="pc-meta"><span>${esc(teamName(p))}</span>${p.cc?`<span class="chip ${p.cc==='MN'?'mn':''}">${p.cc}</span>`:''}${GK==='f1'?`<span class="chip">${p.pts} ${T('ptsShort')}</span>`:''}</div>
         ${g.cur!=null?hintsFor(g,showId):''}
         ${s&&s.how!=='skip'?`<div class="stamp ${s.t?'tb':'ta'}">${s.how==='give'?T('free'):'$'+s.price}</div>`:''}
       </article>
-      ${reel?'<div class="reel" aria-hidden="true"><div class="track"></div><i class="marker"></i></div>':''}
+      ${reel?(GM.reveal==='reel'?'<div class="reel" aria-hidden="true"><div class="track"></div><i class="marker"></i></div>':revealHtml(GM.reveal)):''}
     </div>`;}
   let mid='',acts='';
   const a=g.actor,mine=controls(a);
@@ -1087,7 +1647,7 @@ function renderDraft(){
   const goatAt=reelDelay+(reel?REVEAL_MS:0);
   $('#app').innerHTML=`<main class="wrap wide">
     <div class="dbar"><button class="icon" data-act="quit" aria-label="${T('quit')}">×</button>
-      <div class="cardno"><b class="num">${T('cardNo',g.cardNo)}</b>${T('cardsLeft',left)}${MAPS[g.map]?` <span class="mapchip" style="--mc:${MAPCOL[g.map]}">${MAPS[g.map]}</span>`:''}${G.mode==='online'?` <span id="oppstat">${oppStatus()}</span>`:''}</div>
+      <div class="cardno"><b class="num">${T('cardNo',g.cardNo)}</b>${T('cardsLeft',left)} <span class="mapchip" style="--mc:${MAPCOL[g.map]||GM.acc}">${MAPS[g.map]||(T('g_'+GK)+gsub())}</span>${G.mode==='online'?` <span id="oppstat">${oppStatus()}</span>`:''}</div>
       <button class="icon" data-act="players" aria-label="${T('allPlayers')}" title="${T('allPlayers')}"><svg viewBox="0 0 24 24" class="ic"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
       <div class="timer ${a===1?'b':''} ${a<0?'idle':''}" id="timer"><span id="tsec">15</span></div></div>
     <div class="dgrid">
@@ -1100,7 +1660,7 @@ function renderDraft(){
   ${g.cardNo===1&&flipLeft>0&&g.phase==='offer'?`<div class="flip" id="flip"><div><div class="coin"></div><h2>${T('firstOpen',nameC(g.first))}</h2><p class="muted">${T('thenAlt')}</p></div></div>`:''}`;
   if(g.cardNo===1&&flipLeft>0)setTimeout(()=>{const f=$('#flip');if(f)f.remove();},flipLeft+250);
   if(bump){const el=$('.price .amt');if(el)el.classList.add('bump');}
-  if(reel)startReel($('#stage'),showId,reelDelay);
+  if(reel)startReveal($('#stage'),showId,reelDelay);
   if(goat)setTimeout(()=>{const x=$('#goat');if(x)x.remove();},goatAt+GOAT_MS);
   [0,1].forEach(t=>{if(prev&&prev.m[t]!==g.money[t])tickNum(document.querySelector(`.cash[data-t="${t}"]`),prev.m[t],g.money[t],750,v=>'$'+v);});
   UI.wal={gid:g.gid,m:g.money.slice(),n:g.rost.map(r=>r.length)};
@@ -1148,6 +1708,7 @@ const stk=n=>n>0?`<span class="stk" title="${T('streakT')}">🔥${n}</span>`:'';
 
 /* ================= match screen ================= */
 function renderMatch(){
+  if(GK!=='cs2')return renderMatch2();
   if(ANIM){clearTimeout(ANIM.to);ANIM=null;}
   const g=G,res=g.res,st=g.streak||[0,0],RR=res.rounds.map(decR);
   const col=t=>`<section class="rcol ${t?'b':''}">${g.rost[t].map((id,i)=>{const p=P[id],bf=buffOf(g.rost[t],id);
@@ -1226,7 +1787,7 @@ function refreshAfter(){
   const g=G,res=g.res,w=res.win;
   const me=g.mode==='cpu'?0:g.mode==='online'?NET.team:-1;
   const head=g.mode==='local'?T('winner',nameC(w)):w===me?T('youWon'):T('xWon',esc(g.names[w]));
-  const mvp=P[g.rost[w][res.mvp]];
+  const cs=GK==='cs2',mvp=cs?P[g.rost[w][res.mvp]]:P[g.rost[res.mvp[0]][res.mvp[1]]];
   const myName=g.mode==='local'?g.names[w]:(me>=0?g.names[me]:''),myS=myName?(recOf(myName).s||0):0;
   const streakLine=(g.mode==='local'||w===me)&&myS>=2?`<p class="stat streakline">${T('streakLine',esc(myName),myS)}</p>`:'';
   let acts='';
@@ -1236,8 +1797,8 @@ function refreshAfter(){
       <div class="row2"><button class="btn" data-act="host-start" ${ok?'':'disabled'}>${T('restart')}</button><button class="btn ghost" data-act="leave">${T('leave')}</button></div>`;}
   else acts=`<p class="stat">${NET.ready?T('waitHost'):T('againQ')}</p>
       <div class="row2"><button class="btn ${NET.ready?'ghost':''}" data-act="ready">${NET.ready?T('notReady'):T('ready')}</button><button class="btn ghost" data-act="leave">${T('leave')}</button></div>`;
-  el.innerHTML=`<div class="banner"><h2>${head}</h2><span class="muted num">${res.score[0]} : ${res.score[1]}${res.ot?` (${T('otShort')})`:''}</span></div>
-    <p class="stat">MVP: <b style="color:var(--r-gold)">${esc(pName(mvp))}</b> <span class="num">${res.K[w][res.mvp]}-${res.D[w][res.mvp]}</span></p>
+  el.innerHTML=`<div class="banner"><h2>${head}</h2><span class="muted num">${res.score[0]} : ${res.score[1]}${res.ot?` (${T('otShort')})`:''}${res.pens?` (${T('pensShort')} ${res.pens[0]}:${res.pens[1]})`:''}</span></div>
+    <p class="stat">MVP: <b style="color:var(--r-gold)">${esc(pName(mvp))}</b> <span class="num">${cs?res.K[w][res.mvp]+'-'+res.D[w][res.mvp]:esc(res.mvpS||'')}</span></p>
     ${streakLine}${acts}`;
 }
 function again(){
@@ -1283,7 +1844,7 @@ function renderOnlineSetup(){
   const n=DB.last.p1||'',k=NET.kind;let body;
   if(k===undefined){body=`<div class="notice">${T('checking')}</div>`;detectTransport().then(()=>{if(SCREEN==='online')render();});}
   else if(k===null)body=`<div class="notice">${T('noOnline')}</div>`;
-  else body=`<section class="card"><p class="who-line">${T('player')}: <b>${esc(n)}</b></p></section>
+  else body=`<section class="card"><p class="who-line">${T('gameL')}: <b>${T('g_'+GK)}${gsub()}</b></p><p class="who-line">${T('player')}: <b>${esc(n)}</b></p></section>
     <button class="btn" data-act="create-room">${T('createRoom')}</button>
     <div class="or">${T('orJoin')}</div>
     <section class="card"><div class="field"><label for="code">${T('roomCode')}</label><input id="code" class="code-in" maxlength="4" value="${esc(UI.joinCode)}" placeholder="ABCD" autocomplete="off" autocapitalize="characters"></div>
@@ -1304,10 +1865,10 @@ function oppStatus(){
   if(!NET.tr)return '';if(!NET.conn)return `<span style="color:var(--loss)">${T('connLost')}</span>`;if(!NET.opp)return '';
   return Date.now()-NET.oppSeen<8000?`<span style="color:var(--money)">${T('oppOnline')}</span>`:`<span style="color:var(--loss)">${T('oppLag')}</span>`;
 }
-const SYNC=['gid','first','deck','ptr','cur','cardNo','money','rost','gives','skips','phase','kind','actor','bid','hi','log','seq','res','sold','autoTo','streak','map'];
+const SYNC=['gid','first','deck','ptr','cur','cardNo','money','rost','gives','skips','phase','kind','actor','bid','hi','log','seq','res','sold','autoTo','streak','map','game','sub'];
 function hostSnapshot(){
   let g=null;if(G){g={};SYNC.forEach(k=>g[k]=G[k]);g.rem=Math.max(0,G.deadline-Date.now());g.sa=Math.max(0,Date.now()-G.startedAt);}
-  return {t:'st',v:1,pid:PID,code:NET.code,hn:NET.name,gn:NET.opp?NET.opp.name:'',gp:NET.opp?NET.opp.pid:'',gr:NET.gr,g};
+  return {t:'st',v:1,pid:PID,code:NET.code,gk:GK,gs:GM.sub,hn:NET.name,gn:NET.opp?NET.opp.name:'',gp:NET.opp?NET.opp.pid:'',gr:NET.gr,g};
 }
 function hostBroadcast(){if(NET.tr){NET.tr.send(hostSnapshot());NET.lastSt=Date.now();}}
 function netMsg(d){
@@ -1337,6 +1898,8 @@ function guestState(S){
   NET.opp={pid:S.pid,name:cleanName(S.hn)||T('host')};
   const grChanged=NET.gr!==!!S.gr;NET.gr=!!S.gr;
   const g=S.g;
+  const wantG=(g&&g.game)||S.gk;
+  if(wantG&&(wantG!==GK||((g&&g.sub)||S.gs)!==GM.sub)){useGame(wantG,(g&&g.sub)||S.gs);if(SCREEN==='lobby'&&!g)render();}
   if(!g||(g.phase==='match'&&(!G||G.gid!==g.gid))){
     if(SCREEN!=='lobby'&&SCREEN!=='match'){G=null;go('lobby');}
     else if(SCREEN==='lobby'&&(oppChanged||grChanged||wasFull))render();
@@ -1385,7 +1948,7 @@ function renderLobby(){
     main=`<div class="lseats"><div class="lseat"><span class="lbl">${T('hostSide')}</span><b>${esc(hostName)}</b><span class="wait">${host?T('you'):(oppOn?T('onlineDot'):'')}</span></div>
       <div class="lseat b"><span class="lbl">${T('guestSide')}</span>${seatB}</div></div>${btn}`;
   }
-  $('#app').innerHTML=`<main class="wrap">${topBar(T('onlineRoom'),'leave')}
+  $('#app').innerHTML=`<main class="wrap">${topBar(T('onlineRoom')+': '+T('g_'+GK)+gsub(),'leave')}
     <div class="codebox"><span class="lbl">${T('roomCode')}</span><span class="led num">${esc(NET.code)}</span>
       ${host?`<span class="muted" style="font-size:13px;text-align:center">${T('codeHint')}</span>`:''}
       ${host&&link?`<button class="btn ghost" data-act="copy" style="min-height:40px;padding:8px 14px">${T('copyLink')}</button>`:''}</div>
@@ -1401,12 +1964,13 @@ function hostStart(){
 function modal(html){$('#modal').innerHTML=`<div class="modal" data-act="close-bg"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`;const b=$('#modal .sheet button');if(b)b.focus();}
 function closeModal(){$('#modal').innerHTML='';}
 function rulesModal(){
-  const x={a:Math.round(duelP(1.3,1)*100),b:Math.round(duelP(1.1,1)*100),lead:Math.round(LEAD*100),clutch:Math.round(CLUTCH*100),prime:Math.round(PRIME_CHANCE*100),pr:fmtR(P[PRIME].hl)};
-  modal(`<h2>${T('howTo')}</h2><ol>${T('rules',x).map(li=>`<li>${li}</li>`).join('')}</ol>
+  const x={a:Math.round(duelP(1.3,1)*100),b:Math.round(duelP(1.1,1)*100),lead:Math.round(LEAD*100),clutch:Math.round(CLUTCH*100),prime:Math.round(PRIME_CHANCE*100),pr:PRIME>=0?fmtR(P[PRIME].hl):''};
+  const list=GK==='cs2'?T('rules',x):T('rulesCommon').concat(T('rules_'+GK));
+  modal(`<h2>${T('howTo')}: ${T('g_'+GK)}</h2><ol>${list.map(li=>`<li>${li}</li>`).join('')}</ol>
   <button class="btn" data-act="close">${T('gotIt')}</button>`);
 }
 function playersModal(){
-  modal(`<div class="ph"><h2>${T('allPlayers')}</h2><button class="icon" data-act="close" aria-label="${T('close')}">×</button></div>
+  modal(`<div class="ph"><h2>${T('allPlayers')}: ${T('g_'+GK)}</h2><button class="icon" data-act="close" aria-label="${T('close')}">×</button></div>
     <div class="ptools"><input id="psearch" placeholder="${T('search')}" autocomplete="off" aria-label="${T('searchA')}">
       <div class="seg two" role="group" aria-label="${T('sortA')}"><button data-act="psort" data-k="team" aria-pressed="${UI.psort!=='rating'}">${T('byTeam')}</button><button data-act="psort" data-k="rating" aria-pressed="${UI.psort==='rating'}">${T('byRating')}</button></div></div>
     <div id="plist" class="plist"></div>`);
@@ -1418,13 +1982,13 @@ function fillPlayers(){
   const q=(($('#psearch')||{}).value||'').trim().toLowerCase();
   const mine=G&&G.rost?G.rost:[[],[]];
   const own=id=>mine[0].includes(id)?0:mine[1].includes(id)?1:-1;
-  const row=p=>{const o=own(p.id);return `<li class="prow ${rcls(p)}">${avatar(p,'sm')}<span class="n">${esc(pName(p))}<small>${esc(p.team)}, ${p.role}, ${p.cc}</small></span>${o>=0&&G?`<span class="own ${o?'tb':'ta'}">${esc(G.names[o])}</span>`:'<span></span>'}<b class="num">${fmtR(p.hl)}</b></li>`;};
-  const list=P.filter(p=>!p.special&&(!q||p.nick.toLowerCase().includes(q)||p.team.toLowerCase().includes(q)));
+  const row=p=>{const o=own(p.id);return `<li class="prow ${rcls(p)}">${avatar(p,'sm')}<span class="n">${esc(pName(p))}<small>${[teamName(p),roleName(p),p.cc].filter(Boolean).map(esc).join(', ')}</small></span>${o>=0&&G?`<span class="own ${o?'tb':'ta'}">${esc(G.names[o])}</span>`:'<span></span>'}<b class="num">${fmtR(p.hl)}</b></li>`;};
+  const list=P.filter(p=>!p.special&&(!q||p.nick.toLowerCase().includes(q)||(p.en||'').toLowerCase().includes(q)||teamName(p).toLowerCase().includes(q)));
   let html='';
   if(UI.psort==='rating')html=`<ul>${list.slice().sort((a,b)=>b.hc-a.hc).map(row).join('')}</ul>`;
-  else TEAMS.forEach(([team])=>{const ps=list.filter(p=>p.team===team);if(ps.length)html+=`<h3>${esc(team)}</h3><ul>${ps.map(row).join('')}</ul>`;});
+  else TEAMS.forEach(([team])=>{const ps=list.filter(p=>p.team===team);if(ps.length)html+=`<h3>${esc(GK==='food'?T('cat_'+team):team)}</h3><ul>${ps.map(row).join('')}</ul>`;});
   const pr=P[PRIME];
-  if(!q||'s1mple prime goat'.includes(q))html+=`<h3>${T('rare')}</h3><ul>${row(pr).replace('</small>',`, ${T('dropChance',Math.round(PRIME_CHANCE*100))}</small>`)}</ul>`;
+  if(PRIME>=0&&(!q||'s1mple prime goat'.includes(q)))html+=`<h3>${T('rare')}</h3><ul>${row(pr).replace('</small>',`, ${T('dropChance',Math.round(PRIME_CHANCE*100))}</small>`)}</ul>`;
   el.innerHTML=html||`<p class="muted" style="padding:12px 4px">${T('noneFound')}</p>`;
 }
 function quitModal(){modal(`<h2>${T('quitQ')}</h2><p class="muted">${T('quitSub')}</p>
@@ -1437,6 +2001,9 @@ document.addEventListener('click',e=>{
   if(a==='close-bg'){if(e.target===b)closeModal();return;}
   switch(a){
     case 'nav':if(needName())go(b.dataset.to);break;
+    case 'hub':G=null;go('hub');break;
+    case 'game':useGame(b.dataset.g,DB.last['sub_'+b.dataset.g]);DB.last.game=GK;saveDB();UI.lastScreen=null;go('home');break;
+    case 'nbasub':useGame('nba',b.dataset.s);DB.last.sub_nba=GM.sub;saveDB();document.querySelectorAll('[data-act="nbasub"]').forEach(x=>x.setAttribute('aria-pressed',x===b));{const r=$('#recn');if(r)r.innerHTML=recHtml(recOf(myName()));}break;
     case 'home':G=null;go('home');break;
     case 'rules':rulesModal();break;
     case 'players':playersModal();break;
@@ -1472,7 +2039,7 @@ document.addEventListener('submit',e=>{
   humanAct('raise',v);
 });
 document.addEventListener('input',e=>{
-  if(e.target.id==='pname'){DB.last.p1=cleanName(e.target.value);saveDB();const r=$('#recn');if(r)r.innerHTML=recHtml(recOf(DB.last.p1));e.target.classList.remove('shake');}
+  if(e.target.id==='pname'){DB.last.p1=cleanName(e.target.value);saveDB();e.target.classList.remove('shake');}
   else if(e.target.id==='psearch')fillPlayers();
 });
 
@@ -1488,7 +2055,8 @@ setInterval(()=>{
 (function boot(){
   document.documentElement.lang=LANG();
   const m=location.hash.match(/^#room-([A-Za-z0-9]{4})$/);
-  if(m&&myName()){UI.joinCode=m[1].toUpperCase();go('online');}else{if(m)UI.joinCode=m[1].toUpperCase();go('home');}
+  useGame(DB.last.game||'cs2',DB.last['sub_'+(DB.last.game||'cs2')]);
+  if(m&&myName()){UI.joinCode=m[1].toUpperCase();go('online');}else{if(m)UI.joinCode=m[1].toUpperCase();go('hub');}
   setTimeout(()=>{detectTransport();},0);
 })();
 </script>
