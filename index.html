@@ -75,7 +75,8 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 /* mini item tile (home fan + reel) */
 .mini{position:relative;flex:none;width:104px;height:140px;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;padding:10px 8px 14px;background:radial-gradient(120% 70% at 50% 0%,color-mix(in srgb,var(--rc) 40%,transparent),transparent 72%),linear-gradient(#1a2130,#121722);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--rc) 45%,transparent)}
 .mini::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--rc)}
-.mini .ava{width:46px;height:46px;margin-bottom:auto;margin-top:6px}
+.mini .avw{margin-bottom:auto;margin-top:6px}
+.mini .ava{width:46px;height:46px}
 .mini b{font:700 11.5px/1.15 var(--num);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mini .r{font:800 16px/1 var(--num);color:var(--rc)}
 .mini.hitc{box-shadow:inset 0 0 0 2px var(--rc),0 0 24px color-mix(in srgb,var(--rc) 60%,transparent)}
@@ -291,6 +292,24 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* ---- v3 additions ---- */
+.avw{position:relative;display:inline-grid;flex:none}
+.ttag{position:absolute;right:-9px;bottom:-3px;font:800 9px/1 var(--num);letter-spacing:.02em;padding:3px 4px;border-radius:6px;background:#0b0f17;color:var(--ink);box-shadow:0 0 0 1.5px color-mix(in srgb,var(--rc,#8b97ad) 80%,transparent);white-space:nowrap}
+.avw.lg .ttag{font-size:11px;padding:4px 6px;right:-14px;bottom:0}
+.avw.sm .ttag{font-size:7px;padding:2px 3px;right:-7px;bottom:-3px}
+.avw.sm{margin-right:6px}
+.custom{display:grid;grid-template-columns:1fr auto;gap:8px}
+.custom input{background:var(--bg);border:0;box-shadow:inset 0 0 0 1px var(--line);border-radius:14px;padding:0 14px;min-height:52px;font:700 18px/1 var(--num);width:100%;-moz-appearance:textfield}
+.custom input::placeholder{font:500 15px var(--body);color:var(--muted)}
+.custom input:focus{box-shadow:inset 0 0 0 2px var(--t);outline:none}
+.custom input::-webkit-outer-spin-button,.custom input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.custom .btn{min-width:96px}
+.dl .cl{font:800 9px/1 var(--num);color:var(--r-gold);margin:0 3px;vertical-align:1px}
+.langsw{position:absolute;top:14px;right:16px;z-index:2;display:flex;background:var(--panel);border-radius:10px;padding:3px;box-shadow:inset 0 0 0 1px var(--line)}
+.langsw button{font:700 12px/1 var(--num);padding:7px 9px;border-radius:7px;color:var(--muted)}
+.langsw button[aria-pressed="true"]{background:var(--raise);color:var(--ink)}
+.home{position:relative}
+@media (max-width:899px){.home .hero{padding-top:36px}}
+
 .r-gold.goat{--rc:#F4C542}
 .ava.xs{width:20px;height:20px;box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--rc) 70%,transparent)}
 .stk{display:inline-flex;align-items:center;gap:1px;margin-left:6px;padding:1px 6px;border-radius:99px;font:700 11.5px/1.4 var(--num);color:#ffb35c;background:rgba(240,169,62,.14);white-space:nowrap}
@@ -452,11 +471,160 @@ const pName=p=>p.nick+(p.special?' (prime)':'');
 // rarity colour from rating (CS2 item grades)
 const rarOf=hc=>hc>=125?'gold':hc>=115?'cov':hc>=110?'cla':hc>=105?'res':hc>=100?'mil':'ind';
 // neutral placeholder avatar (no real photos): silhouette tinted by rarity
-const avatar=(p,size='')=>`<span class="ava ${size}" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7.5"/><path d="M5 40c1.5-9 7.5-14 15-14s13.5 5 15 14z"/></svg></span>`;
+// short team tag shown on the avatar (text only, no real logos)
+const TAG={'Vitality':'VIT','MOUZ':'MZ','FURIA':'FUR','Spirit':'TS','Aurora':'AUR','Falcons':'FAL','NAVI':'NAVI','FUT':'FUT','The MongolZ':'MGZ','G2':'G2','PARIVISION':'PARI','Legacy':'LGC','Liquid':'TL','FaZe':'FAZE','9z':'9Z','BC.Game':'BCG','100 Thieves':'100T','TYLOO':'TYL','Chinggis Warriors':'CW','5star':'5S','The Huns':'HUNS','NAVI 2021':'NAVI'};
+const avatar=(p,size='')=>`<span class="avw ${size}" aria-hidden="true"><span class="ava ${size}"><svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7.5"/><path d="M5 40c1.5-9 7.5-14 15-14s13.5 5 15 14z"/></svg></span>${size==='xs'?'':`<i class="ttag">${TAG[p.team]||''}</i>`}</span>`;
 const rcls=p=>'r-'+rarOf(p.hc)+(p.special?' goat':'');
 const miniCard=p=>`<div class="mini ${rcls(p)}">${avatar(p)}<b>${esc(pName(p))}</b><span class="r num">${fmtR(p.hl)}</span></div>`;
 const fmtR=x=>(+x).toFixed(2);
-const DIFF={easy:'Хялбар',mid:'Дунд',hard:'Хэцүү'};
+const DIFFS=['easy','mid','hard'];
+/* ================= language (Mongolian / English) ================= */
+const ord=n=>n+(n===1?'st':n===2?'nd':n===3?'rd':'th');
+const I18N={
+mn:{
+  easy:'Хялбар',mid:'Дунд',hard:'Хэцүү',
+  lede:n=>`CS2-ын ${n} тамирчнаас $20-оор 5 хүнтэй баг цуглуулж, 13 раунд тоглуул.`,
+  yourName:'Таны нэр',namePh:'Нэрээ бичнэ үү',modesAria:'Тоглох горим',
+  mCpu:'Компьютерын эсрэг',mCpuSub:'Хялбар, дунд, хэцүү түвшин',
+  mLocal:'2 хүн нэг утсан дээр',mLocalSub:'Утсаа ээлжлэн дамжуулж үнэ хаялцана',
+  mOnline:'Онлайн',mOnlineSub:'4 тэмдэгттэй кодоор найзтайгаа',
+  howTo:'Тоглох заавар',allPlayers:'Бүх тамирчид',
+  wins:'ялалт',losses:'ялагдал',streakShort:'дараалсан',
+  needName:'Эхлээд нэрээ бичнэ үү',back:'Буцах',player:'Тоглогч',
+  cpuLevel:'Компьютерын түвшин',start:'Эхлэх',
+  cpuFine:'Хэцүү компьютер мөнгөө хэмнэж, өндөр rating-тэй тамирчдыг хүлээнэ.',
+  tSide:'T тал',ctSide2:'CT тал, хоёр дахь тоглогчийн нэр',player2:'Тоглогч 2',
+  localFine:'Ээлжтэй хүний өнгө дэлгэц дээр тодорно. Утсаа түүнд өгөөрэй.',
+  cpuName:'Компьютер',
+  avgArrow:(a,b)=>`Таны дундаж ${a} → ${b}`,
+  mateHint:(team,n,pct)=>`${team}-ийн ${n} дахь тамирчин: +${pct}%`,
+  iglHint:pct=>`IGL: багийн бусад тамирчид +${pct}%`,
+  iglHave:'Танд IGL аль хэдийн байгаа',
+  clutchHint:pct=>`Андердог: ганцаараа үлдэхэд +${pct}%`,
+  cpuThinking:'Компьютер бодож байна…',deciding:n=>`${n} шийдэж байна…`,
+  seatsAria:n=>`${n}/5 суудал`,empty:'Хоосон',
+  metaAvg:'Дундаж',metaGive:'өгөх',metaSkip:'алгасах',free:'Үнэгүй',
+  openTurnOf:n=>'Нээх ээлж: '+n,yourOpen:'Таны нээх ээлж',
+  openSub:o=>`$1-ээр нээвэл нөгөө нь үнээ өсгөж болно. Эсвэл ${o}-д үнэгүй өг.`,
+  open1:'$1-ээр нээх',give:'Өгөх',left:n=>`${n} эрх үлдсэн`,
+  brokeT:': мөнгө дууссан',brokeSub:(a,o)=>`${a} $1-ээр авах уу? Үгүй бол энэ тамирчин ${o}-д $0-оор очно.`,
+  take1:'$1-ээр авах',giveHim:'Түүнд өгөх',at0:'$0-оор',
+  fullT:': баг бүрэн',fullSub:a=>`${a} $1-ээр авах эсвэл алгасах.`,skip:'Алгасах',
+  highest:'хамгийн өндөр',turnOf:n=>'Ээлж: '+n,raiseQ:'Үнээ өсгөх үү?',allIn:m=>`Бүгд $${m}`,
+  passBtn:'Өнжих',passSub:(n,b)=>`${n} $${b}-оор авна`,
+  custom:'Дүнгээ бичих',say:'Хэлэх',badBid:(a,b)=>`$${a}-$${b} хооронд бичнэ үү`,
+  skipped:': алгаслаа',gaveFree:', үнэгүй өгсөн',bothBroke:'Хоёулаа мөнгөгүй',autoSub:(p,n)=>`${p} ${n}-д $0-оор очно.`,
+  logSkip:'алгасав',logFree:' (үнэгүй)',quit:'Гарах',cardNo:n=>`${n}-р карт`,cardsLeft:n=>`${n} карт үлдсэн`,recent:'Сүүлийн картууд',
+  goatChance:p=>`Гарч ирэх магадлал ${p}%`,firstOpen:n=>`Эхний картыг ${n} нээнэ`,thenAlt:'Дараа нь ээлжлэн нээнэ',
+  streakT:'Дараалсан ялалт',match:'Тоглолт',round:n=>`${n}-р раунд`,to13:'13 раунд хожсон нь ялна',roundDuels:n=>`${n}-р раундын тулаанууд`,
+  final:'Эцсийн дүн',roundsN:n=>`${n} раунд`,winner:n=>'Ялагч: '+n,youWon:'Та яллаа!',xWon:n=>`${n} яллаа`,
+  streakLine:(n,s)=>`🔥 ${n}: ${s} дараалсан ялалт`,again:'Дахин тоглох',home:'Нүүр',
+  oppLeft:'Өрсөлдөгч гарсан байна',oppReady:n=>`${n} дахин тоглоход бэлэн`,waitReady:n=>`${n} бэлэн болохыг хүлээж байна…`,
+  restart:'Дахин эхлүүлэх',leave:'Гарах',waitHost:'Хост эхлүүлэхийг хүлээж байна…',againQ:'Дахин тоглох уу?',
+  notReady:'Бэлэн биш',ready:'Бэлэн',checking:'Холболт шалгаж байна…',
+  noOnline:'Онлайн горим энэ хуудсан дээр ажиллахгүй байна. Тоглоомыг Cloudflare дээр байршуулсан хаягаар нээвэл найзтайгаа кодоор тоглоно.',
+  createRoom:'Өрөө үүсгэх',orJoin:'эсвэл кодоор нэгдэх',roomCode:'Өрөөний код',join:'Нэгдэх',online:'Онлайн',
+  connFail:'Өрөөнд холбогдож чадсангүй',connLost:'· холболт тасарсан',oppOnline:'· ● онлайн',oppLag:'· ● саатсан',
+  guest:'Зочин',host:'Хост',roomFull:'Энэ өрөөнд өөр хүн аль хэдийн нэгдсэн байна. Өөр код ашиглана уу.',
+  noRoom:c=>`${c} кодтой өрөө олдсонгүй. Кодоо шалгаад дахин оролдоно уу.`,
+  waiting:'Хүлээж байна…',sendCode:'Кодоо найздаа илгээ',startBtn:'Эхлүүлэх',
+  waitFriend:'Найз тань нэгдэхийг хүлээж байна…',allReady:'Бүгд бэлэн. Эхлүүлээрэй!',waitGuest:'Зочин «Бэлэн» дарахыг хүлээж байна…',
+  unready:'Бэлэн биш болох',readySub:'Бэлэн болмогц хост тоглолтыг эхлүүлнэ',
+  hostSide:'Хост, T тал',guestSide:'Зочин, CT тал',you:'Та',onlineDot:'● онлайн',onlineRoom:'Онлайн өрөө',
+  codeHint:'Найз тань «Онлайн → Нэгдэх» хэсэгт энэ кодыг оруулна',copyLink:'Холбоос хуулах',
+  srvOk:'Сервертэй холбогдсон',srvWait:'Сервертэй холбогдож байна…',gotIt:'Ойлголоо',close:'Хаах',
+  search:'Нэр эсвэл баг хайх',searchA:'Хайх',sortA:'Эрэмбэ',byTeam:'Багаар',byRating:'Rating-аар',
+  rare:'Ховор карт',dropChance:p=>`гарах магадлал ${p}%`,noneFound:'Ийм тамирчин олдсонгүй',
+  quitQ:'Тоглоомоос гарах уу?',quitSub:'Энэ draft дуусахгүй, ялалт ялагдал бүртгэгдэхгүй.',keep:'Үргэлжлүүлэх',
+  code4:'4 тэмдэгттэй код оруулна уу',copied:'Холбоос хуулагдлаа',lang:'Хэл',
+  rules:x=>[
+    'Хоёулаа $20 мөнгөтэй, 5 хоосон суудалтай эхэлнэ. Мөнгө нь виртуал.',
+    'Тамирчдын карт санамсаргүй дарааллаар нэг нэгээр гарна. Карт бүрийг та хоёр ээлжлэн нээнэ.',
+    'Нээх ээлжтэй үедээ картыг $1-ээр нээнэ, эсвэл өрсөлдөгчдөө үнэгүй өгнө. Үнэгүй өгөх эрх 2 удаа.',
+    'Нээсний дараа нөгөө нь үнээ +$1, +$2, +$5, бүх мөнгөөрөө эсвэл өөрийн бичсэн дүнгээр өсгөнө. Өнжвөл хамгийн сүүлд үнэ хэлсэн нь авна.',
+    'Мөнгө дуусаад суудал үлдсэн бол өрсөлдөгч тань хүсээгүй картаа танд $0-оор өгнө. Нэг талын баг бүрдсэн бол нөгөө нь $1-ээр авна эсвэл алгасна (3 удаа).',
+    'Ээлж бүрт 15 секунд. Цаг дуусвал нээх үед $1-ээр авна, хаялцах үед өнжинө.',
+    'Хоёр баг бүрдмэгц тоглолт эхэлнэ. 13 раунд түрүүлж хожсон баг ялна.',
+    `Раунд бүр 1v1 тулаанаас бүрдэнэ. Тулаан бүрт хожих магадлалыг хоёр тамирчны HLTV rating-ээр тооцно. Жишээ нь 1.30 ба 1.00 бол ${x.a}% ба ${100-x.a}%, 1.10 ба 1.00 бол ${x.b}% ба ${100-x.b}%.`,
+    'Нэг багийн тамирчдыг цуглуулбал бонус авна: 2 хүн бол rating нь +3%, 3 бол +6%, 4 бол +8%, 5 бол +10%.',
+    `IGL нь багийнхаа бусад тамирчдад +${x.lead}% өгнө (нэг IGL-ийнх л тооцогдоно). Rating нь 1.00-аас доош тамирчин багтаа ганцаараа үлдэхдээ +${x.clutch}% хүчтэй тулалдана. Тиймээс rating муутай тамирчин ч хэрэгтэй.`,
+    'AWP, IGL заавал байх албагүй.',
+    `Ховор карт: ${x.prime}% магадлалтайгаар s1mple (prime) гарч ирнэ. Түүний rating ${x.pr}.`,
+    'Дараалсан ялалт 🔥 таны нэрийн хажууд гарах бөгөөд өрсөлдөгч тань ч харна.'],
+},
+en:{
+  easy:'Easy',mid:'Medium',hard:'Hard',
+  lede:n=>`Build a 5-player team from ${n} CS2 pros with $20, then play it out to 13 rounds.`,
+  yourName:'Your name',namePh:'Type your name',modesAria:'Game mode',
+  mCpu:'Vs computer',mCpuSub:'Easy, medium or hard',
+  mLocal:'2 players, 1 phone',mLocalSub:'Pass the phone and bid in turns',
+  mOnline:'Online',mOnlineSub:'Play a friend with a 4-letter code',
+  howTo:'How to play',allPlayers:'All players',
+  wins:'wins',losses:'losses',streakShort:'streak',
+  needName:'Type your name first',back:'Back',player:'Player',
+  cpuLevel:'Computer level',start:'Start',
+  cpuFine:'The hard computer saves its money for high-rated players.',
+  tSide:'T side',ctSide2:'CT side, second player’s name',player2:'Player 2',
+  localFine:'The player whose turn it is lights up. Hand them the phone.',
+  cpuName:'Computer',
+  avgArrow:(a,b)=>`Your average ${a} → ${b}`,
+  mateHint:(team,n,pct)=>`${ord(n)} ${team} player: +${pct}%`,
+  iglHint:pct=>`IGL: teammates +${pct}%`,
+  iglHave:'You already have an IGL',
+  clutchHint:pct=>`Underdog: +${pct}% when last alive`,
+  cpuThinking:'Computer is thinking…',deciding:n=>`${n} is deciding…`,
+  seatsAria:n=>`${n}/5 seats`,empty:'Empty',
+  metaAvg:'Avg',metaGive:'gifts',metaSkip:'skips',free:'Free',
+  openTurnOf:n=>n+' opens',yourOpen:'Your turn to open',
+  openSub:o=>`Open at $1 and the other player can raise. Or give him to ${o} for free.`,
+  open1:'Open at $1',give:'Give',left:n=>`${n} left`,
+  brokeT:' is out of money',brokeSub:(a,o)=>`${a}, take him for $1? Otherwise he goes to ${o} for $0.`,
+  take1:'Take for $1',giveHim:'Let them have him',at0:'for $0',
+  fullT:' has a full team',fullSub:a=>`${a}: take him for $1 or skip.`,skip:'Skip',
+  highest:'highest bid',turnOf:n=>n+'’s turn',raiseQ:'Raise?',allIn:m=>`All in $${m}`,
+  passBtn:'Pass',passSub:(n,b)=>`${n} gets him for $${b}`,
+  custom:'Your amount',say:'Bid',badBid:(a,b)=>`Enter $${a} to $${b}`,
+  skipped:': skipped',gaveFree:', given for free',bothBroke:'Both are out of money',autoSub:(p,n)=>`${p} goes to ${n} for $0.`,
+  logSkip:'skipped',logFree:' (free)',quit:'Quit',cardNo:n=>`Card ${n}`,cardsLeft:n=>`${n} cards left`,recent:'Recent cards',
+  goatChance:p=>`Drop chance ${p}%`,firstOpen:n=>`${n} opens the first card`,thenAlt:'Then you take turns',
+  streakT:'Win streak',match:'Match',round:n=>`Round ${n}`,to13:'First to 13 rounds',roundDuels:n=>`Round ${n} duels`,
+  final:'Final',roundsN:n=>`${n} rounds`,winner:n=>'Winner: '+n,youWon:'You won!',xWon:n=>`${n} won`,
+  streakLine:(n,s)=>`🔥 ${n}: ${s} wins in a row`,again:'Play again',home:'Home',
+  oppLeft:'Your opponent left',oppReady:n=>`${n} is ready for a rematch`,waitReady:n=>`Waiting for ${n} to get ready…`,
+  restart:'Start rematch',leave:'Leave',waitHost:'Waiting for the host to start…',againQ:'Play again?',
+  notReady:'Not ready',ready:'Ready',checking:'Checking connection…',
+  noOnline:'Online mode does not work on this page. Open the game from its Cloudflare address to play a friend with a code.',
+  createRoom:'Create room',orJoin:'or join with a code',roomCode:'Room code',join:'Join',online:'Online',
+  connFail:'Could not connect to the room',connLost:'· connection lost',oppOnline:'· ● online',oppLag:'· ● lagging',
+  guest:'Guest',host:'Host',roomFull:'Someone else already joined this room. Use another code.',
+  noRoom:c=>`No room with code ${c}. Check the code and try again.`,
+  waiting:'Waiting…',sendCode:'Send the code to a friend',startBtn:'Start',
+  waitFriend:'Waiting for your friend to join…',allReady:'Everyone is ready. Start!',waitGuest:'Waiting for the guest to press Ready…',
+  unready:'Not ready',readySub:'Once you are ready, the host starts the match',
+  hostSide:'Host, T side',guestSide:'Guest, CT side',you:'You',onlineDot:'● online',onlineRoom:'Online room',
+  codeHint:'Your friend enters this code under Online → Join',copyLink:'Copy link',
+  srvOk:'Connected',srvWait:'Connecting…',gotIt:'Got it',close:'Close',
+  search:'Search name or team',searchA:'Search',sortA:'Sort',byTeam:'By team',byRating:'By rating',
+  rare:'Rare card',dropChance:p=>`drop chance ${p}%`,noneFound:'No players found',
+  quitQ:'Quit the game?',quitSub:'This draft will not finish and will not count as a win or loss.',keep:'Keep playing',
+  code4:'Enter a 4-character code',copied:'Link copied',lang:'Language',
+  rules:x=>[
+    'You both start with $20 and 5 empty seats. The money is virtual.',
+    'Player cards come up one at a time in random order. You take turns opening them.',
+    'On your turn, open the card at $1 or give the player to your opponent for free. You can give twice per game.',
+    'After a card is opened, the other player can raise by +$1, +$2, +$5, all in, or any amount you type. Pass and the last bidder gets him.',
+    'If you run out of money with seats left, your opponent can hand you players for $0. If one side is full, the other takes the card for $1 or skips it (3 skips).',
+    'You get 15 seconds per turn. If time runs out you take the card at $1 when opening, or pass when bidding.',
+    'When both teams are full, the match starts. First team to 13 rounds wins.',
+    `Each round is a series of 1v1 duels. Each duel’s win chance comes from the two players’ HLTV ratings. For example 1.30 vs 1.00 is ${x.a}% vs ${100-x.a}%, and 1.10 vs 1.00 is ${x.b}% vs ${100-x.b}%.`,
+    'Players from the same team boost each other: 2 players +3% rating, 3 +6%, 4 +8%, 5 +10%.',
+    `An IGL gives every teammate +${x.lead}% (only one IGL counts). A player rated below 1.00 duels +${x.clutch}% stronger when he is the last one alive. So low-rated players are worth taking too.`,
+    'You do not need an AWPer or an IGL.',
+    `Rare card: s1mple (prime) shows up in ${x.prime}% of drafts. His rating is ${x.pr}.`,
+    'Your win streak 🔥 appears next to your name, and your opponent sees it too.'],
+}};
+const LANG=()=>DB.last&&DB.last.lang==='en'?'en':'mn';
+const T=(k,...a)=>{const v=I18N[LANG()][k]!==undefined?I18N[LANG()][k]:I18N.mn[k];return typeof v==='function'?v(...a):v;};
 
 /* ================= utils ================= */
 const $=s=>document.querySelector(s);
@@ -561,7 +729,11 @@ function stepClock(g){
 // Players from the same real team get a small boost: 2 → +3%, 3 → +6%, 4 → +8%, 5 → +10%.
 const BUFF=[0,0,.03,.06,.08,.10],WIN_ROUNDS=13,DUEL_K=3;
 function teamCounts(ids){const c={};ids.forEach(i=>{const t=P[i].team;c[t]=(c[t]||0)+1;});return c;}
-const buffOf=(ids,i)=>BUFF[Math.min(5,teamCounts(ids)[P[i].team]||0)];
+// Reasons to take weaker players: an IGL lifts every teammate, and a sub-1.00 player is stronger in a clutch.
+const LEAD=.03,CLUTCH=.20,UNDERDOG=100;
+const isIGL=p=>/IGL/.test(p.role);
+const leaderOf=ids=>ids.find(i=>isIGL(P[i]));
+const buffOf=(ids,i)=>{const l=leaderOf(ids);return BUFF[Math.min(5,teamCounts(ids)[P[i].team]||0)]+(l!=null&&l!==i?LEAD:0);};
 const effOf=ids=>ids.map(i=>P[i].hl*(1+buffOf(ids,i)));
 // chance that a player with effective rating a wins a 1v1 against b
 const duelP=(a,b)=>{const x=Math.pow(a,DUEL_K),y=Math.pow(b,DUEL_K);return x/(x+y);};
@@ -573,8 +745,9 @@ function playMatch(g){
     const alive=[R[0].map((_,i)=>i),R[1].map((_,i)=>i)],duels=[];
     while(alive[0].length&&alive[1].length){
       const a=alive[0][Math.floor(Math.random()*alive[0].length)],b=alive[1][Math.floor(Math.random()*alive[1].length)];
-      const p=duelP(E[0][a],E[1][b]),w=Math.random()<p?0:1;
-      duels.push([a,b,Math.round(p*100),w]);
+      const ca=alive[0].length===1&&P[R[0][a]].hc<UNDERDOG,cb=alive[1].length===1&&P[R[1][b]].hc<UNDERDOG;
+      const p=duelP(E[0][a]*(ca?1+CLUTCH:1),E[1][b]*(cb?1+CLUTCH:1)),w=Math.random()<p?0:1;
+      duels.push([a,b,Math.round(p*100),w,(ca?1:0)|(cb?2:0)]);
       if(w===0){K[0][a]++;D[1][b]++;alive[1].splice(alive[1].indexOf(b),1);}
       else{K[1][b]++;D[0][a]++;alive[0].splice(alive[0].indexOf(a),1);}
     }
@@ -594,6 +767,8 @@ function botValue(g,t,id){
   const mates=g.rost[t].filter(i=>P[i].team===p.team).length;
   let v=Math.max(0,(p.hc-95)*.32);                // 0.95 → $0, 1.15 → $6.4, 1.32 → $11.8
   if(mates)v+=[0,1.5,2.5,3,3][mates];               // same-team boost
+  if(isIGL(p)&&leaderOf(g.rost[t])==null)v+=2.5;     // first IGL lifts the whole team
+  if(p.hc<UNDERDOG)v+=.8;                           // clutch underdog
   if(cur&&p.hc<cur-4)v*=.6;                         // would drag the average down
   v*=clamp((money/left)/4,.6,1.5);
   if(left===1)v=Math.max(v,money*(p.hc>=115?1:p.hc>=108?.6:.25));
@@ -661,56 +836,57 @@ function renderHome(){
     local:'<svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><circle cx="10" cy="11" r="1.6"/><circle cx="14" cy="11" r="1.6"/><path d="M10 18h4"/></svg>',
     online:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.6 2.6 3.9 5.8 3.9 9.5s-1.3 6.9-3.9 9.5c-2.6-2.6-3.9-5.8-3.9-9.5S9.4 5.1 12 2.5z"/></svg>'};
   $('#app').innerHTML=`<main class="wrap wide home">
+    <div class="langsw" role="group" aria-label="${T('lang')} / Language"><button data-act="lang" data-l="mn" aria-pressed="${LANG()==='mn'}">MN</button><button data-act="lang" data-l="en" aria-pressed="${LANG()==='en'}">EN</button></div>
     <header class="hero"><div class="fan" aria-hidden="true">${fan.map(miniCard).join('')}</div>
       <h1 class="brand">Draftly</h1>
-      <p class="lede">CS2-ын ${P.length-1} тамирчнаас $20-оор 5 хүнтэй баг цуглуулж, 13 раунд тоглуул.</p></header>
+      <p class="lede">${T('lede',P.length-1)}</p></header>
     <div class="side">
       <section class="me">
-        <label for="pname" class="lbl">Таны нэр</label>
-        <input id="pname" maxlength="16" value="${esc(n)}" placeholder="Нэрээ бичнэ үү" autocomplete="off">
+        <label for="pname" class="lbl">${T('yourName')}</label>
+        <input id="pname" maxlength="16" value="${esc(n)}" placeholder="${T('namePh')}" autocomplete="off">
         <div class="recn" id="recn">${recHtml(r)}</div>
       </section>
-      <nav class="modes" aria-label="Тоглох горим">
-        <button class="mode" data-act="nav" data-to="cpu"><span class="mi">${I.cpu}</span><span><b>Компьютерын эсрэг</b><small>Хялбар, дунд, хэцүү түвшин</small></span></button>
-        <button class="mode" data-act="nav" data-to="local"><span class="mi">${I.local}</span><span><b>2 хүн нэг утсан дээр</b><small>Утсаа ээлжлэн дамжуулж үнэ хаялцана</small></span></button>
-        <button class="mode" data-act="nav" data-to="online"><span class="mi">${I.online}</span><span><b>Онлайн</b><small>4 тэмдэгттэй кодоор найзтайгаа</small></span></button>
+      <nav class="modes" aria-label="${T('modesAria')}">
+        <button class="mode" data-act="nav" data-to="cpu"><span class="mi">${I.cpu}</span><span><b>${T('mCpu')}</b><small>${T('mCpuSub')}</small></span></button>
+        <button class="mode" data-act="nav" data-to="local"><span class="mi">${I.local}</span><span><b>${T('mLocal')}</b><small>${T('mLocalSub')}</small></span></button>
+        <button class="mode" data-act="nav" data-to="online"><span class="mi">${I.online}</span><span><b>${T('mOnline')}</b><small>${T('mOnlineSub')}</small></span></button>
       </nav>
-      <div class="links"><button class="linkbtn" data-act="rules">Тоглох заавар</button><button class="linkbtn" data-act="players">Бүх тамирчид</button></div>
+      <div class="links"><button class="linkbtn" data-act="rules">${T('howTo')}</button><button class="linkbtn" data-act="players">${T('allPlayers')}</button></div>
     </div></main>`;
 }
 function recHtml(r){
-  return `<span><b class="num" style="color:var(--money)">${r.w||0}</b>ялалт</span><span><b class="num" style="color:var(--loss)">${r.l||0}</b>ялагдал</span><span><b class="num" style="color:var(--t)">${r.s?'🔥'+r.s:'0'}</b>дараалсан</span>`;
+  return `<span><b class="num" style="color:var(--money)">${r.w||0}</b>${T('wins')}</span><span><b class="num" style="color:var(--loss)">${r.l||0}</b>${T('losses')}</span><span><b class="num" style="color:var(--t)">${r.s?'🔥'+r.s:'0'}</b>${T('streakShort')}</span>`;
 }
 function needName(){
   if(myName())return true;
-  go('home');const i=$('#pname');if(i){i.focus();i.classList.add('shake');}toast('Эхлээд нэрээ бичнэ үү');return false;
+  go('home');const i=$('#pname');if(i){i.focus();i.classList.add('shake');}toast(T('needName'));return false;
 }
-function topBar(title,act='home'){return `<div class="top"><button class="icon" data-act="${act}" aria-label="Буцах">←</button><h2>${title}</h2></div>`;}
+function topBar(title,act='home'){return `<div class="top"><button class="icon" data-act="${act}" aria-label="${T('back')}">←</button><h2>${title}</h2></div>`;}
 function renderCpuSetup(){
-  $('#app').innerHTML=`<main class="wrap">${topBar('Компьютерын эсрэг')}
+  $('#app').innerHTML=`<main class="wrap">${topBar(T('mCpu'))}
     <section class="card">
-      <p class="who-line">Тоглогч: <b>${esc(myName())}</b></p>
-      <div class="field"><label id="dl">Компьютерын түвшин</label>
-        <div class="seg" role="group" aria-labelledby="dl">${Object.keys(DIFF).map(k=>`<button data-act="diff" data-d="${k}" aria-pressed="${UI.diff===k}">${DIFF[k]}</button>`).join('')}</div></div>
+      <p class="who-line">${T('player')}: <b>${esc(myName())}</b></p>
+      <div class="field"><label id="dl">${T('cpuLevel')}</label>
+        <div class="seg" role="group" aria-labelledby="dl">${DIFFS.map(k=>`<button data-act="diff" data-d="${k}" aria-pressed="${UI.diff===k}">${T(k)}</button>`).join('')}</div></div>
     </section>
-    <button class="btn" data-act="start-cpu">Эхлэх</button>
-    <p class="fine">Хэцүү компьютер мөнгөө хэмнэж, өндөр rating-тэй тамирчдыг хүлээнэ.</p></main>`;
+    <button class="btn" data-act="start-cpu">${T('start')}</button>
+    <p class="fine">${T('cpuFine')}</p></main>`;
 }
 function renderLocalSetup(){
-  $('#app').innerHTML=`<main class="wrap">${topBar('2 хүн нэг утсан дээр')}
+  $('#app').innerHTML=`<main class="wrap">${topBar(T('mLocal'))}
     <section class="card">
-      <p class="who-line"><span class="ta">●</span> T тал: <b>${esc(myName())}</b></p>
-      <div class="field"><label for="nm2"><span class="tb">●</span> CT тал, хоёр дахь тоглогчийн нэр</label><input id="nm2" maxlength="16" value="${esc(DB.last.p2||'')}" placeholder="Тоглогч 2" autocomplete="off"></div>
+      <p class="who-line"><span class="ta">●</span> ${T('tSide')}: <b>${esc(myName())}</b></p>
+      <div class="field"><label for="nm2"><span class="tb">●</span> ${T('ctSide2')}</label><input id="nm2" maxlength="16" value="${esc(DB.last.p2||'')}" placeholder="${T('player2')}" autocomplete="off"></div>
     </section>
-    <button class="btn" data-act="start-local">Эхлэх</button>
-    <p class="fine">Ээлжтэй хүний өнгө дэлгэц дээр тодорно. Утсаа түүнд өгөөрэй.</p></main>`;
+    <button class="btn" data-act="start-local">${T('start')}</button>
+    <p class="fine">${T('localFine')}</p></main>`;
 }
 function startCpu(){
   const n=myName();DB.last.diff=UI.diff;saveDB();
-  G=newGame('cpu',[n,'Компьютер'],UI.diff);G.streak=[recOf(n).s||0,0];UI.lastCard=null;go('draft');scheduleBot();
+  G=newGame('cpu',[n,T('cpuName')],UI.diff);G.streak=[recOf(n).s||0,0];UI.lastCard=null;go('draft');scheduleBot();
 }
 function startLocal(){
-  let a=myName(),b=cleanName($('#nm2').value)||'Тоглогч 2';
+  let a=myName(),b=cleanName($('#nm2').value)||T('player2');
   if(a===b)b=b.slice(0,14)+' 2';
   DB.last.p2=b;saveDB();
   G=newGame('local',[a,b]);G.streak=[recOf(a).s||0,recOf(b).s||0];UI.lastCard=null;go('draft');
@@ -722,13 +898,15 @@ function hintsFor(g,id){
   if(slotsLeft(g,t)<=0)return '';
   const out=[];
   if(r.length){const now=rosterAvg(r),nx=rosterAvg(r.concat(id)),d=nx-now;
-    out.push([d>0.0005?'good':d<-0.0005?'bad':'',`Таны дундаж ${now.toFixed(3)} → ${nx.toFixed(3)}`]);}
+    out.push([d>0.0005?'good':d<-0.0005?'bad':'',T('avgArrow',now.toFixed(3),nx.toFixed(3))]);}
   const mates=r.filter(i=>P[i].team===p.team).length;
-  if(mates&&!p.special)out.push(['good',`${esc(p.team)}-ийн ${mates+1} дахь тамирчин: +${Math.round(BUFF[Math.min(5,mates+1)]*100)}%`]);
+  if(mates&&!p.special)out.push(['good',T('mateHint',esc(p.team),mates+1,Math.round(BUFF[Math.min(5,mates+1)]*100))]);
+  if(isIGL(p))out.push(leaderOf(r)==null?['good',T('iglHint',Math.round(LEAD*100))]:['',T('iglHave')]);
+  if(p.hc<UNDERDOG)out.push(['good',T('clutchHint',Math.round(CLUTCH*100))]);
   return out.length?`<div class="hints">${out.map(h=>`<span class="hint ${h[0]}">${h[1]}</span>`).join('')}</div>`:'';
 }
 function nameC(t){return `<span class="${t?'tb':'ta'}">${esc(G.names[t])}</span>`;}
-function waitText(t){if(G.mode==='cpu')return 'Компьютер бодож байна…';if(G.mode==='online')return `${esc(G.names[t])} шийдэж байна…`;return '';}
+function waitText(t){if(G.mode==='cpu')return T('cpuThinking');if(G.mode==='online')return T('deciding',esc(G.names[t]));return '';}
 function renderDraft(){
   const g=G,motion=!reduceMotion();
   const showId=g.cur!=null?g.cur:(g.sold?g.sold.id:null);
@@ -741,9 +919,9 @@ function renderDraft(){
   const mgr=t=>{const n=g.rost[t].length,ns=prev&&n>prev.n[t]?n-1:-1;
     return `<section class="mgr ${t?'b':''} ${g.actor===t?'on':''} ${ns>=0?'hit':''}">
       <div class="hd"><span class="nm"><span class="nmt">${esc(g.names[t])}</span>${stk((g.streak||[])[t])}</span><span class="cash num ${g.money[t]?'':'zero'}" data-t="${t}">$${prev?prev.m[t]:g.money[t]}</span></div>
-      <div class="seats" aria-label="${n}/5 суудал">${Array.from({length:SLOTS},(_,i)=>`<span class="${i<n?'f':''} ${i===ns?'pop':''}"></span>`).join('')}</div>
-      <div class="who">${n?g.rost[t].map(id=>{const q=P[id],bf=buffOf(g.rost[t],id);return `<span class="rp ${rcls(q)}">${avatar(q,'xs')}<i>${esc(pName(q))}</i>${bf?`<em class="bf">+${Math.round(bf*100)}%</em>`:''}<b class="num">${fmtR(q.hl)}</b></span>`;}).join(''):'<span class="muted">Хоосон</span>'}</div>
-      <div class="meta">Дундаж <b class="num">${n?rosterAvg(g.rost[t]).toFixed(3):'—'}</b>, өгөх ${g.gives[t]}${slotsLeft(g,1-t)===0?`, алгасах ${g.skips[t]}`:''}</div></section>`;};
+      <div class="seats" aria-label="${T('seatsAria',n)}">${Array.from({length:SLOTS},(_,i)=>`<span class="${i<n?'f':''} ${i===ns?'pop':''}"></span>`).join('')}</div>
+      <div class="who">${n?g.rost[t].map(id=>{const q=P[id],bf=buffOf(g.rost[t],id);return `<span class="rp ${rcls(q)}">${avatar(q,'xs')}<i>${esc(pName(q))}</i>${bf?`<em class="bf">+${Math.round(bf*100)}%</em>`:''}<b class="num">${fmtR(q.hl)}</b></span>`;}).join(''):`<span class="muted">${T('empty')}</span>`}</div>
+      <div class="meta">${T('metaAvg')} <b class="num">${n?rosterAvg(g.rost[t]).toFixed(3):'—'}</b>, ${T('metaGive')} ${g.gives[t]}${slotsLeft(g,1-t)===0?`, ${T('metaSkip')} ${g.skips[t]}`:''}</div></section>`;};
   const goat=fresh&&showId===PRIME&&g.cur===PRIME;
   let card='';
   if(showId!=null){const p=P[showId],s=g.phase==='sold'?g.sold:null;
@@ -756,7 +934,7 @@ function renderDraft(){
         <div class="pc-nick">${esc(p.nick)}${p.special?'<small class="prime">prime</small>':''}</div>
         <div class="pc-meta"><span>${esc(p.team)}</span><span class="chip ${p.cc==='MN'?'mn':''}">${p.cc}</span></div>
         ${g.cur!=null?hintsFor(g,showId):''}
-        ${s&&s.how!=='skip'?`<div class="stamp ${s.t?'tb':'ta'}">${s.how==='give'?'Үнэгүй':'$'+s.price}</div>`:''}
+        ${s&&s.how!=='skip'?`<div class="stamp ${s.t?'tb':'ta'}">${s.how==='give'?T('free'):'$'+s.price}</div>`:''}
       </article>
       ${reel?'<div class="reel" aria-hidden="true"><div class="track"></div><i class="marker"></i></div>':''}
     </div>`;}
@@ -765,54 +943,55 @@ function renderDraft(){
   if(g.phase==='offer'){
     const o=1-a;
     if(g.kind==='normal'){
-      mid=`<p class="status">${G.mode==='local'||!mine?'Нээх ээлж: '+nameC(a):'Таны нээх ээлж'}</p><p class="status sub">$1-ээр нээвэл нөгөө нь үнээ өсгөж болно. Эсвэл ${esc(g.names[o])}-д үнэгүй өг.</p>`;
+      mid=`<p class="status">${G.mode==='local'||!mine?T('openTurnOf',nameC(a)):T('yourOpen')}</p><p class="status sub">${T('openSub',esc(g.names[o]))}</p>`;
       if(mine){const give=legalActs(g,a).includes('give');
-        acts=`<div class="acts g2"><button class="btn ${a?'blue':''}" data-act="do" data-a="take">$1-ээр нээх</button><button class="btn ghost" data-act="do" data-a="give" ${give?'':'disabled'}>Өгөх<small>${g.gives[a]} эрх үлдсэн</small></button></div>`;}
+        acts=`<div class="acts g2"><button class="btn ${a?'blue':''}" data-act="do" data-a="take">${T('open1')}</button><button class="btn ghost" data-act="do" data-a="give" ${give?'':'disabled'}>${T('give')}<small>${T('left',g.gives[a])}</small></button></div>`;}
     }else if(g.kind==='broke'){
-      mid=`<p class="status">${nameC(o)}: мөнгө дууссан</p><p class="status sub">${esc(g.names[a])} $1-ээр авах уу? Үгүй бол энэ тамирчин ${esc(g.names[o])}-д $0-оор очно.</p>`;
-      if(mine)acts=`<div class="acts g2"><button class="btn ${a?'blue':''}" data-act="do" data-a="take">$1-ээр авах</button><button class="btn ghost" data-act="do" data-a="pass">Түүнд өгөх<small>$0-оор</small></button></div>`;
+      mid=`<p class="status">${nameC(o)}${T('brokeT')}</p><p class="status sub">${T('brokeSub',esc(g.names[a]),esc(g.names[o]))}</p>`;
+      if(mine)acts=`<div class="acts g2"><button class="btn ${a?'blue':''}" data-act="do" data-a="take">${T('take1')}</button><button class="btn ghost" data-act="do" data-a="pass">${T('giveHim')}<small>${T('at0')}</small></button></div>`;
     }else{
-      mid=`<p class="status">${nameC(o)}: баг бүрэн</p><p class="status sub">${esc(g.names[a])} $1-ээр авах эсвэл алгасах.</p>`;
+      mid=`<p class="status">${nameC(o)}${T('fullT')}</p><p class="status sub">${T('fullSub',esc(g.names[a]))}</p>`;
       if(mine){const sk=legalActs(g,a).includes('skip');
-        acts=`<div class="acts g2"><button class="btn ${a?'blue':''}" data-act="do" data-a="take">$1-ээр авах</button><button class="btn ghost" data-act="do" data-a="skip" ${sk?'':'disabled'}>Алгасах<small>${g.skips[a]} эрх үлдсэн</small></button></div>`;}
+        acts=`<div class="acts g2"><button class="btn ${a?'blue':''}" data-act="do" data-a="take">${T('take1')}</button><button class="btn ghost" data-act="do" data-a="skip" ${sk?'':'disabled'}>${T('skip')}<small>${T('left',g.skips[a])}</small></button></div>`;}
     }
     if(!mine)acts=`<p class="status sub">${waitText(a)}</p>`;
   }else if(g.phase==='bid'){
-    mid=`<div class="price"><span class="amt num">$${g.bid}</span><span class="by">${nameC(g.hi)}<br>хамгийн өндөр</span></div>
-      <p class="status">${G.mode==='local'||!mine?'Ээлж: '+nameC(a):'Үнээ өсгөх үү?'}</p>`;
+    mid=`<div class="price"><span class="amt num">$${g.bid}</span><span class="by">${nameC(g.hi)}<br>${T('highest')}</span></div>
+      <p class="status">${G.mode==='local'||!mine?T('turnOf',nameC(a)):T('raiseQ')}</p>`;
     if(mine){
       const m=g.money[a],opts=[];
       [1,2,5].forEach(d=>{if(g.bid+d<=m&&!opts.includes(g.bid+d))opts.push(g.bid+d);});
       const allIn=m>g.bid&&!opts.includes(m);
-      acts=`<div class="acts g3 raise">${opts.map(v=>`<button class="btn ${a?'blue':''}" data-act="raise" data-v="${v}">$${v}</button>`).join('')}${allIn?`<button class="btn ghost" data-act="raise" data-v="${m}">Бүгд $${m}</button>`:''}</div>
-        <button class="btn ghost" data-act="do" data-a="pass">Өнжих<small>${esc(g.names[g.hi])} $${g.bid}-оор авна</small></button>`;
+      acts=`<div class="acts g3 raise">${opts.map(v=>`<button class="btn ${a?'blue':''}" data-act="raise" data-v="${v}">$${v}</button>`).join('')}${allIn?`<button class="btn ghost" data-act="raise" data-v="${m}">${T('allIn',m)}</button>`:''}</div>
+        ${m>g.bid?`<form class="custom" data-form="bid" novalidate><input id="bidv" type="number" inputmode="numeric" min="${g.bid+1}" max="${m}" placeholder="${T('custom')} ($${g.bid+1}–$${m})" aria-label="${T('custom')}"><button class="btn ghost" type="submit">${T('say')}</button></form>`:''}
+        <button class="btn ghost" data-act="do" data-a="pass">${T('passBtn')}<small>${T('passSub',esc(g.names[g.hi]),g.bid)}</small></button>`;
     }else acts=`<p class="status sub">${waitText(a)}</p>`;
   }else if(g.phase==='sold'&&g.sold){
     const s=g.sold,p=P[s.id];
-    mid=s.how==='skip'?`<p class="sold muted">${esc(pName(p))}: алгаслаа</p>`
-      :`<p class="sold">${esc(pName(p))} → ${nameC(s.t)}${s.how==='give'?', үнэгүй өгсөн':`, $${s.price}`}</p>`;
+    mid=s.how==='skip'?`<p class="sold muted">${esc(pName(p))}${T('skipped')}</p>`
+      :`<p class="sold">${esc(pName(p))} → ${nameC(s.t)}${s.how==='give'?T('gaveFree'):`, $${s.price}`}</p>`;
   }else if(g.phase==='auto'){
-    mid=`<p class="status">Хоёулаа мөнгөгүй</p><p class="status sub">${esc(P[g.cur].nick)} ${esc(g.names[g.autoTo])}-д $0-оор очно.</p>`;
+    mid=`<p class="status">${T('bothBroke')}</p><p class="status sub">${T('autoSub',esc(pName(P[g.cur])),esc(g.names[g.autoTo]))}</p>`;
   }
   const bk=g.gid+'|'+g.cardNo,bump=g.phase==='bid'&&UI.bid&&UI.bid.k===bk&&UI.bid.v!==g.bid;
   UI.bid={k:bk,v:g.phase==='bid'?g.bid:0};
   const head=g.log[0]?g.gid+'|'+g.log.length+'|'+g.log[0].id+'|'+g.log[0].how:'',newHead=head&&head!==UI.logHead;UI.logHead=head;
-  const log=g.log.map((l,i)=>`<li class="${l.how==='skip'?'skip':l.t?'b':''} ${i===0&&newHead?'new':''} ${rcls(P[l.id])}"><span class="rt">${fmtR(P[l.id].hl)}</span><span>${esc(pName(P[l.id]))} ${l.how==='skip'?'алгасав':'→ '+esc(g.names[l.t])+(l.how==='give'?' (үнэгүй)':'')}</span><span class="pr">${l.how==='skip'?'':'$'+l.price}</span></li>`).join('');
+  const log=g.log.map((l,i)=>`<li class="${l.how==='skip'?'skip':l.t?'b':''} ${i===0&&newHead?'new':''} ${rcls(P[l.id])}"><span class="rt">${fmtR(P[l.id].hl)}</span><span>${esc(pName(P[l.id]))} ${l.how==='skip'?T('logSkip'):'→ '+esc(g.names[l.t])+(l.how==='give'?T('logFree'):'')}</span><span class="pr">${l.how==='skip'?'':'$'+l.price}</span></li>`).join('');
   const late=fresh&&motion&&g.cur!=null;
   const goatAt=reelDelay+(reel?REVEAL_MS:0);
   $('#app').innerHTML=`<main class="wrap wide">
-    <div class="dbar"><button class="icon" data-act="quit" aria-label="Гарах">×</button>
-      <div class="cardno"><b class="num">${g.cardNo}-р карт</b>${left} карт үлдсэн${G.mode==='online'?` <span id="oppstat">${oppStatus()}</span>`:''}</div>
-      <button class="icon" data-act="players" aria-label="Бүх тамирчид" title="Бүх тамирчид"><svg viewBox="0 0 24 24" class="ic"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
+    <div class="dbar"><button class="icon" data-act="quit" aria-label="${T('quit')}">×</button>
+      <div class="cardno"><b class="num">${T('cardNo',g.cardNo)}</b>${T('cardsLeft',left)}${G.mode==='online'?` <span id="oppstat">${oppStatus()}</span>`:''}</div>
+      <button class="icon" data-act="players" aria-label="${T('allPlayers')}" title="${T('allPlayers')}"><svg viewBox="0 0 24 24" class="ic"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
       <div class="timer ${a===1?'b':''} ${a<0?'idle':''}" id="timer"><span id="tsec">15</span></div></div>
     <div class="dgrid">
       <div class="mgrs">${mgr(0)}${mgr(1)}</div>
       <section class="block">${card}<div class="${late?'late':'block'}" style="--ld:${goatAt+(goat?GOAT_MS:0)+(reel?-120:120)}ms">${mid}${acts}</div></section>
-      ${log?`<div class="logwrap"><div class="lbl" style="margin-bottom:8px">Сүүлийн картууд</div><ul class="log">${log}</ul></div>`:''}
+      ${log?`<div class="logwrap"><div class="lbl" style="margin-bottom:8px">${T('recent')}</div><ul class="log">${log}</ul></div>`:''}
     </div>
   </main>
-  ${goat?`<div class="goatov" id="goat" data-act="goat-x" style="--gd:${goatAt}ms"><div class="goat-in"><span class="goat-k">THE GOAT</span>${miniCard(P[PRIME])}<b>s1mple (prime)</b><span class="muted">NAVI 2021, rating ${fmtR(P[PRIME].hl)}</span><span class="goat-c">Гарч ирэх магадлал ${Math.round(PRIME_CHANCE*100)}%</span></div></div>`:''}
-  ${g.cardNo===1&&flipLeft>0&&g.phase==='offer'?`<div class="flip" id="flip"><div><div class="coin"></div><h2>Эхний картыг ${nameC(g.first)} нээнэ</h2><p class="muted">Дараа нь ээлжлэн нээнэ</p></div></div>`:''}`;
+  ${goat?`<div class="goatov" id="goat" data-act="goat-x" style="--gd:${goatAt}ms"><div class="goat-in"><span class="goat-k">THE GOAT</span>${miniCard(P[PRIME])}<b>s1mple (prime)</b><span class="muted">NAVI 2021, rating ${fmtR(P[PRIME].hl)}</span><span class="goat-c">${T('goatChance',Math.round(PRIME_CHANCE*100))}</span></div></div>`:''}
+  ${g.cardNo===1&&flipLeft>0&&g.phase==='offer'?`<div class="flip" id="flip"><div><div class="coin"></div><h2>${T('firstOpen',nameC(g.first))}</h2><p class="muted">${T('thenAlt')}</p></div></div>`:''}`;
   if(g.cardNo===1&&flipLeft>0)setTimeout(()=>{const f=$('#flip');if(f)f.remove();},flipLeft+250);
   if(bump){const el=$('.price .amt');if(el)el.classList.add('bump');}
   if(reel)startReel($('#stage'),showId,reelDelay);
@@ -859,7 +1038,7 @@ function settle(){
   const w=G.res.win,rec=(n,t)=>record(n,w===t?'w':'l');
   if(G.mode==='cpu')rec(G.names[0],0);else if(G.mode==='local'){rec(G.names[0],0);rec(G.names[1],1);}else rec(NET.name,NET.team);
 }
-const stk=n=>n>0?`<span class="stk" title="Дараалсан ялалт">🔥${n}</span>`:'';
+const stk=n=>n>0?`<span class="stk" title="${T('streakT')}">🔥${n}</span>`:'';
 
 /* ================= match screen ================= */
 function renderMatch(){
@@ -868,22 +1047,22 @@ function renderMatch(){
   const col=t=>`<section class="rcol ${t?'b':''}">${g.rost[t].map((id,i)=>{const p=P[id],bf=buffOf(g.rost[t],id);
       return `<div class="rrow ${rcls(p)}" id="p${t}-${i}" style="--i:${i}">${avatar(p,'sm')}<span class="n">${esc(pName(p))}<small>${bf?`<em class="bf">+${Math.round(bf*100)}%</em> `:''}${fmtR(p.hl)}, ${esc(p.team)}</small></span><b class="kd num">0-0</b></div>`;}).join('')}</section>`;
   $('#app').innerHTML=`<main class="wrap wide">
-    <div class="top"><button class="icon" data-act="${g.mode==='online'?'leave':'home'}" aria-label="Гарах">×</button><h2>Тоглолт</h2><button class="linkbtn" data-act="skip" id="skipbtn">Алгасах</button></div>
+    <div class="top"><button class="icon" data-act="${g.mode==='online'?'leave':'home'}" aria-label="${T('quit')}">×</button><h2>${T('match')}</h2><button class="linkbtn" data-act="skip" id="skipbtn">${T('skip')}</button></div>
     <div class="board">
       <div class="bteam" id="bt0"><span class="bname ta">${esc(g.names[0])} ${stk(st[0])}</span><span class="led num" id="s0">0</span></div>
-      <div class="bmid"><span class="vs" id="rno">1-р раунд</span><span class="mapn" id="half">13 раунд хожсон нь ялна</span></div>
+      <div class="bmid"><span class="vs" id="rno">${T('round',1)}</span><span class="mapn" id="half">${T('to13')}</span></div>
       <div class="bteam" id="bt1"><span class="bname tb">${esc(g.names[1])} ${stk(st[1])}</span><span class="led num" id="s1">0</span></div>
     </div>
     <div class="strip" id="strip" aria-hidden="true"></div>
-    <div class="mgrid">${col(0)}<section class="feed" aria-live="off"><div class="lbl" id="ftitle">1-р раундын тулаанууд</div><ol class="duels" id="duels"></ol></section>${col(1)}</div>
+    <div class="mgrid">${col(0)}<section class="feed" aria-live="off"><div class="lbl" id="ftitle">${T('roundDuels',1)}</div><ol class="duels" id="duels"></ol></section>${col(1)}</div>
     <div id="after" class="after"></div>
   </main>`;
   const instant=reduceMotion()||UI.animGid===g.gid;UI.animGid=g.gid;
   const K=[g.rost[0].map(()=>0),g.rost[1].map(()=>0)],D=[g.rost[0].map(()=>0),g.rost[1].map(()=>0)],score=[0,0];
   let r=0,d=0;
   const nick=(t,i)=>esc(pName(P[g.rost[t][i]]));
-  function duelLi(x){const [a,b,p,w]=x;
-    return `<li class="dl"><span class="ta ${w===0?'w':'l'}">${nick(0,a)}</span><span class="pc">${p}%</span><i>vs</i><span class="pc">${100-p}%</span><span class="tb ${w===1?'w':'l'}">${nick(1,b)}</span></li>`;}
+  function duelLi(x){const [a,b,p,w,c]=x,cl='<i class="cl">CLUTCH</i>';
+    return `<li class="dl"><span class="ta ${w===0?'w':'l'}">${c&1?cl:''}${nick(0,a)}</span><span class="pc">${p}%</span><i>vs</i><span class="pc">${100-p}%</span><span class="tb ${w===1?'w':'l'}">${nick(1,b)}${c&2?cl:''}</span></li>`;}
   function kd(t,i){const el=$(`#p${t}-${i} .kd`);if(el)el.textContent=K[t][i]+'-'+D[t][i];}
   function apply(x,show){const [a,b,,w]=x;
     if(w===0){K[0][a]++;D[1][b]++;}else{K[1][b]++;D[0][a]++;}
@@ -892,7 +1071,7 @@ function renderMatch(){
   function endRound(show){const rw=res.rounds[r][0];score[rw]++;
     const el=$('#s'+rw);if(el){el.textContent=score[rw];if(show){el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump');}}
     const sp=$('#strip');if(sp)sp.insertAdjacentHTML('beforeend',`<i class="${rw?'b':'a'}"></i>`);}
-  function title(){const t=$('#ftitle'),n=$('#rno');if(t)t.textContent=`${r+1}-р раундын тулаанууд`;if(n)n.textContent=`${r+1}-р раунд`;}
+  function title(){const t=$('#ftitle'),n=$('#rno');if(t)t.textContent=T('roundDuels',r+1);if(n)n.textContent=T('round',r+1);}
   function step(){
     if(!$('#duels'))return;
     const ds=res.rounds[r][1];
@@ -915,8 +1094,8 @@ function finishMatch(){
   const g=G,res=g.res;
   if(finished===g.gid+'|'+SCREEN&&$('#after').innerHTML)return;finished=g.gid+'|'+SCREEN;
   [0,1].forEach(t=>{$('#s'+t).textContent=res.score[t];g.rost[t].forEach((_,i)=>{const el=$(`#p${t}-${i} .kd`);if(el)el.textContent=res.K[t][i]+'-'+res.D[t][i];});});
-  const h=$('#half');h.textContent='Эцсийн дүн';h.dataset.done='1';
-  $('#rno').textContent=`${res.rounds.length} раунд`;
+  const h=$('#half');h.textContent=T('final');h.dataset.done='1';
+  $('#rno').textContent=T('roundsN',res.rounds.length);
   $('#s'+(1-res.win)).classList.add('dimmed');$('#bt'+res.win).classList.add('won');
   const mv=$(`#p${res.win}-${res.mvp}`);if(mv)mv.classList.add('mvp');
   const sb=$('#skipbtn');if(sb)sb.remove();
@@ -937,24 +1116,24 @@ function refreshAfter(){
   const el=$('#after');if(!el||!G||!G.res||!$('#half')||!$('#half').dataset.done)return;
   const g=G,res=g.res,w=res.win;
   const me=g.mode==='cpu'?0:g.mode==='online'?NET.team:-1;
-  const head=g.mode==='local'?`Ялагч: ${nameC(w)}`:w===me?'Та яллаа!':`${esc(g.names[w])} яллаа`;
+  const head=g.mode==='local'?T('winner',nameC(w)):w===me?T('youWon'):T('xWon',esc(g.names[w]));
   const mvp=P[g.rost[w][res.mvp]];
   const myName=g.mode==='local'?g.names[w]:(me>=0?g.names[me]:''),myS=myName?(recOf(myName).s||0):0;
-  const streakLine=(g.mode==='local'||w===me)&&myS>=2?`<p class="stat streakline">🔥 ${esc(myName)}: ${myS} дараалсан ялалт</p>`:'';
+  const streakLine=(g.mode==='local'||w===me)&&myS>=2?`<p class="stat streakline">${T('streakLine',esc(myName),myS)}</p>`:'';
   let acts='';
-  if(g.mode!=='online')acts=`<div class="row2"><button class="btn" data-act="again">Дахин тоглох</button><button class="btn ghost" data-act="home">Нүүр</button></div>`;
+  if(g.mode!=='online')acts=`<div class="row2"><button class="btn" data-act="again">${T('again')}</button><button class="btn ghost" data-act="home">${T('home')}</button></div>`;
   else if(NET.role==='host'){const ok=NET.opp&&NET.gr;
-    acts=`<p class="stat">${!NET.opp?'Өрсөлдөгч гарсан байна':ok?`${esc(NET.opp.name)} дахин тоглоход бэлэн`:`${esc(NET.opp.name)} бэлэн болохыг хүлээж байна…`}</p>
-      <div class="row2"><button class="btn" data-act="host-start" ${ok?'':'disabled'}>Дахин эхлүүлэх</button><button class="btn ghost" data-act="leave">Гарах</button></div>`;}
-  else acts=`<p class="stat">${NET.ready?'Хост эхлүүлэхийг хүлээж байна…':'Дахин тоглох уу?'}</p>
-      <div class="row2"><button class="btn ${NET.ready?'ghost':''}" data-act="ready">${NET.ready?'Бэлэн биш':'Бэлэн'}</button><button class="btn ghost" data-act="leave">Гарах</button></div>`;
+    acts=`<p class="stat">${!NET.opp?T('oppLeft'):ok?T('oppReady',esc(NET.opp.name)):T('waitReady',esc(NET.opp.name))}</p>
+      <div class="row2"><button class="btn" data-act="host-start" ${ok?'':'disabled'}>${T('restart')}</button><button class="btn ghost" data-act="leave">${T('leave')}</button></div>`;}
+  else acts=`<p class="stat">${NET.ready?T('waitHost'):T('againQ')}</p>
+      <div class="row2"><button class="btn ${NET.ready?'ghost':''}" data-act="ready">${NET.ready?T('notReady'):T('ready')}</button><button class="btn ghost" data-act="leave">${T('leave')}</button></div>`;
   el.innerHTML=`<div class="banner"><h2>${head}</h2><span class="muted num">${res.score[0]} : ${res.score[1]}</span></div>
     <p class="stat">MVP: <b style="color:var(--r-gold)">${esc(pName(mvp))}</b> <span class="num">${res.K[w][res.mvp]}-${res.D[w][res.mvp]}</span></p>
     ${streakLine}${acts}`;
 }
 function again(){
   const [a,b]=G.names;
-  G=G.mode==='cpu'?newGame('cpu',[a,'Компьютер'],G.diff):newGame('local',[a,b]);
+  G=G.mode==='cpu'?newGame('cpu',[a,T('cpuName')],G.diff):newGame('local',[a,b]);
   G.streak=[recOf(a).s||0,G.mode==='cpu'?0:(recOf(b).s||0)];
   UI.lastCard=null;go('draft');scheduleBot();
 }
@@ -993,28 +1172,28 @@ async function roomTransport(code,onMsg,onStatus){
 }
 function renderOnlineSetup(){
   const n=DB.last.p1||'',k=NET.kind;let body;
-  if(k===undefined){body=`<div class="notice">Холболт шалгаж байна…</div>`;detectTransport().then(()=>{if(SCREEN==='online')render();});}
-  else if(k===null)body=`<div class="notice">Онлайн горим энэ хуудсан дээр ажиллахгүй байна. Тоглоомыг Cloudflare дээр байршуулсан хаягаар нээвэл найзтайгаа кодоор тоглоно.</div>`;
-  else body=`<section class="card"><p class="who-line">Тоглогч: <b>${esc(n)}</b></p></section>
-    <button class="btn" data-act="create-room">Өрөө үүсгэх</button>
-    <div class="or">эсвэл кодоор нэгдэх</div>
-    <section class="card"><div class="field"><label for="code">Өрөөний код</label><input id="code" class="code-in" maxlength="4" value="${esc(UI.joinCode)}" placeholder="ABCD" autocomplete="off" autocapitalize="characters"></div>
-      <button class="btn ghost" data-act="join-room">Нэгдэх</button></section>`;
-  $('#app').innerHTML=`<main class="wrap">${topBar('Онлайн')}${body}</main>`;
+  if(k===undefined){body=`<div class="notice">${T('checking')}</div>`;detectTransport().then(()=>{if(SCREEN==='online')render();});}
+  else if(k===null)body=`<div class="notice">${T('noOnline')}</div>`;
+  else body=`<section class="card"><p class="who-line">${T('player')}: <b>${esc(n)}</b></p></section>
+    <button class="btn" data-act="create-room">${T('createRoom')}</button>
+    <div class="or">${T('orJoin')}</div>
+    <section class="card"><div class="field"><label for="code">${T('roomCode')}</label><input id="code" class="code-in" maxlength="4" value="${esc(UI.joinCode)}" placeholder="ABCD" autocomplete="off" autocapitalize="characters"></div>
+      <button class="btn ghost" data-act="join-room">${T('join')}</button></section>`;
+  $('#app').innerHTML=`<main class="wrap">${topBar(T('online'))}${body}</main>`;
 }
 async function netOpen(role,code){
-  const name=myName()||'Тоглогч';
+  const name=myName()||T('player');
   Object.assign(NET,{role,code,name,team:role==='host'?0:1,opp:null,oppSeen:0,gr:false,ready:false,conn:false,lastSt:0,lastHi:0,pending:null,full:false,gotSt:0,openedAt:Date.now(),noHostShown:false,oppOn:false});
   G=null;
   try{NET.tr=NET.kind==='room'?await roomTransport(code,netMsg,netStatus):wsTransport(code,netMsg,netStatus);}
-  catch(e){NET.tr=null;toast('Өрөөнд холбогдож чадсангүй');return;}
+  catch(e){NET.tr=null;toast(T('connFail'));return;}
   go('lobby');
 }
 function netStatus(c){const was=NET.conn;NET.conn=c;if(c&&!was){NET.lastHi=0;NET.lastSt=0;}refreshNet();}
 function netLeave(){if(NET.tr)NET.tr.close();NET.tr=null;NET.role=null;G=null;go('home');}
 function oppStatus(){
-  if(!NET.tr)return '';if(!NET.conn)return '<span style="color:var(--loss)">· холболт тасарсан</span>';if(!NET.opp)return '';
-  return Date.now()-NET.oppSeen<8000?'<span style="color:var(--money)">· ● онлайн</span>':'<span style="color:var(--loss)">· ● саатсан</span>';
+  if(!NET.tr)return '';if(!NET.conn)return `<span style="color:var(--loss)">${T('connLost')}</span>`;if(!NET.opp)return '';
+  return Date.now()-NET.oppSeen<8000?`<span style="color:var(--money)">${T('oppOnline')}</span>`:`<span style="color:var(--loss)">${T('oppLag')}</span>`;
 }
 const SYNC=['gid','first','deck','ptr','cur','cardNo','money','rost','gives','skips','phase','kind','actor','bid','hi','log','seq','res','sold','autoTo','streak'];
 function hostSnapshot(){
@@ -1030,7 +1209,7 @@ function netMsg(d){
     if(d.t==='hi'&&d.role==='guest'){
       const free=!NET.opp||d.pid===NET.opp.pid||(now-NET.oppSeen>15000&&(!G||G.phase==='match'));
       if(!free)return;
-      const fresh=!NET.opp||NET.opp.pid!==d.pid,nm=cleanName(d.name)||'Зочин',renamed=NET.opp&&NET.opp.name!==nm;
+      const fresh=!NET.opp||NET.opp.pid!==d.pid,nm=cleanName(d.name)||T('guest'),renamed=NET.opp&&NET.opp.name!==nm;
       NET.opp={pid:d.pid,name:nm,st:Math.max(0,Math.min(999,+d.st||0))};NET.oppSeen=now;if(fresh)NET.gr=false;
       if(fresh||renamed){if(G&&!fresh)G.names[1]=nm;hostBroadcast();refreshNet();}
     }else if(d.t==='ready'&&NET.opp&&d.pid===NET.opp.pid){
@@ -1046,7 +1225,7 @@ function guestState(S){
   const wasFull=NET.full;NET.full=!!(S.gp&&S.gp!==PID);
   if(NET.full){if(!wasFull)render();return;}
   const oppChanged=!NET.opp||NET.opp.name!==S.hn;
-  NET.opp={pid:S.pid,name:cleanName(S.hn)||'Хост'};
+  NET.opp={pid:S.pid,name:cleanName(S.hn)||T('host')};
   const grChanged=NET.gr!==!!S.gr;NET.gr=!!S.gr;
   const g=S.g;
   if(!g||(g.phase==='match'&&(!G||G.gid!==g.gid))){
@@ -1087,21 +1266,21 @@ function renderLobby(){
   const noHost=!host&&!NET.gotSt&&Date.now()-NET.openedAt>6000;
   const link=NET.kind==='ws'?location.origin+location.pathname+'#room-'+NET.code:'';
   let main;
-  if(NET.full)main=`<div class="notice">Энэ өрөөнд өөр хүн аль хэдийн нэгдсэн байна. Өөр код ашиглана уу.</div>`;
-  else if(noHost)main=`<div class="notice">${esc(NET.code)} кодтой өрөө олдсонгүй. Кодоо шалгаад дахин оролдоно уу.</div>`;
+  if(NET.full)main=`<div class="notice">${T('roomFull')}</div>`;
+  else if(noHost)main=`<div class="notice">${T('noRoom',esc(NET.code))}</div>`;
   else{
     const gReady=host?NET.gr:NET.ready;
-    const seatB=guestName?`<b>${esc(guestName)}</b>${gReady?'<span class="ok">Бэлэн</span>':'<span class="wait">Бэлэн биш</span>'}`:'<b class="muted">Хүлээж байна…</b><span class="wait">Кодоо найздаа илгээ</span>';
-    const btn=host?`<button class="btn" data-act="host-start" ${opp&&NET.gr?'':'disabled'}>Эхлүүлэх</button><p class="stat">${!opp?'Найз тань нэгдэхийг хүлээж байна…':NET.gr?'Бүгд бэлэн. Эхлүүлээрэй!':'Зочин «Бэлэн» дарахыг хүлээж байна…'}</p>`
-      :`<button class="btn ${NET.ready?'ghost':''}" data-act="ready">${NET.ready?'Бэлэн биш болох':'Бэлэн'}</button><p class="stat">${NET.ready?'Хост эхлүүлэхийг хүлээж байна…':'Бэлэн болмогц хост тоглолтыг эхлүүлнэ'}</p>`;
-    main=`<div class="lseats"><div class="lseat"><span class="lbl">Хост, T тал</span><b>${esc(hostName)}</b><span class="wait">${host?'Та':(oppOn?'● онлайн':'')}</span></div>
-      <div class="lseat b"><span class="lbl">Зочин, CT тал</span>${seatB}</div></div>${btn}`;
+    const seatB=guestName?`<b>${esc(guestName)}</b>${gReady?`<span class="ok">${T('ready')}</span>`:`<span class="wait">${T('notReady')}</span>`}`:`<b class="muted">${T('waiting')}</b><span class="wait">${T('sendCode')}</span>`;
+    const btn=host?`<button class="btn" data-act="host-start" ${opp&&NET.gr?'':'disabled'}>${T('startBtn')}</button><p class="stat">${!opp?T('waitFriend'):NET.gr?T('allReady'):T('waitGuest')}</p>`
+      :`<button class="btn ${NET.ready?'ghost':''}" data-act="ready">${NET.ready?T('unready'):T('ready')}</button><p class="stat">${NET.ready?T('waitHost'):T('readySub')}</p>`;
+    main=`<div class="lseats"><div class="lseat"><span class="lbl">${T('hostSide')}</span><b>${esc(hostName)}</b><span class="wait">${host?T('you'):(oppOn?T('onlineDot'):'')}</span></div>
+      <div class="lseat b"><span class="lbl">${T('guestSide')}</span>${seatB}</div></div>${btn}`;
   }
-  $('#app').innerHTML=`<main class="wrap">${topBar('Онлайн өрөө','leave')}
-    <div class="codebox"><span class="lbl">Өрөөний код</span><span class="led num">${esc(NET.code)}</span>
-      ${host?`<span class="muted" style="font-size:13px;text-align:center">Найз тань «Онлайн → Нэгдэх» хэсэгт энэ кодыг оруулна</span>`:''}
-      ${host&&link?`<button class="btn ghost" data-act="copy" style="min-height:40px;padding:8px 14px">Холбоос хуулах</button>`:''}</div>
-    ${main}<p class="net ${NET.conn?'':'bad'}">${NET.conn?'Сервертэй холбогдсон':'Сервертэй холбогдож байна…'}</p></main>`;
+  $('#app').innerHTML=`<main class="wrap">${topBar(T('onlineRoom'),'leave')}
+    <div class="codebox"><span class="lbl">${T('roomCode')}</span><span class="led num">${esc(NET.code)}</span>
+      ${host?`<span class="muted" style="font-size:13px;text-align:center">${T('codeHint')}</span>`:''}
+      ${host&&link?`<button class="btn ghost" data-act="copy" style="min-height:40px;padding:8px 14px">${T('copyLink')}</button>`:''}</div>
+    ${main}<p class="net ${NET.conn?'':'bad'}">${NET.conn?T('srvOk'):T('srvWait')}</p></main>`;
 }
 function hostStart(){
   if(NET.role!=='host'||!NET.opp||!NET.gr)return;
@@ -1113,26 +1292,14 @@ function hostStart(){
 function modal(html){$('#modal').innerHTML=`<div class="modal" data-act="close-bg"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`;const b=$('#modal .sheet button');if(b)b.focus();}
 function closeModal(){$('#modal').innerHTML='';}
 function rulesModal(){
-  modal(`<h2>Тоглох заавар</h2><ol>
-    <li>Хоёулаа $20 мөнгөтэй, 5 хоосон суудалтай эхэлнэ. Мөнгө нь виртуал.</li>
-    <li>Тамирчдын карт санамсаргүй дарааллаар нэг нэгээр гарна. Карт бүрийг та хоёр ээлжлэн нээнэ.</li>
-    <li>Нээх ээлжтэй үедээ картыг $1-ээр нээнэ, эсвэл өрсөлдөгчдөө үнэгүй өгнө. Үнэгүй өгөх эрх 2 удаа.</li>
-    <li>Нээсний дараа нөгөө нь үнээ +$1, +$2, +$5 эсвэл бүх мөнгөөрөө өсгөнө. Өнжвөл хамгийн сүүлд үнэ хэлсэн нь авна.</li>
-    <li>Мөнгө дуусаад суудал үлдсэн бол өрсөлдөгч тань хүсээгүй картаа танд $0-оор өгнө. Нэг талын баг бүрдсэн бол нөгөө нь $1-ээр авна эсвэл алгасна (3 удаа).</li>
-    <li>Ээлж бүрт 15 секунд. Цаг дуусвал нээх үед $1-ээр авна, хаялцах үед өнжинө.</li>
-    <li>Хоёр баг бүрдмэгц тоглолт эхэлнэ. 13 раунд түрүүлж хожсон баг ялна.</li>
-    <li>Раунд бүр 1v1 тулаанаас бүрдэнэ. Тулаан бүрт хожих магадлалыг хоёр тамирчны HLTV rating-ээр тооцно. Жишээ нь 1.30 ба 1.00 бол ${Math.round(duelP(1.3,1)*100)}% ба ${100-Math.round(duelP(1.3,1)*100)}%, 1.10 ба 1.00 бол ${Math.round(duelP(1.1,1)*100)}% ба ${100-Math.round(duelP(1.1,1)*100)}%.</li>
-    <li>Нэг багийн тамирчдыг цуглуулбал бонус авна: 2 хүн бол rating нь +3%, 3 бол +6%, 4 бол +8%, 5 бол +10%.</li>
-    <li>AWP, IGL заавал байх албагүй.</li>
-    <li>Ховор карт: ${Math.round(PRIME_CHANCE*100)}% магадлалтайгаар s1mple (prime) гарч ирнэ. Түүний rating ${fmtR(P[PRIME].hl)}.</li>
-    <li>Дараалсан ялалт 🔥 таны нэрийн хажууд гарах бөгөөд өрсөлдөгч тань ч харна.</li>
-  </ol>
-  <button class="btn" data-act="close">Ойлголоо</button>`);
+  const x={a:Math.round(duelP(1.3,1)*100),b:Math.round(duelP(1.1,1)*100),lead:Math.round(LEAD*100),clutch:Math.round(CLUTCH*100),prime:Math.round(PRIME_CHANCE*100),pr:fmtR(P[PRIME].hl)};
+  modal(`<h2>${T('howTo')}</h2><ol>${T('rules',x).map(li=>`<li>${li}</li>`).join('')}</ol>
+  <button class="btn" data-act="close">${T('gotIt')}</button>`);
 }
 function playersModal(){
-  modal(`<div class="ph"><h2>Бүх тамирчид</h2><button class="icon" data-act="close" aria-label="Хаах">×</button></div>
-    <div class="ptools"><input id="psearch" placeholder="Нэр эсвэл баг хайх" autocomplete="off" aria-label="Хайх">
-      <div class="seg two" role="group" aria-label="Эрэмбэ"><button data-act="psort" data-k="team" aria-pressed="${UI.psort!=='rating'}">Багаар</button><button data-act="psort" data-k="rating" aria-pressed="${UI.psort==='rating'}">Rating-аар</button></div></div>
+  modal(`<div class="ph"><h2>${T('allPlayers')}</h2><button class="icon" data-act="close" aria-label="${T('close')}">×</button></div>
+    <div class="ptools"><input id="psearch" placeholder="${T('search')}" autocomplete="off" aria-label="${T('searchA')}">
+      <div class="seg two" role="group" aria-label="${T('sortA')}"><button data-act="psort" data-k="team" aria-pressed="${UI.psort!=='rating'}">${T('byTeam')}</button><button data-act="psort" data-k="rating" aria-pressed="${UI.psort==='rating'}">${T('byRating')}</button></div></div>
     <div id="plist" class="plist"></div>`);
   $('#modal .sheet').classList.add('tall');
   fillPlayers();
@@ -1148,11 +1315,11 @@ function fillPlayers(){
   if(UI.psort==='rating')html=`<ul>${list.slice().sort((a,b)=>b.hc-a.hc).map(row).join('')}</ul>`;
   else TEAMS.forEach(([team])=>{const ps=list.filter(p=>p.team===team);if(ps.length)html+=`<h3>${esc(team)}</h3><ul>${ps.map(row).join('')}</ul>`;});
   const pr=P[PRIME];
-  if(!q||'s1mple prime goat'.includes(q))html+=`<h3>Ховор карт</h3><ul>${row(pr).replace('</small>',`, гарах магадлал ${Math.round(PRIME_CHANCE*100)}%</small>`)}</ul>`;
-  el.innerHTML=html||'<p class="muted" style="padding:12px 4px">Ийм тамирчин олдсонгүй</p>';
+  if(!q||'s1mple prime goat'.includes(q))html+=`<h3>${T('rare')}</h3><ul>${row(pr).replace('</small>',`, ${T('dropChance',Math.round(PRIME_CHANCE*100))}</small>`)}</ul>`;
+  el.innerHTML=html||`<p class="muted" style="padding:12px 4px">${T('noneFound')}</p>`;
 }
-function quitModal(){modal(`<h2>Тоглоомоос гарах уу?</h2><p class="muted">Энэ draft дуусахгүй, ялалт ялагдал бүртгэгдэхгүй.</p>
-  <div class="row2"><button class="btn ghost" data-act="close">Үргэлжлүүлэх</button><button class="btn" data-act="quit-yes">Гарах</button></div>`);}
+function quitModal(){modal(`<h2>${T('quitQ')}</h2><p class="muted">${T('quitSub')}</p>
+  <div class="row2"><button class="btn ghost" data-act="close">${T('keep')}</button><button class="btn" data-act="quit-yes">${T('quit')}</button></div>`);}
 
 /* ================= events ================= */
 document.addEventListener('click',e=>{
@@ -1164,6 +1331,7 @@ document.addEventListener('click',e=>{
     case 'home':G=null;go('home');break;
     case 'rules':rulesModal();break;
     case 'players':playersModal();break;
+    case 'lang':DB.last.lang=b.dataset.l;saveDB();document.documentElement.lang=LANG();render();break;
     case 'psort':UI.psort=b.dataset.k;document.querySelectorAll('[data-act="psort"]').forEach(x=>x.setAttribute('aria-pressed',x===b));fillPlayers();break;
     case 'goat-x':b.remove();break;
     case 'close':closeModal();break;
@@ -1178,15 +1346,22 @@ document.addEventListener('click',e=>{
     case 'again':again();break;
     case 'create-room':netOpen('host',rid(4,'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'));break;
     case 'join-room':{const c=(($('#code')||{}).value||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
-      if(c.length!==4){toast('4 тэмдэгттэй код оруулна уу');return;}UI.joinCode=c;netOpen('guest',c);break;}
+      if(c.length!==4){toast(T('code4'));return;}UI.joinCode=c;netOpen('guest',c);break;}
     case 'ready':NET.ready=!NET.ready;sendReady();if(SCREEN==='lobby')render();else refreshAfter();break;
     case 'host-start':hostStart();break;
     case 'leave':if(G&&G.phase!=='match')quitModal();else netLeave();break;
     case 'copy':{const link=location.origin+location.pathname+'#room-'+NET.code;
-      (navigator.clipboard?navigator.clipboard.writeText(link):Promise.reject()).then(()=>toast('Холбоос хуулагдлаа'),()=>toast(link));break;}
+      (navigator.clipboard?navigator.clipboard.writeText(link):Promise.reject()).then(()=>toast(T('copied')),()=>toast(link));break;}
   }
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+document.addEventListener('submit',e=>{
+  const f=e.target;if(!f.dataset||f.dataset.form!=='bid')return;e.preventDefault();
+  if(!G||G.phase!=='bid')return;
+  const i=$('#bidv'),v=Math.floor(+i.value),min=G.bid+1,max=G.money[G.actor];
+  if(!(v>=min&&v<=max)){toast(T('badBid',min,max));i.focus();return;}
+  humanAct('raise',v);
+});
 document.addEventListener('input',e=>{
   if(e.target.id==='pname'){DB.last.p1=cleanName(e.target.value);saveDB();const r=$('#recn');if(r)r.innerHTML=recHtml(recOf(DB.last.p1));e.target.classList.remove('shake');}
   else if(e.target.id==='psearch')fillPlayers();
@@ -1202,6 +1377,7 @@ setInterval(()=>{
   if(SCREEN==='lobby'&&NET.role==='guest'&&!NET.gotSt&&Date.now()-NET.openedAt>6000&&!NET.noHostShown){NET.noHostShown=true;render();}
 },200);
 (function boot(){
+  document.documentElement.lang=LANG();
   const m=location.hash.match(/^#room-([A-Za-z0-9]{4})$/);
   if(m&&myName()){UI.joinCode=m[1].toUpperCase();go('online');}else{if(m)UI.joinCode=m[1].toUpperCase();go('home');}
   setTimeout(()=>{detectTransport();},0);
