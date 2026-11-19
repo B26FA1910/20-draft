@@ -299,6 +299,7 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 .hub .hubhero{padding-top:44px}
 .hub .hubhero h1{font-size:clamp(46px,15vw,92px)}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hub .tiles{margin-top:18px}
 .tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;padding:14px;border-radius:18px;min-height:118px;overflow:hidden;
   background:radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,var(--acc) 26%,transparent),transparent 60%),var(--panel);box-shadow:inset 0 0 0 1px var(--line);transition:transform .15s var(--out),box-shadow .2s}
 .tile:hover{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--acc) 60%,transparent),0 12px 30px -18px var(--acc)}
@@ -312,7 +313,7 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 .home .gname{color:var(--acc);font-size:clamp(38px,11vw,72px);text-wrap:balance}
 .nbaseg button{font:800 15px/1 var(--num)}
 @media (min-width:900px){.hub{display:block}.tiles{grid-template-columns:repeat(3,1fr)}.tile:first-child{grid-column:auto;flex-direction:column;align-items:flex-start;min-height:118px}
-  .hub .me{max-width:520px;margin:0 auto 6px}.hub .hubhero{padding-top:40px;margin-bottom:6px}}
+  .hub .me{max-width:520px;margin:0 auto}.hub .tiles{margin-top:40px}.hub .hubhero{padding-top:40px;margin-bottom:6px}}
 /* other-game match feed */
 .feed2 .dl2{font-size:13.5px;padding:4px 2px;border-bottom:1px solid var(--line);animation:slidein .25s var(--out)}
 .feed2 .dl2:first-child{font-weight:600}
