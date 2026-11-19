@@ -359,6 +359,7 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 .stage.rs-door .pcard,.stage.rs-assemble .pcard{visibility:visible}
 .stage.reeling.rs-door .pcard,.stage.reeling.rs-assemble .pcard{visibility:visible}
 .flagw{fill:#e9eef5;opacity:.35}
+.mapbg .hubcard{stroke:#202a40;stroke-width:2}
 /* map backgrounds */
 .mapbg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .mapbg .ml{position:absolute;inset:0;opacity:0;transition:opacity 1s ease}
@@ -844,8 +845,20 @@ function setMap(key){
   layers.forEach(l=>{if(l!==nl){l.classList.remove('in');setTimeout(()=>l.remove(),1100);}});
 }
 /* ================= themed backgrounds for the other games (original generic art) ================= */
-Object.assign(MAPCOL,{f1:'#ff4a3d',nba:'#ff8a2e',fifa:'#46d17a',food:'#ffb547',anime:'#ff7eb6',marvel:'#ff3d55'});
+Object.assign(MAPCOL,{hub:'#7c5cff',f1:'#ff4a3d',nba:'#ff8a2e',fifa:'#46d17a',food:'#ffb547',anime:'#ff7eb6',marvel:'#ff3d55'});
 Object.assign(MAPART,{
+  // hub: a fanned hand of blank draft cards, one accent stripe per game
+  hub(){
+    const n=GAME_KEYS.length,mid=(n-1)/2;
+    const far=`M0 ${GY}Q360 ${GY-150} 720 ${GY-170}Q1080 ${GY-150} 1440 ${GY}Z`;
+    const cards=GAME_KEYS.map((k,i)=>{const x=720+(i-mid)*150,rot=(i-mid)*8,y=GY-210+Math.abs(i-mid)*18;
+      return `<g transform="rotate(${rot} ${x} ${GY+120})"><rect class="near hubcard" x="${x-70}" y="${y}" width="140" height="200" rx="16"/>`+
+        `<rect x="${x-70}" y="${y+190}" width="140" height="10" rx="3" style="fill:${GAMES[k].acc};opacity:.85"/>`+
+        `<circle cx="${x}" cy="${y+62}" r="26" style="fill:none;stroke:${GAMES[k].acc};stroke-width:3;opacity:.45"/>`+
+        `<rect x="${x-38}" y="${y+112}" width="76" height="9" rx="4" style="fill:${GAMES[k].acc};opacity:.3"/></g>`;}).join('');
+    const dots=Array.from({length:26},(_,k)=>`<circle cx="${(k*211)%1440}" cy="${GY-90-(k*67)%230}" r="${2+(k%3)}" style="fill:${GAMES[GAME_KEYS[k%n]].acc};opacity:.35"/>`).join('');
+    return {far,near:'',extra:dots+cards,lit:''};
+  },
   f1(){
     const stand=(x,w,h)=>`M${x} ${GY}V${GY-h}L${x+w} ${GY-h-30}V${GY}Z`;
     const far=stand(0,520,120)+stand(900,540,130)+bx(560,300,70);
@@ -1447,7 +1460,7 @@ function render(){
   if(ANIM&&SCREEN!=='match'){cancelAnimationFrame(ANIM.raf);clearTimeout(ANIM.to);ANIM=null;}
   if(SCREEN!=='draft')document.body.dataset.side=SCREEN==='match'?'n':'';
   if(!UI.homeMap)UI.homeMap=MAPKEYS[Math.floor(Math.random()*MAPKEYS.length)];
-  setMap(SCREEN==='hub'?UI.homeMap:(SCREEN==='draft'||SCREEN==='match')&&G&&MAPART[G.map]?G.map:GK==='cs2'?UI.homeMap:GK);
+  setMap(SCREEN==='hub'?'hub':(SCREEN==='draft'||SCREEN==='match')&&G&&MAPART[G.map]?G.map:GK==='cs2'?UI.homeMap:GK);
   ({hub:renderHub,home:renderHome,cpu:renderCpuSetup,local:renderLocalSetup,online:renderOnlineSetup,lobby:renderLobby,draft:renderDraft,match:renderMatch})[SCREEN]();
   if(UI.lastScreen!==SCREEN){UI.lastScreen=SCREEN;const w=$('#app .wrap');if(w&&!reduceMotion())w.classList.add('enter');}
 }
