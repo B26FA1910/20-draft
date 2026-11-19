@@ -292,6 +292,21 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* ---- v3 additions ---- */
+/* map backgrounds */
+.mapbg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.mapbg .ml{position:absolute;inset:0;opacity:0;transition:opacity 1s ease}
+.mapbg .ml.in{opacity:1}
+.mapbg .glow{position:absolute;left:0;right:0;bottom:0;height:72vh;background:radial-gradient(110% 75% at 50% 100%,color-mix(in srgb,var(--mc) 34%,transparent),color-mix(in srgb,var(--mc) 8%,transparent) 55%,transparent 80%)}
+.mapbg svg{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:max(100vw,1000px);height:auto;display:block}
+.mapbg .far{fill:#182033}
+.mapbg .near{fill:#070a10}
+.mapbg .stk{fill:none;stroke:#070a10;stroke-width:9;stroke-linecap:round}
+.mapbg .stk.thin{stroke-width:5}
+.mapbg .lit{fill:var(--mc);opacity:.6}
+.mapchip{display:inline-flex;align-items:center;gap:6px;font:700 11px/1 var(--num);letter-spacing:.04em;color:var(--ink);padding:5px 9px;border-radius:99px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px var(--line)}
+.mapchip::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--mc,var(--t))}
+
+
 .avw{position:relative;display:inline-grid;flex:none}
 .ttag{position:absolute;right:-9px;bottom:-3px;font:800 9px/1 var(--num);letter-spacing:.02em;padding:3px 4px;border-radius:6px;background:#0b0f17;color:var(--ink);box-shadow:0 0 0 1.5px color-mix(in srgb,var(--rc,#8b97ad) 80%,transparent);white-space:nowrap}
 .avw.lg .ttag{font-size:11px;padding:4px 6px;right:-14px;bottom:0}
@@ -432,6 +447,7 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 </style>
 </head>
 <body>
+<div class="mapbg" id="mapbg" aria-hidden="true"></div>
 <div class="aura" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="n"></i></div>
 <div id="app"></div>
 <div id="modal"></div>
@@ -623,6 +639,85 @@ en:{
     `Rare card: s1mple (prime) shows up in ${x.prime}% of drafts. His rating is ${x.pr}.`,
     'Your win streak 🔥 appears next to your name, and your opponent sees it too.'],
 }};
+/* ================= map backgrounds (original skyline art in each map's setting) ================= */
+const MAPS={mirage:'Mirage',dust2:'Dust II',inferno:'Inferno',nuke:'Nuke',ancient:'Ancient',anubis:'Anubis'};
+const MAPKEYS=Object.keys(MAPS);
+const MAPCOL={mirage:'#ff9a4d',dust2:'#e8c27a',inferno:'#ff6b3d',nuke:'#4fd1c5',ancient:'#5fd38a',anubis:'#e4ae39'};
+const GY=360; // ground line of the 1440×360 view box
+const bx=(x,w,h,y=GY)=>`M${x} ${y}V${y-h}H${x+w}V${y}Z`;
+const dome=(cx,y,r)=>`M${cx-r} ${y}A${r} ${r*0.95} 0 0 1 ${cx+r} ${y}Z`;
+const tri=(x,w,h,y=GY)=>`M${x} ${y}L${x+w/2} ${y-h}L${x+w} ${y}Z`;
+const hills=(pts,y=GY)=>`M0 ${y}`+pts.map(([x,h],i)=>{const px=i?pts[i-1][0]:0;return `Q${(px+x)/2} ${y-h} ${x} ${y-h*.6}`;}).join('')+`L1440 ${y}Z`;
+const wins=(arr)=>arr.map(([x,y,w,h])=>`<rect class="lit" x="${x}" y="${y}" width="${w||6}" height="${h||9}" rx="1"/>`).join('');
+const palm=(x,h,lean=14)=>{const tx=x+lean,ty=GY-h;
+  return `<path class="stk" d="M${x} ${GY}Q${x+lean*.2} ${GY-h*.5} ${tx} ${ty}"/>`+
+    [[-46,10],[-30,-14],[34,-12],[48,12],[4,-22]].map(([dx,dy])=>`<path class="stk thin" d="M${tx} ${ty}Q${tx+dx*.5} ${ty+dy-10} ${tx+dx} ${ty+dy+14}"/>`).join('');};
+const cypress=(x,h,w=16)=>`M${x} ${GY}C${x-w} ${GY-h*.4} ${x-w*.6} ${GY-h*.85} ${x} ${GY-h}C${x+w*.6} ${GY-h*.85} ${x+w} ${GY-h*.4} ${x} ${GY}Z`;
+const tree=(x,h,r)=>`M${x-4} ${GY}V${GY-h}H${x+4}V${GY}Z`+[[0,0],[-r*.7,r*.35],[r*.7,r*.3],[0,-r*.6]].map(([dx,dy])=>`M${x+dx-r} ${GY-h+dy}a${r} ${r} 0 1 0 ${2*r} 0a${r} ${r} 0 1 0 ${-2*r} 0Z`).join('');
+const MAPART={
+  mirage(){
+    const far=hills([[180,40],[420,30],[700,46],[980,34],[1260,44],[1440,30]])+[[90,90,26],[260,110,32],[600,100,30],[860,120,36],[1140,95,28],[1340,105,30]].map(([x,h,r])=>bx(x-r,r*2,h)+dome(x,GY-h,r)).join('');
+    const near=[bx(0,120,120),bx(110,90,170),dome(155,190,38),bx(190,140,110),bx(320,70,205),dome(355,155,30),bx(380,160,140),
+      bx(530,34,250),dome(547,110,17),`M545 93L547 70L549 93Z`,bx(560,180,118),bx(730,110,185),dome(785,175,52),bx(830,150,130),
+      bx(970,30,240),dome(985,120,15),`M983 105L985 82L987 105Z`,bx(1000,170,150),bx(1170,96,195),dome(1218,165,44),bx(1266,174,125)].join('');
+    return {far,near,extra:palm(470,190,10)+palm(1110,170,-12)+palm(700,140,8),
+      lit:wins([[30,280],[60,280],[140,230],[220,290],[340,200,6,12],[420,260],[460,260],[600,290],[640,290],[680,290],[760,240],[800,240],[880,280],[920,280],[1040,260],[1090,260],[1200,220],[1300,290],[1350,290]])};
+  },
+  dust2(){
+    const far=hills([[240,70],[520,40],[860,80],[1180,50],[1440,70]]);
+    const near=[bx(0,170,130),bx(150,60,150),bx(210,220,95),bx(420,120,170),bx(420,140,20,190),bx(560,40,60),bx(600,40,40),bx(580,40,40,300),
+      bx(680,260,80),bx(700,90,135),bx(940,150,155),bx(1080,52,52),bx(1132,52,52),bx(1106,52,52,308),bx(1200,240,120),bx(1250,70,165)].join('');
+    return {far,near,extra:`<path class="stk thin" d="M1330 240L1330 150"/><path class="lit" d="M1332 152L1372 162L1332 172Z" style="opacity:.35"/>`,
+      lit:wins([[40,270,8,14],[100,270,8,14],[260,300,10,16],[450,220,8,14],[480,220,8,14],[730,260,8,12],[980,240,8,14],[1020,240,8,14],[1230,280,8,14],[1280,230,8,14]])};
+  },
+  inferno(){
+    const far=hills([[200,90],[520,120],[860,80],[1180,110],[1440,90]])+[[160,40],[320,50],[640,46],[900,40],[1250,52]].map(([x,h])=>bx(x,60,h,GY-50)+tri(x-6,72,26,GY-50-h)).join('');
+    const house=(x,w,h)=>bx(x,w,h)+tri(x-10,w+20,Math.round(w*.32),GY-h);
+    const near=[house(0,140,140),house(150,110,180),house(270,150,120),bx(450,56,280),tri(444,68,70,80),house(520,160,150),
+      house(700,120,190),house(830,170,130),house(1010,110,165),bx(1135,48,250),tri(1129,60,60,110),house(1195,130,140),house(1330,110,175)].join('')+
+      cypress(425,170)+cypress(680,150)+cypress(995,180)+cypress(1185,140);
+    return {far,near,extra:'',lit:wins([[30,260,8,12],[90,260,8,12],[180,220,8,12],[230,220,8,12],[300,280,8,12],[470,140,6,14],[560,250,8,12],[620,250,8,12],[730,220,8,12],[870,270,8,12],[930,270,8,12],[1040,240,8,12],[1230,260,8,12],[1360,230,8,12]])};
+  },
+  nuke(){
+    const tower=(x,w,h,y=GY)=>{const t=w*.62,i=(w-t)/2;return `M${x} ${y}C${x+w*.2} ${y-h*.45} ${x+i+w*.06} ${y-h*.7} ${x+i} ${y-h}H${x+i+t}C${x+w-i-w*.06} ${y-h*.7} ${x+w*.8} ${y-h*.45} ${x+w} ${y}Z`;};
+    const far=tower(180,170,230)+tower(1150,190,260)+bx(0,1440,30);
+    const saw=(x,n,w,h,y)=>`M${x} ${GY}V${y}`+Array.from({length:n},(_,k)=>`L${x+k*w+w} ${y-h}V${y}`).join('')+`V${GY}Z`;
+    const near=[tower(520,210,290),bx(0,200,120),saw(0,5,40,26,GY-120),bx(220,46,170),dome(243,190,23),bx(276,46,170),dome(299,190,23),
+      bx(380,24,260),bx(760,300,110),saw(760,6,50,30,GY-110),bx(1080,24,230),bx(1120,200,140),bx(1340,46,180),dome(1363,180,23),bx(1392,46,180),dome(1415,180,23),
+      bx(200,580,10,GY-150),bx(1060,300,8,GY-175)].join('');
+    return {far,near,extra:Array.from({length:30},(_,k)=>`<path class="stk thin" d="M${k*48+8} ${GY}V${GY-38}"/>`).join(''),
+      lit:wins([[30,270,10,6],[80,270,10,6],[130,270,10,6],[384,110,6,6],[800,280,10,6],[860,280,10,6],[920,280,10,6],[980,280,10,6],[1084,140,6,6],[1150,260,10,6],[1210,260,10,6],[1270,260,10,6]])};
+  },
+  ancient(){
+    const far=Array.from({length:30},(_,k)=>{const x=k*52,r=34+(k*13%22);return `M${x-r} ${GY}a${r} ${r} 0 1 0 ${2*r} 0Z`;}).join('')+bx(0,1440,40);
+    const steps=(x,w,n,sh)=>Array.from({length:n},(_,k)=>bx(x+k*w/(n*2.4),w-k*w/(n*1.2),sh,GY-k*sh)).join('');
+    const near=steps(470,500,7,30)+bx(640,160,60,GY-210)+tri(630,180,40,GY-270)+bx(690,60,40,GY-210)+
+      bx(160,34,180)+bx(150,54,14,GY-180)+bx(230,34,120)+bx(1160,34,170)+bx(1150,54,14,GY-170)+bx(1230,34,110)+
+      tree(60,170,46)+tree(330,200,52)+tree(1080,210,56)+tree(1350,180,50)+tree(1000,140,40);
+    return {far,near,extra:`<path class="stk thin" d="M510 ${GY-60}q20 40 0 80M930 ${GY-90}q-18 50 4 90"/>`,
+      lit:wins([[700,166,10,16],[740,166,10,16],[600,300,8,10],[860,300,8,10]])};
+  },
+  anubis(){
+    const far=tri(140,360,190)+tri(420,260,130)+tri(1000,420,220)+tri(1340,200,110);
+    const col=(x,h)=>bx(x,30,h)+`M${x-10} ${GY-h}L${x-4} ${GY-h-22}H${x+34}L${x+40} ${GY-h}Z`;
+    const near=[bx(0,200,110),col(230,200),col(300,200),col(370,200),bx(220,190,20,GY-222),bx(470,26,300),`M470 60L483 30L496 60Z`,
+      bx(540,220,130),bx(780,160,90),col(970,180),col(1040,180),bx(960,120,18,GY-202),bx(1120,170,140),bx(1290,150,100),bx(0,1440,14)].join('');
+    return {far,near,extra:palm(130,180,12)+palm(820,160,-10)+palm(1260,190,10)+`<rect class="lit" x="0" y="${GY-6}" width="1440" height="3" style="opacity:.25"/>`,
+      lit:wins([[40,280,8,14],[120,280,8,14],[580,270,8,14],[640,270,8,14],[700,270,8,14],[820,300,8,10],[1160,260,8,14],[1220,260,8,14],[1320,290,8,10]])};
+  }};
+function mapLayer(key){
+  const a=MAPART[key]();
+  return `<div class="ml" style="--mc:${MAPCOL[key]}"><div class="glow"></div>
+    <svg viewBox="0 0 1440 360" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><path class="far" d="${a.far}"/><path class="near" d="${a.near}"/>${a.extra}${a.lit}</svg></div>`;
+}
+function setMap(key){
+  const box=$('#mapbg');if(!box||!MAPART[key]||UI.bgMap===key)return;UI.bgMap=key;
+  box.insertAdjacentHTML('beforeend',mapLayer(key));
+  const layers=box.querySelectorAll('.ml'),nl=layers[layers.length-1];
+  requestAnimationFrame(()=>requestAnimationFrame(()=>nl.classList.add('in')));
+  layers.forEach(l=>{if(l!==nl){l.classList.remove('in');setTimeout(()=>l.remove(),1100);}});
+}
+
 const LANG=()=>DB.last&&DB.last.lang==='en'?'en':'mn';
 const T=(k,...a)=>{const v=I18N[LANG()][k]!==undefined?I18N[LANG()][k]:I18N.mn[k];return typeof v==='function'?v(...a):v;};
 
@@ -659,7 +754,7 @@ function newGame(mode,names,diff){
   const deck=shuffle(P.filter(p=>!p.special).map(p=>p.id));
   // the rare card goes into the first 10 cards, which are always drawn, so its chance is exactly PRIME_CHANCE per draft
   if(Math.random()<PRIME_CHANCE||(typeof FORCE_PRIME!=='undefined'&&FORCE_PRIME))deck.splice(1+Math.floor(Math.random()*9),0,PRIME);
-  const g={mode,gid:rid(8),names,diff:diff||'mid',first:Math.random()<.5?0:1,deck,ptr:0,cur:null,cardNo:0,streak:[0,0],
+  const g={mode,gid:rid(8),names,diff:diff||'mid',map:MAPKEYS[Math.floor(Math.random()*MAPKEYS.length)],first:Math.random()<.5?0:1,deck,ptr:0,cur:null,cardNo:0,streak:[0,0],
     money:[BUDGET,BUDGET],rost:[[],[]],gives:[GIVES,GIVES],skips:[SKIPS,SKIPS],phase:'offer',kind:'normal',actor:0,bid:0,hi:-1,
     deadline:0,log:[],seq:0,res:null,sold:null,autoTo:-1,startedAt:Date.now()};
   nextCard(g,FLIP_MS);
@@ -810,6 +905,8 @@ function go(s){SCREEN=s;render();}
 function render(){
   if(ANIM&&SCREEN!=='match'){cancelAnimationFrame(ANIM.raf);clearTimeout(ANIM.to);ANIM=null;}
   if(SCREEN!=='draft')document.body.dataset.side=SCREEN==='match'?'n':'';
+  if(!UI.homeMap)UI.homeMap=MAPKEYS[Math.floor(Math.random()*MAPKEYS.length)];
+  setMap((SCREEN==='draft'||SCREEN==='match')&&G&&MAPS[G.map]?G.map:UI.homeMap);
   ({home:renderHome,cpu:renderCpuSetup,local:renderLocalSetup,online:renderOnlineSetup,lobby:renderLobby,draft:renderDraft,match:renderMatch})[SCREEN]();
   if(UI.lastScreen!==SCREEN){UI.lastScreen=SCREEN;const w=$('#app .wrap');if(w&&!reduceMotion())w.classList.add('enter');}
 }
@@ -981,7 +1078,7 @@ function renderDraft(){
   const goatAt=reelDelay+(reel?REVEAL_MS:0);
   $('#app').innerHTML=`<main class="wrap wide">
     <div class="dbar"><button class="icon" data-act="quit" aria-label="${T('quit')}">×</button>
-      <div class="cardno"><b class="num">${T('cardNo',g.cardNo)}</b>${T('cardsLeft',left)}${G.mode==='online'?` <span id="oppstat">${oppStatus()}</span>`:''}</div>
+      <div class="cardno"><b class="num">${T('cardNo',g.cardNo)}</b>${T('cardsLeft',left)}${MAPS[g.map]?` <span class="mapchip" style="--mc:${MAPCOL[g.map]}">${MAPS[g.map]}</span>`:''}${G.mode==='online'?` <span id="oppstat">${oppStatus()}</span>`:''}</div>
       <button class="icon" data-act="players" aria-label="${T('allPlayers')}" title="${T('allPlayers')}"><svg viewBox="0 0 24 24" class="ic"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
       <div class="timer ${a===1?'b':''} ${a<0?'idle':''}" id="timer"><span id="tsec">15</span></div></div>
     <div class="dgrid">
@@ -1050,7 +1147,7 @@ function renderMatch(){
     <div class="top"><button class="icon" data-act="${g.mode==='online'?'leave':'home'}" aria-label="${T('quit')}">×</button><h2>${T('match')}</h2><button class="linkbtn" data-act="skip" id="skipbtn">${T('skip')}</button></div>
     <div class="board">
       <div class="bteam" id="bt0"><span class="bname ta">${esc(g.names[0])} ${stk(st[0])}</span><span class="led num" id="s0">0</span></div>
-      <div class="bmid"><span class="vs" id="rno">${T('round',1)}</span><span class="mapn" id="half">${T('to13')}</span></div>
+      <div class="bmid">${MAPS[g.map]?`<span class="mapchip" style="--mc:${MAPCOL[g.map]}">${MAPS[g.map]}</span>`:''}<span class="vs" id="rno">${T('round',1)}</span><span class="mapn" id="half">${T('to13')}</span></div>
       <div class="bteam" id="bt1"><span class="bname tb">${esc(g.names[1])} ${stk(st[1])}</span><span class="led num" id="s1">0</span></div>
     </div>
     <div class="strip" id="strip" aria-hidden="true"></div>
@@ -1195,7 +1292,7 @@ function oppStatus(){
   if(!NET.tr)return '';if(!NET.conn)return `<span style="color:var(--loss)">${T('connLost')}</span>`;if(!NET.opp)return '';
   return Date.now()-NET.oppSeen<8000?`<span style="color:var(--money)">${T('oppOnline')}</span>`:`<span style="color:var(--loss)">${T('oppLag')}</span>`;
 }
-const SYNC=['gid','first','deck','ptr','cur','cardNo','money','rost','gives','skips','phase','kind','actor','bid','hi','log','seq','res','sold','autoTo','streak'];
+const SYNC=['gid','first','deck','ptr','cur','cardNo','money','rost','gives','skips','phase','kind','actor','bid','hi','log','seq','res','sold','autoTo','streak','map'];
 function hostSnapshot(){
   let g=null;if(G){g={};SYNC.forEach(k=>g[k]=G[k]);g.rem=Math.max(0,G.deadline-Date.now());g.sa=Math.max(0,Date.now()-G.startedAt);}
   return {t:'st',v:1,pid:PID,code:NET.code,hn:NET.name,gn:NET.opp?NET.opp.name:'',gp:NET.opp?NET.opp.pid:'',gr:NET.gr,g};
