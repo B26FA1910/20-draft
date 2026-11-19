@@ -109,13 +109,17 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:.01em;text-wr
 .pcard::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent 0 22px,rgba(255,255,255,.025) 22px 44px);pointer-events:none}
 .pcard.fresh{animation:deal .45s cubic-bezier(.2,.8,.3,1)}
 @keyframes deal{from{transform:translateY(16px) rotate(-2deg);opacity:0}to{transform:none;opacity:1}}
-.ovr{grid-row:1/3;width:74px;height:74px;border-radius:14px;background:#0b0f15;border:1px solid #3a4a63;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
-.ovr b{font:800 34px/1 var(--display);color:var(--led);font-variant-numeric:tabular-nums}
-.ovr small{font-size:9.5px;letter-spacing:.14em;color:var(--muted);margin-top:4px;font-weight:700}
+.ovr{grid-row:1/3;width:84px;height:84px;border-radius:14px;background:#0b0f15;border:1px solid #3a4a63;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;gap:5px}
+.ovr b{font:800 29px/1 var(--display);color:var(--ink);font-variant-numeric:tabular-nums}
+.ovr small{font-size:9px;letter-spacing:.12em;color:var(--muted);font-weight:700;white-space:nowrap}
+.ovr .rk{font-size:10.5px;letter-spacing:0;color:var(--muted);font-weight:600}
+.t1{color:var(--led)!important} .t2{color:var(--ink)} .t3{color:#b9c4d4} .t4{color:var(--loss)!important}
+.ovr.t1b{border-color:rgba(255,207,90,.55);box-shadow:0 0 18px rgba(255,207,90,.18)}
+.log .rt{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
 .pnick{font:800 clamp(30px,10vw,44px)/1 var(--display);font-style:italic;letter-spacing:-.01em;overflow-wrap:anywhere}
 .pmeta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
 .chip{display:inline-flex;align-items:center;padding:3px 8px;border-radius:6px;font-size:11.5px;font-weight:700;background:var(--raise);color:var(--ink)}
-.chip.role-AWP{background:rgba(255,207,90,.16);color:var(--led)}
+.chip.role-AWP,.chip.role-AWPIGL{background:rgba(255,207,90,.16);color:var(--led)}
 .chip.role-IGL{background:rgba(74,210,149,.14);color:var(--money)}
 .chip.role-Entry{background:rgba(240,96,106,.15);color:#ff8b92}
 .chip.mn{background:#c4272f;color:#fff}
@@ -154,18 +158,19 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:.01em;text-wr
 .bmid{display:flex;flex-direction:column;align-items:center;gap:6px}
 .mapn{font:800 13px/1 var(--display);color:var(--muted);letter-spacing:.04em}
 .colon{font:800 34px/1 var(--display);color:#3a4658}
-.rstrip{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;min-height:12px}
-.rstrip i{width:9px;height:12px;border-radius:2px;background:var(--t)}
-.rstrip i.b{background:var(--ct)}
-.rstrip .half{width:2px;background:var(--line);margin:0 3px}
-.evals{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.ev{background:var(--panel);border-radius:12px;padding:10px;border-top:3px solid var(--t);display:flex;flex-direction:column;gap:6px;min-width:0}
-.ev.b{border-top-color:var(--ct)}
-.ev .tot{display:flex;justify-content:space-between;align-items:baseline}
-.ev .tot b{font:800 22px/1 var(--display);font-variant-numeric:tabular-nums}
-.mods{display:flex;flex-wrap:wrap;gap:4px}
-.mod{font-size:11px;font-weight:700;padding:2px 6px;border-radius:5px;background:var(--raise)}
-.mod.p{color:var(--money)} .mod.n{color:var(--loss)}
+.rcols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rcol{background:var(--panel);border-radius:12px;padding:8px;border-top:3px solid var(--t);display:flex;flex-direction:column;gap:2px;min-width:0}
+.rcol.b{border-top-color:var(--ct)}
+.rrow{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:baseline;padding:7px 6px;border-radius:8px;font-size:14px;transition:opacity .25s,transform .25s}
+.rrow+.rrow{border-top:1px solid var(--line)}
+.rrow.hid{opacity:0;transform:translateY(6px)}
+.rrow .n{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.rrow .n small{display:block;font-weight:500;color:var(--muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rrow b{font:800 18px/1 var(--display);font-variant-numeric:tabular-nums}
+.rrow .st{font-style:normal;color:var(--led)}
+.led.avg{font-size:clamp(28px,9vw,44px)}
+.rsum{display:flex;justify-content:space-between;align-items:baseline;padding:8px 6px 4px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+.rsum b{font:800 15px/1 var(--display);color:var(--ink);font-variant-numeric:tabular-nums}
 .sb{width:100%;border-collapse:collapse;font-size:13px}
 .sb th{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:right;padding:4px 6px;font-weight:700}
 .sb th:first-child,.sb td:first-child{text-align:left}
@@ -212,21 +217,37 @@ h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:.01em;text-wr
 'use strict';
 /* ================= rules & data ================= */
 const BUDGET=20,SLOTS=5,GIVES=2,SKIPS=3,TURN_MS=15000,FLIP_MS=1600,SOLD_MS=1400,AUTO_MS=1500;
-const MAPS=['Mirage','Inferno','Nuke','Dust2','Ancient','Anubis','Cache'];
-// [nick, team (Nov 2026), role, country, game rating]
-const RAW=[
-['ZywOo','Vitality','AWP','FR',97],['ropz','Vitality','Rifler','EE',93],['flameZ','Vitality','Entry','IL',88],['mezii','Vitality','Rifler','GB',86],['apEX','Vitality','IGL','FR',81],
-['donk','Spirit','Entry','RU',96],['sh1ro','Spirit','AWP','RU',92],['zont1x','Spirit','Rifler','UA',84],['tN1R','Spirit','Rifler','BY',83],['magixx','Spirit','IGL','RU',78],
-['molodoy','FURIA','AWP','KZ',90],['KSCERATO','FURIA','Rifler','BR',89],['YEKINDAR','FURIA','Entry','LV',87],['yuurih','FURIA','Rifler','BR',84],['FalleN','FURIA','IGL','BR',80],
-['m0NESY','Falcons','AWP','RU',94],['NiKo','Falcons','Rifler','BA',88],['kyousuke','Falcons','Rifler','RU',86],['TeSeS','Falcons','Rifler','DK',80],['karrigan','Falcons','IGL','DK',78],
-['Spinx','MOUZ','Rifler','IL',88],['torzsi','MOUZ','AWP','HU',87],['xertioN','MOUZ','Entry','IL',86],['PR','MOUZ','Rifler','CZ',84],['xelex','MOUZ','Rifler','HU',80],
-['b1t','NAVI','Rifler','UA',86],['w0nderful','NAVI','AWP','UA',86],['iM','NAVI','Entry','RO',83],['makazze','NAVI','Rifler','XK',80],['Aleksib','NAVI','IGL','FI',76],
-['s1mple','BC.Game','AWP','UA',88],['Senzu','BC.Game','Rifler','MN',87],['mzinho','BC.Game','Rifler','MN',84],['electroNic','BC.Game','Rifler','RU',80],['Magisk','BC.Game','IGL','DK',76],
-['910','The MongolZ','AWP','MN',83],['bLitz','The MongolZ','IGL','MN',80],['Techno','The MongolZ','Rifler','MN',79],
-['frozen','FaZe','Rifler','SK',87],['Twistzz','FaZe','IGL','CA',84],['jcobbb','FaZe','Rifler','PL',80],
-['XANTARES','Aurora','Entry','TR',87],['Wicadia','Aurora','Rifler','TR',86],['woxic','Aurora','AWP','TR',82],
-['HeavyGod','G2','Rifler','IL',86],['MATYS','G2','Rifler','SK',82],['NertZ','G2','Rifler','IL',82],['huNter-','G2','IGL','BA',79]];
-const P=RAW.map((a,i)=>({id:i,nick:a[0],team:a[1],role:a[2],cc:a[3],ovr:a[4]}));
+// [nick, team, role, country, HLTV Rating 3.0 for the player's time on that team (hltv.org team pages, Nov 2026)]
+// Teams: HLTV world ranking top 20 (9 Nov 2026) + BC.Game, 100 Thieves, TYLOO, Chinggis Warriors
+const TEAMS=[
+ ['Vitality',[['apEX','IGL','FR',1.00],['ZywOo','AWP','FR',1.32],['flameZ','Entry','IL',1.14],['mezii','Rifler','GB',1.06],['ropz','Rifler','EE',1.16]]],
+ ['MOUZ',[['torzsi','AWP','HU',1.12],['xertioN','IGL','IL',1.13],['Spinx','Rifler','IL',1.12],['xelex','Rifler','HU',1.06],['PR','Rifler','CZ',1.06]]],
+ ['FURIA',[['yuurih','Rifler','BR',1.14],['KSCERATO','Rifler','BR',1.19],['FalleN','IGL','BR',0.97],['molodoy','AWP','KZ',1.15],['YEKINDAR','Entry','LV',1.09]]],
+ ['Spirit',[['magixx','IGL','RU',1.05],['donk','Entry','RU',1.39],['zont1x','Rifler','UA',1.08],['sh1ro','AWP','RU',1.18],['tN1R','Rifler','BY',1.03]]],
+ ['Aurora',[['Wicadia','Rifler','TR',1.12],['woxic','AWP','TR',1.05],['XANTARES','Entry','TR',1.12],['Jimpphat','Rifler','FI',1.12],['kyxsan','IGL','MK',0.94]]],
+ ['Falcons',[['NiKo','Rifler','BA',1.13],['TeSeS','Rifler','DK',1.03],['m0NESY','AWP','RU',1.28],['kyousuke','Rifler','RU',1.15],['karrigan','IGL','DK',0.76]]],
+ ['BetBoom',[['Boombl4','IGL','RU',0.97],['zorte','AWP','RU',1.02],['S1ren','Rifler','RU',1.06],['Magnojez','Rifler','RU',1.17],['d1Ledez','Rifler','RU',1.08]]],
+ ['NAVI',[['b1t','Rifler','UA',1.12],['Aleksib','IGL','FI',0.93],['iM','Entry','RO',1.10],['w0nderful','AWP','UA',1.14],['makazze','Rifler','XK',1.11]]],
+ ['FUT',[['dem0n','Rifler','UA',1.12],['dziugss','Rifler','LT',1.11],['Krabeni','IGL','XK',1.05],['xfl0ud','Rifler','TR',1.10],['SunPayus','AWP','ES',1.16]]],
+ ['The MongolZ',[['bLitz','IGL','MN',1.08],['Techno','Rifler','MN',1.02],['910','AWP','MN',1.12],['cobrazera','Rifler','MN',1.02],['nin9','Rifler','MN',0.99]]],
+ ['Nemiga',[['robo','IGL','RU',1.01],['KaiR0N-','Rifler','RU',1.11],['syph0','Rifler','KZ',1.17],['khaN','Rifler','KZ',1.08],['Xant3r','Rifler','RU',1.07]]],
+ ['G2',[['huNter-','IGL','BA',1.09],['HeavyGod','Rifler','IL',1.14],['MATYS','Rifler','SK',1.07],['NertZ','Rifler','IL',1.09],['r1nkle','AWP','UA',0.95]]],
+ ['PARIVISION',[['Jame','AWP/IGL','RU',1.13],['xiELO','Rifler','RU',1.06],['zweih','Rifler','RU',1.05],['FL1T','Rifler','RU',0.98],['HObbit','Rifler','KZ',0.94]]],
+ ['Legacy',[['arT','IGL','BR',0.91],['dumau','AWP','BR',1.19],['latto','Rifler','BR',1.18],['try','Rifler','AR',1.10],['ksloks','Rifler','BR',0.84]]],
+ ['1win',[['nafany','IGL','RU',0.96],['Ax1Le','Rifler','RU',1.16],['ArtFr0st','AWP','RU',1.10],['fame','Rifler','RU',1.06],['BELCHONOKK','Rifler','RU',1.02]]],
+ ['MIBR',[['LNZ','IGL','SE',0.99],['insani','Rifler','BR',1.21],['venomzera','Rifler','BR',1.07],['nqz','AWP','BR',1.06],['tomaszin','Rifler','AR',1.01]]],
+ ['Liquid',[['NAF','Rifler','CA',1.14],['EliGE','Rifler','US',1.10],['malbsMd','Rifler','GT',1.08],['JT','IGL','ZA',0.95],['Jorko','AWP','BG',1.04]]],
+ ['FaZe',[['Twistzz','IGL','CA',1.15],['frozen','Rifler','SK',1.16],['jcobbb','Rifler','PL',1.00],['Neityu','Rifler','FR',0.94],['JBOEN','AWP','DK',1.10]]],
+ ['9z',[['max','IGL','UY',1.06],['dgt','Rifler','UY',1.14],['luchov','Rifler','AR',1.14],['HUASOPEEK','Entry','CL',1.10],['history','Rifler','BR',1.14]]],
+ ['Astralis',[['siuhy','IGL','PL',0.89],['phzy','AWP','SE',1.07],['Staehr','Rifler','DK',1.10],['ryu','Rifler','LT',1.08],['cmtry','Rifler','UA',0.95]]],
+ ['BC.Game',[['s1mple','AWP','UA',1.18],['Senzu','Rifler','MN',1.20],['mzinho','Rifler','MN',1.08],['Magisk','IGL','DK',1.00],['asap','Rifler','AU',0.98]]],
+ ['100 Thieves',[['Gizmy','IGL','GB',1.01],['device','AWP','DK',1.14],['rain','Rifler','NO',1.06],['poiii','Rifler','SE',1.15],['sirah','Rifler','DK',1.08]]],
+ ['TYLOO',[['Mercury','IGL','CN',1.08],['Jee','AWP','CN',1.11],['JamYoung','Rifler','CN',1.21],['Moseyuh','Rifler','CN',1.10],['Zero','Rifler','CN',1.07]]],
+ ['Chinggis Warriors',[['ROUX','Rifler','MN',1.06],['sk0R','Rifler','MN',1.14],['fury5k','Rifler','MN',0.98],['tikuak','Rifler','MN',1.17],['cool4st','Rifler','MN',1.03]]]];
+const P=[];TEAMS.forEach(([team,ps],ti)=>ps.forEach(a=>P.push({id:P.length,nick:a[0],team,trank:ti+1,role:a[1],cc:a[2],hl:a[3],hc:Math.round(a[3]*100)})));
+const RANK=(()=>{const s=P.slice().sort((a,b)=>b.hc-a.hc),r={};s.forEach(p=>{r[p.id]=1+s.findIndex(q=>q.hc===p.hc);});return r;})();
+const fmtR=x=>(+x).toFixed(2);
+const tier=hc=>hc>=115?'t1':hc>=105?'t2':hc>=100?'t3':'t4';
 const DIFF={easy:'Хялбар',mid:'Дунд',hard:'Хэцүү'};
 
 /* ================= utils ================= */
@@ -247,7 +268,7 @@ function loadDB(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e)
 function saveDB(){MEM=DB;try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}}
 const DB=loadDB();DB.rec=DB.rec||{};DB.last=DB.last||{};
 const recOf=n=>DB.rec[n]||{w:0,l:0};
-function record(n,r){const x=DB.rec[n]||(DB.rec[n]={w:0,l:0});x[r]++;saveDB();}
+function record(n,r){const x=DB.rec[n]||(DB.rec[n]={w:0,l:0});x[r]=(x[r]||0)+1;saveDB();}
 function ssGet(k,d){try{const v=sessionStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
 function ssSet(k,v){try{sessionStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 const PID=ssGet('cs2d.pid',null)||rid(10);ssSet('cs2d.pid',PID);
@@ -324,57 +345,28 @@ function stepClock(g){
   return false;
 }
 
-/* ================= team strength & match ================= */
-function evalTeam(ids){
-  const ps=ids.map(i=>P[i]),n=ps.length;
-  const avg=(ps.reduce((a,p)=>a+p.ovr,0)+(SLOTS-n)*60)/SLOTS;
-  const mods=[],cnt=r=>ps.filter(p=>p.role===r).length;
-  const awp=cnt('AWP'),igl=cnt('IGL');
-  if(awp===1)mods.push(['AWP-тай',3]);else if(awp===0)mods.push(['AWP байхгүй',-4]);else mods.push([awp+' AWP',-3*(awp-1)]);
-  if(igl===1)mods.push(['IGL-тэй',3]);else if(igl===0)mods.push(['IGL байхгүй',-3]);else mods.push([igl+' IGL',-2*(igl-1)]);
-  if(cnt('Entry'))mods.push(['Entry-тэй',1]);
-  const by={};ps.forEach(p=>by[p.team]=(by[p.team]||0)+1);
-  let pairs=0;Object.values(by).forEach(c=>pairs+=c*(c-1)/2);
-  if(pairs)mods.push(['Нэг багийн '+pairs+' хос',Math.min(4,pairs)]);
-  return {avg:r1(avg),mods,total:r1(avg+mods.reduce((a,m)=>a+m[1],0))};
-}
-function wpick(w){let r=Math.random()*w.reduce((a,b)=>a+b,0);for(let i=0;i<w.length;i++){r-=w[i];if(r<=0)return i;}return w.length-1;}
+/* ================= team strength (HLTV rating only) ================= */
+// Strength = average HLTV Rating 3.0 of the 5 players. Kept in hundredths so ties are exact.
+function teamSum(ids){return ids.reduce((a,i)=>a+P[i].hc,0);}
+const avgTxt=sum=>(sum/SLOTS/100).toFixed(3);
+function rosterAvg(ids){return ids.length?ids.reduce((a,i)=>a+P[i].hl,0)/ids.length:0;}
 function playMatch(g){
-  const E=[evalTeam(g.rost[0]),evalTeam(g.rost[1])];
-  const p=clamp(.5+(E[0].total-E[1].total)*.016,.22,.78);
-  const map=MAPS[Math.floor(Math.random()*MAPS.length)];
-  const KW={AWP:1.1,Entry:1.05,Rifler:1,IGL:.8},DW={Entry:1.35,IGL:1.1,Rifler:1,AWP:.85};
-  const WK=[0,1].map(t=>g.rost[t].map(id=>(1+(P[id].ovr-75)/30)*KW[P[id].role]));
-  const WD=[0,1].map(t=>g.rost[t].map(id=>DW[P[id].role]));
-  const K=[g.rost[0].map(()=>0),g.rost[1].map(()=>0)],D=[g.rost[0].map(()=>0),g.rost[1].map(()=>0)];
-  const s=[0,0];let target=13,rounds='';
-  const deaths=(t,n)=>{const w=WD[t].slice();for(let i=0;i<n&&i<w.length;i++){const j=wpick(w);D[t][j]++;w[j]=0;}};
-  for(let guard=0;guard<80;guard++){
-    const w=Math.random()<p?0:1,l=1-w;s[w]++;rounds+=w;
-    const kw=Math.random()<.62?5:(Math.random()<.5?4:3),kl=[0,1,1,2,2,2,3,3,4][Math.floor(Math.random()*9)];
-    for(let i=0;i<kw;i++)K[w][wpick(WK[w])]++;
-    for(let i=0;i<kl;i++)K[l][wpick(WK[l])]++;
-    deaths(l,kw);deaths(w,kl);
-    if(s[0]===target-1&&s[1]===target-1)target+=3;
-    else if(s[0]===target||s[1]===target)break;
-  }
-  const win=s[0]>s[1]?0:1;
-  let mvp=0;K[win].forEach((k,i)=>{if(k-D[win][i]*.5>K[win][mvp]-D[win][mvp]*.5)mvp=i;});
-  return {map,s,rounds,K,D,E:[E[0].total,E[1].total],win,mvp};
+  const S=[teamSum(g.rost[0]),teamSum(g.rost[1])];
+  const win=S[0]===S[1]?-1:S[0]>S[1]?0:1;
+  const best=[0,1].map(t=>{let b=0;g.rost[t].forEach((id,i)=>{if(P[id].hc>P[g.rost[t][b]].hc)b=i;});return b;});
+  return {S,win,best};
 }
 function toMatch(g){g.phase='match';g.actor=-1;g.cur=null;g.res=playMatch(g);g.seq++;}
 
 /* ================= bot ================= */
 function botValue(g,t,id){
-  const p=P[id],r=g.rost[t].map(i=>P[i]),left=slotsLeft(g,t),money=g.money[t];
+  const p=P[id],left=slotsLeft(g,t),money=g.money[t];
   if(left<=0)return 0;
-  let v=Math.max(0,(p.ovr-75)/2.1);
-  const has=role=>r.filter(q=>q.role===role).length;
-  if(p.role==='AWP')v=has('AWP')?v*.35:v*1.3+1;
-  if(p.role==='IGL')v=has('IGL')?v*.4:v*1.2+1.5;
-  v+=.8*r.filter(q=>q.team===p.team).length;
+  const cur=g.rost[t].length?teamSum(g.rost[t])/g.rost[t].length:0;
+  let v=Math.max(0,(p.hc-95)*.32);                // 0.95 → $0, 1.15 → $6.4, 1.32 → $11.8
+  if(cur&&p.hc<cur-4)v*=.6;                         // would drag the average down
   v*=clamp((money/left)/4,.6,1.5);
-  if(left===1)v=Math.max(v,money*(p.ovr>=85?1:.6));
+  if(left===1)v=Math.max(v,money*(p.hc>=115?1:p.hc>=108?.6:.25));
   v+=(Math.random()*2-1)*({easy:3,mid:1.5,hard:.6}[g.diff]||1.5);
   const reserve=g.diff==='hard'?left-1:g.diff==='mid'?Math.floor((left-1)/2):0;
   return clamp(Math.round(v),0,Math.max(0,money-reserve));
@@ -385,7 +377,7 @@ function botMove(g,t){
   if(g.phase==='offer'){
     if(g.kind==='normal'){
       if(W>=2||!acts.includes('give'))return ['take'];
-      return (W<1||p.ovr<81)?['give']:['take'];
+      return (W<1||p.hc<105)?['give']:['take'];
     }
     if(g.kind==='broke')return W>=1?['take']:['pass'];
     if(g.kind==='full')return (W>=1||!acts.includes('skip'))?['take']:['skip'];
@@ -429,16 +421,16 @@ function renderHome(){
   $('#app').innerHTML=`<main class="wrap">
     <header class="brand"><div class="eyebrow">Counter-Strike 2 · дуудлага худалдаа</div>
       <h1>Draft<span class="usd">$20</span></h1>
-      <p class="lede">Хоёулаа $20-той. Тамирчин нэг нэгээр гарч ирнэ, үнээ хаялцаж 5 хүнтэй баг бүрдүүл. Дараа нь хоёр баг тоглоно.</p></header>
-    <section class="rec"><div><div class="lbl">Таны амжилт · ${esc(n)}</div><div class="muted" style="font-size:13px;margin-top:4px">${P.length} тамирчин · 2026 оны 11-р сарын бүрэлдэхүүн</div></div>
-      <div style="text-align:right"><b class="num" style="color:var(--money)">${r.w}</b><span class="muted"> ялалт · </span><b class="num" style="color:var(--loss)">${r.l}</b><span class="muted"> ялагдал</span></div></section>
+      <p class="lede">Хоёулаа $20-той. Тамирчин нэг нэгээр гарч ирнэ, үнээ хаялцаж 5 хүнтэй баг бүрдүүл. HLTV rating-ийн дундаж нь өндөр баг ялна.</p></header>
+    <section class="rec"><div><div class="lbl">Таны амжилт · ${esc(n)}</div><div class="muted" style="font-size:13px;margin-top:4px">${P.length} тамирчин · HLTV Top 20 + 4 баг</div></div>
+      <div style="text-align:right"><b class="num" style="color:var(--money)">${r.w}</b><span class="muted"> ялалт · </span><b class="num" style="color:var(--loss)">${r.l}</b><span class="muted"> ялагдал</span>${r.d?`<span class="muted"> · ${r.d} тэнцээ</span>`:''}</div></section>
     <nav class="modes" aria-label="Тоглох горим">
       <button class="mode" data-act="nav" data-to="cpu"><span><b>Компьютерын эсрэг</b><small>Хялбар, дунд, хэцүү түвшин</small></span><span class="arr" aria-hidden="true">→</span></button>
       <button class="mode" data-act="nav" data-to="local"><span><b>2 хүн нэг утсан дээр</b><small>Утсаа тойруулж үнэ хаялцана</small></span><span class="arr" aria-hidden="true">→</span></button>
       <button class="mode" data-act="nav" data-to="online"><span><b>Онлайн</b><small>4 тэмдэгттэй кодоор найзтайгаа</small></span><span class="arr" aria-hidden="true">→</span></button>
     </nav>
     <button class="linkbtn" data-act="rules">Дүрэм</button>
-    <p class="fine">Мөнгө нь виртуал. Тамирчдын үнэлгээ зөвхөн энэ тоглоомд зориулсан.</p></main>`;
+    <p class="fine">Мөнгө нь виртуал. Үнэлгээ нь HLTV Rating 3.0 (2026 оны 11-р сар).</p></main>`;
 }
 function topBar(title,act='home'){return `<div class="top"><button class="icon" data-act="${act}" aria-label="Буцах">←</button><h2>${title}</h2></div>`;}
 function renderCpuSetup(){
@@ -449,7 +441,7 @@ function renderCpuSetup(){
         <div class="seg" role="group" aria-labelledby="dl">${Object.keys(DIFF).map(k=>`<button data-act="diff" data-d="${k}" aria-pressed="${UI.diff===k}">${DIFF[k]}</button>`).join('')}</div></div>
     </section>
     <button class="btn" data-act="start-cpu">Эхлэх</button>
-    <p class="fine">Хэцүү компьютер мөнгөө хэмнэж, AWP болон IGL-ээ заавал авахыг хичээнэ.</p></main>`;
+    <p class="fine">Хэцүү компьютер мөнгөө хэмнэж, өндөр rating-тэй тамирчдыг хүлээнэ.</p></main>`;
 }
 function renderLocalSetup(){
   $('#app').innerHTML=`<main class="wrap">${topBar('2 хүн нэг утсан дээр')}
@@ -475,11 +467,12 @@ function startLocal(){
 /* ================= draft screen ================= */
 function seatsHtml(g,t){return Array.from({length:SLOTS},(_,i)=>g.rost[t][i]==null?'<span></span>':'<span class="f"></span>').join('');}
 function hintsFor(g,id){
-  const t=myTeam(),r=g.rost[t].map(i=>P[i]),p=P[id],out=[];
+  const t=myTeam(),r=g.rost[t],p=P[id];
   if(slotsLeft(g,t)<=0)return '';
-  if(p.role==='AWP')out.push(r.some(q=>q.role==='AWP')?['bad','Танд AWP бий']:['good','AWP хэрэгтэй']);
-  if(p.role==='IGL')out.push(r.some(q=>q.role==='IGL')?['bad','Танд IGL бий']:['good','IGL хэрэгтэй']);
-  const mates=r.filter(q=>q.team===p.team).length;if(mates)out.push(['good',`Нэг багийн ${mates} хүн бий`]);
+  const out=[];
+  if(r.length){const now=rosterAvg(r),nx=rosterAvg(r.concat(id)),d=nx-now;
+    out.push([d>0.0005?'good':d<-0.0005?'bad':'',`Таны дундаж ${now.toFixed(3)} → ${nx.toFixed(3)}`]);}
+  if(RANK[id]<=10)out.push(['good','Топ 10 rating']);
   return out.length?`<div class="hints">${out.map(h=>`<span class="hint ${h[0]}">${h[1]}</span>`).join('')}</div>`:'';
 }
 function nameC(t){return `<span class="${t?'tb':'ta'}">${esc(G.names[t])}</span>`;}
@@ -493,13 +486,13 @@ function renderDraft(){
       <div class="hd"><span class="nm">${esc(g.names[t])}</span><span class="cash num ${g.money[t]?'':'zero'}">$${g.money[t]}</span></div>
       <div class="seats" aria-label="${g.rost[t].length}/5 суудал">${seatsHtml(g,t)}</div>
       <div class="who">${g.rost[t].length?g.rost[t].map(id=>esc(P[id].nick)).join(', '):'<span class="muted">Хоосон</span>'}</div>
-      <div class="meta">Өгөх эрх: ${g.gives[t]}${slotsLeft(g,1-t)===0?` · Алгасах: ${g.skips[t]}`:''}</div></section>`;
+      <div class="meta">Дундаж <b class="num" style="color:var(--ink)">${g.rost[t].length?rosterAvg(g.rost[t]).toFixed(3):'—'}</b> · Өгөх: ${g.gives[t]}${slotsLeft(g,1-t)===0?` · Алгасах: ${g.skips[t]}`:''}</div></section>`;
   let card='';
   if(showId!=null){const p=P[showId];
     card=`<article class="pcard ${fresh?'fresh':''}" aria-label="${esc(p.nick)}">
-      <div class="ovr"><b>${p.ovr}</b><small>ҮНЭЛГЭЭ</small></div>
+      <div class="ovr ${p.hc>=115?'t1b':''}"><small>HLTV 3.0</small><b class="${tier(p.hc)}">${fmtR(p.hl)}</b><span class="rk">#${RANK[p.id]}/${P.length}</span></div>
       <div class="pnick">${esc(p.nick)}</div>
-      <div class="pmeta"><span class="chip role-${p.role}">${p.role}</span><span>${esc(p.team)}</span><span class="chip ${p.cc==='MN'?'mn':''}">${p.cc}</span></div>
+      <div class="pmeta"><span class="chip role-${p.role.replace('/','')}">${p.role}</span><span>${esc(p.team)} <span class="muted">#${p.trank}</span></span><span class="chip ${p.cc==='MN'?'mn':''}">${p.cc}</span></div>
       ${g.cur!=null?hintsFor(g,showId):''}</article>`;}
   let mid='',acts='';
   const a=g.actor,mine=controls(a);
@@ -535,7 +528,7 @@ function renderDraft(){
   }else if(g.phase==='auto'){
     mid=`<p class="status">Хоёулаа мөнгөгүй</p><p class="status sub">${esc(P[g.cur].nick)} ${esc(g.names[g.autoTo])}-д $0-оор очно.</p>`;
   }
-  const log=g.log.map(l=>`<li class="${l.how==='skip'?'skip':l.t?'b':''}"><span>${esc(P[l.id].nick)} ${l.how==='skip'?'· алгасав':'→ '+esc(g.names[l.t])+(l.how==='give'?' (өгсөн)':'')}</span><span class="pr">${l.how==='skip'?'':'$'+l.price}</span></li>`).join('');
+  const log=g.log.map(l=>`<li class="${l.how==='skip'?'skip':l.t?'b':''}"><span>${esc(P[l.id].nick)} <span class="rt">${fmtR(P[l.id].hl)}</span> ${l.how==='skip'?'· алгасав':'→ '+esc(g.names[l.t])+(l.how==='give'?' (өгсөн)':'')}</span><span class="pr">${l.how==='skip'?'':'$'+l.price}</span></li>`).join('');
   const flipLeft=g.startedAt+FLIP_MS-Date.now();
   $('#app').innerHTML=`<main class="wrap">
     <div class="dbar"><button class="icon" data-act="quit" aria-label="Гарах">×</button>
@@ -570,70 +563,66 @@ function humanAct(a,v){
 /* ================= settlement ================= */
 function settle(){
   if(!G||!G.res||SETTLED.has(G.gid))return;markSettled(G.gid);
-  const w=G.res.win,rec=(n,t)=>record(n,w===t?'w':'l');
+  const w=G.res.win,rec=(n,t)=>record(n,w<0?'d':w===t?'w':'l');
   if(G.mode==='cpu')rec(G.names[0],0);else if(G.mode==='local'){rec(G.names[0],0);rec(G.names[1],1);}else rec(NET.name,NET.team);
 }
 
-/* ================= match screen ================= */
-const mapTag=m=>'de_'+m.toLowerCase().replace(/\s/g,'');
+/* ================= result screen (HLTV rating only) ================= */
+function sortedRost(t){return G.rost[t].map((id,i)=>({id,i})).sort((a,b)=>P[b.id].hc-P[a.id].hc);}
 function renderMatch(){
   if(ANIM){clearTimeout(ANIM.to);ANIM=null;}
   const g=G,res=g.res;
-  const ev=t=>{const e=evalTeam(g.rost[t]);return `<section class="ev ${t?'b':''}"><div class="tot"><span class="nm" style="font-weight:700">${esc(g.names[t])}</span><b>${e.total.toFixed(1)}</b></div>
-    <div class="muted" style="font-size:12px">Дундаж үнэлгээ ${e.avg.toFixed(1)}</div>
-    <div class="mods">${e.mods.map(m=>`<span class="mod ${m[1]>0?'p':m[1]<0?'n':''}">${esc(m[0])} ${m[1]>0?'+':''}${m[1]}</span>`).join('')}</div></section>`;};
+  const col=t=>`<section class="rcol ${t?'b':''}">${sortedRost(t).map((r,k)=>{const p=P[r.id];
+      return `<div class="rrow hid" data-t="${t}" data-k="${k}"><span class="n">${esc(p.nick)}${res.best[t]===r.i?' <i class="st" aria-label="багийн шилдэг">★</i>':''}<small>${esc(p.team)} · ${p.role}</small></span><b class="${tier(p.hc)}">${fmtR(p.hl)}</b></div>`;}).join('')}
+    <div class="rsum"><span>Нийлбэр</span><b id="sum${t}">0.00</b></div></section>`;
   $('#app').innerHTML=`<main class="wrap">
-    <div class="top"><button class="icon" data-act="${g.mode==='online'?'leave':'home'}" aria-label="Гарах">×</button><h2>Тоглолт · BO1</h2><button class="linkbtn" data-act="skip" id="skipbtn">Алгасах</button></div>
+    <div class="top"><button class="icon" data-act="${g.mode==='online'?'leave':'home'}" aria-label="Гарах">×</button><h2>Үр дүн</h2><button class="linkbtn" data-act="skip" id="skipbtn">Алгасах</button></div>
     <div class="board">
-      <div class="bteam"><span class="bname ta">${esc(g.names[0])}</span><span class="led num" id="s0">0</span></div>
-      <div class="bmid"><span class="mapn">${mapTag(res.map)}</span><span class="colon">:</span><span class="mapn" id="half">1-р хагас</span></div>
-      <div class="bteam"><span class="bname tb">${esc(g.names[1])}</span><span class="led num" id="s1">0</span></div>
+      <div class="bteam"><span class="bname ta">${esc(g.names[0])}</span><span class="led avg num" id="s0">0.000</span></div>
+      <div class="bmid"><span class="mapn">HLTV 3.0</span><span class="colon">:</span><span class="mapn" id="half">Дундаж</span></div>
+      <div class="bteam"><span class="bname tb">${esc(g.names[1])}</span><span class="led avg num" id="s1">0.000</span></div>
     </div>
-    <div class="rstrip" id="strip" aria-label="Раунд бүрийн ялагч"></div>
-    <div class="evals">${ev(0)}${ev(1)}</div>
+    <div class="rcols">${col(0)}${col(1)}</div>
     <div id="after" class="after"></div>
   </main>`;
   const instant=reduceMotion()||UI.animGid===g.gid;UI.animGid=g.gid;
-  let i=0;const n=res.rounds.length,sc=[0,0];
-  const strip=$('#strip');
-  function step(){
-    if(!$('#strip'))return;
-    const w=+res.rounds[i];sc[w]++;
-    if(i===12)strip.insertAdjacentHTML('beforeend','<span class="half"></span>');
-    if(i>=24&&(i-24)%6===0)strip.insertAdjacentHTML('beforeend','<span class="half"></span>');
-    strip.insertAdjacentHTML('beforeend',`<i class="${w?'b':''}"></i>`);
-    $('#s0').textContent=sc[0];$('#s1').textContent=sc[1];
-    $('#half').textContent=i<12?'1-р хагас':i<24?'2-р хагас':'Нэмэлт цаг';
-    i++;
-    if(i<n){ANIM.to=setTimeout(step,instant?0:290);}else finishMatch();
+  // reveal from the weakest pick up to the strongest, alternating sides
+  const order=[];for(let k=SLOTS-1;k>=0;k--)[0,1].forEach(t=>{if(k<g.rost[t].length)order.push([t,k]);});
+  const sum=[0,0],cnt=[0,0];let i=0;
+  function show(t,k){
+    const row=document.querySelector(`.rrow[data-t="${t}"][data-k="${k}"]`);if(!row)return;
+    row.classList.remove('hid');sum[t]+=P[sortedRost(t)[k].id].hc;cnt[t]++;
+    $('#sum'+t).textContent=(sum[t]/100).toFixed(2);
+    $('#s'+t).textContent=(sum[t]/cnt[t]/100).toFixed(3);
   }
-  ANIM={raf:0,to:setTimeout(step,instant?0:900),skip:()=>{clearTimeout(ANIM.to);instantAll();}};
-  function instantAll(){while(i<n){const w=+res.rounds[i];sc[w]++;if(i===12||(i>=24&&(i-24)%6===0))strip.insertAdjacentHTML('beforeend','<span class="half"></span>');strip.insertAdjacentHTML('beforeend',`<i class="${w?'b':''}"></i>`);i++;}
-    $('#s0').textContent=sc[0];$('#s1').textContent=sc[1];finishMatch();}
+  function step(){
+    if(!$('#s0'))return;
+    show(...order[i]);i++;
+    if(i<order.length)ANIM.to=setTimeout(step,instant?0:420);else finishMatch();
+  }
+  function instantAll(){while(i<order.length){show(...order[i]);i++;}finishMatch();}
+  ANIM={raf:0,to:setTimeout(step,instant?0:700),skip:()=>{clearTimeout(ANIM.to);instantAll();}};
   if(instant){clearTimeout(ANIM.to);instantAll();}
 }
 let finished=null;
 function finishMatch(){
   const g=G,res=g.res;
   if(finished===g.gid+'|'+SCREEN&&$('#after').innerHTML)return;finished=g.gid+'|'+SCREEN;
+  [0,1].forEach(t=>{$('#s'+t).textContent=avgTxt(res.S[t]);$('#sum'+t).textContent=(res.S[t]/100).toFixed(2);});
   $('#half').textContent='Төгсгөл';
-  $('#s'+(1-res.win)).classList.add('dimmed');
+  if(res.win>=0)$('#s'+(1-res.win)).classList.add('dimmed');
   const sb=$('#skipbtn');if(sb)sb.remove();
   refreshAfter();
 }
-function scoreTable(t){
-  const g=G,res=g.res;
-  const rows=g.rost[t].map((id,i)=>({id,k:res.K[t][i],d:res.D[t][i],i})).sort((a,b)=>(b.k-b.d)-(a.k-a.d)||b.k-a.k);
-  return `<div class="sbwrap ${t?'b':''}"><h3 class="${t?'tb':'ta'}">${esc(g.names[t])}</h3><table class="sb"><thead><tr><th>Тамирчин</th><th>K</th><th>D</th><th>+/−</th></tr></thead><tbody>
-    ${rows.map(r=>{const df=r.k-r.d;return `<tr class="${res.win===t&&res.mvp===r.i?'mvp':''}"><td>${esc(P[r.id].nick)}</td><td>${r.k}</td><td>${r.d}</td><td class="${df>0?'pos':df<0?'neg':''}">${df>0?'+':''}${df}</td></tr>`;}).join('')}</tbody></table></div>`;
-}
 function refreshAfter(){
   const el=$('#after');if(!el||!G||!G.res||!$('#half')||$('#half').textContent!=='Төгсгөл')return;
-  const g=G,res=g.res,w=res.win,sc=`${res.s[0]}–${res.s[1]}`;
+  const g=G,res=g.res,w=res.win;
+  const diff=Math.abs(res.S[0]-res.S[1])/SLOTS/100;
   let head;
-  if(g.mode==='local')head=`Ялагч: ${nameC(w)}`;
+  if(w<0)head='Тэнцлээ!';
+  else if(g.mode==='local')head=`Ялагч: ${nameC(w)}`;
   else{const me=g.mode==='cpu'?0:NET.team;head=w===me?'Та яллаа!':`${esc(g.names[w])} яллаа`;}
-  const mvp=P[g.rost[w][res.mvp]];
+  const star=w>=0?P[g.rost[w][res.best[w]]]:null;
   let acts='';
   if(g.mode!=='online')acts=`<div class="row2"><button class="btn" data-act="again">Дахин тоглох</button><button class="btn ghost" data-act="home">Нүүр</button></div>`;
   else if(NET.role==='host'){const ok=NET.opp&&NET.gr;
@@ -641,9 +630,9 @@ function refreshAfter(){
       <div class="row2"><button class="btn" data-act="host-start" ${ok?'':'disabled'}>Дахин эхлүүлэх</button><button class="btn ghost" data-act="leave">Гарах</button></div>`;}
   else acts=`<p class="stat">${NET.ready?'Хост эхлүүлэхийг хүлээж байна…':'Дахин тоглох уу?'}</p>
       <div class="row2"><button class="btn ${NET.ready?'ghost':''}" data-act="ready">${NET.ready?'Бэлэн биш':'Бэлэн'}</button><button class="btn ghost" data-act="leave">Гарах</button></div>`;
-  el.innerHTML=`<div class="banner"><h2>${head}</h2><span class="muted">${mapTag(res.map)} · ${sc}</span></div>
-    <p class="stat">MVP: <b style="color:var(--led)">${esc(mvp.nick)}</b></p>
-    ${scoreTable(w)}${scoreTable(1-w)}${acts}`;
+  el.innerHTML=`<div class="banner"><h2>${head}</h2><span class="muted num">Дундаж ${avgTxt(res.S[0])} : ${avgTxt(res.S[1])}${w>=0?` · зөрүү ${diff.toFixed(3)}`:''}</span></div>
+    ${star?`<p class="stat">Ялагч багийн хамгийн өндөр rating: <b style="color:var(--led)">${esc(star.nick)} ${fmtR(star.hl)}</b></p>`:''}
+    ${acts}`;
 }
 function again(){
   const [a,b]=G.names;
@@ -812,9 +801,9 @@ function rulesModal(){
     <li>Мөнгө дуусаад суудал үлдсэн бол үнэ хаялцаж чадахгүй. Өрсөлдөгч тань хүсээгүй картаа танд $0-оор өгнө.</li>
     <li>Нэг талын баг бүрдсэн бол нөгөө нь картыг $1-ээр авна, эсвэл алгасна. Алгасах эрх 3 удаа байна.</li>
     <li>Ээлж бүрт 15 секунд өгнө. Цаг дуусвал нээх үед $1-ээр авна, хаялцах үед өнжинө.</li>
-    <li>Хоёр баг бүрдмэгц BO1 тоглолт эхэлнэ (MR12, 13 раунд хожсон нь ялна). Багийн хүчийг 5 тамирчны дундаж үнэлгээгээр тооцоод AWP-тай бол +3, IGL-тэй бол +3, Entry-тэй бол +1 нэмнэ. Нэг багаас ирсэн хос бүрт +1 (хамгийн ихдээ +4). AWP байхгүй бол −4, IGL байхгүй бол −3, давхар AWP эсвэл IGL байвал хасна.</li>
+    <li>Хоёр баг бүрдмэгц 5 тамирчны HLTV Rating 3.0-ийн дунджийг харьцуулна. Дундаж нь өндөр баг ялна. Яг тэнцвэл тэнцээ болно. Санамсаргүй зүйл, үүрэг (AWP, IGL), нэг багийн хослол огт тооцогдохгүй.</li>
   </ol>
-  <p class="fine">Бүрэлдэхүүн 2026 оны 11-р сарын байдлаар. Үнэлгээг HLTV-ийн 2025 оны Top 20 болон 2026 оны тоглолтын хэлбэрт тулгуурлан энэ тоглоомд зориулж гаргасан.</p>
+  <p class="fine">Тамирчид: HLTV-ийн 2026.11.09-ний дэлхийн Top 20 баг, мөн BC.Game, 100 Thieves, TYLOO, Chinggis Warriors. Rating нь HLTV-ийн багийн хуудсан дээрх, тухайн багт тоглосон хугацааных (2026 оны 11-р сар).</p>
   <button class="btn" data-act="close">Ойлголоо</button>`);
 }
 function quitModal(){modal(`<h2>Тоглоомоос гарах уу?</h2><p class="muted">Энэ draft дуусахгүй, ялалт ялагдал бүртгэгдэхгүй.</p>
