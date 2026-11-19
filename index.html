@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CS2 $20 Draft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,600;0,800;1,800&family=Golos+Text:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout idea: an auction desk. Two wallets face each other (T side vs CT side), the player card sits on the block between them, the gavel is a 15-second ring. */
+  --bg:#0d1117; --panel:#161d27; --raise:#1f2834; --line:#2a3646;
+  --ink:#e9eef5; --muted:#8796ab;
+  --t:#e8a33d;     /* team A = T side, also the accent */
+  --ct:#5b9bf0;    /* team B = CT side */
+  --led:#ffcf5a;
+  --money:#4ad295; --loss:#f0606a;
+  --display:"Exo 2","Arial Narrow",system-ui,sans-serif;
+  --body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:400 15px/1.45 var(--body);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:disabled{cursor:not-allowed}
+input{font:inherit;color:var(--ink)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--t);outline-offset:2px}
+.wrap{max-width:560px;margin:0 auto;padding:16px 16px 48px;display:flex;flex-direction:column;gap:14px}
+h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:.01em;text-wrap:balance}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.ta{color:var(--t)} .tb{color:var(--ct)}
+.btn{display:flex;align-items:center;justify-content:center;gap:6px;min-height:50px;padding:10px 14px;border-radius:12px;font-weight:700;background:var(--t);color:#241502;font-size:16px;transition:transform .12s,filter .12s;text-align:center;line-height:1.15}
+.btn:hover:not(:disabled){filter:brightness(1.08)}
+.btn:active:not(:disabled){transform:scale(.97)}
+.btn:disabled{background:var(--raise);color:var(--muted)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover:not(:disabled){background:var(--panel)}
+.btn.blue{background:var(--ct);color:#04172f}
+.btn small{display:block;font-weight:500;font-size:11.5px;opacity:.8}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.icon{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center;font-size:18px;flex:none}
+.icon:hover{background:var(--panel)}
+.linkbtn{color:var(--muted);text-decoration:underline;text-underline-offset:3px;font-size:14px;align-self:center;padding:6px}
+.linkbtn:hover{color:var(--ink)}
+.fine{font-size:12.5px;color:var(--muted);text-align:center}
+
+/* home */
+.brand{padding-top:18px}
+.eyebrow{font:700 12px/1 var(--body);letter-spacing:.16em;text-transform:uppercase;color:var(--t)}
+.brand h1{font-style:italic;font-size:clamp(54px,17vw,104px);line-height:.88;margin-top:12px;text-transform:uppercase}
+.brand h1 .usd{color:var(--money);display:block}
+.lede{color:var(--muted);margin-top:14px;max-width:36ch;font-size:16px}
+.rec{background:var(--panel);border-radius:14px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.rec b{font:800 26px/1 var(--display)}
+.lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.modes{display:flex;flex-direction:column;gap:10px}
+.mode{display:grid;grid-template-columns:1fr auto;align-items:center;text-align:left;padding:16px 18px;border-radius:14px;border:1px solid var(--line);background:var(--panel);transition:border-color .15s,background .15s}
+.mode:hover{border-color:var(--t);background:var(--raise)}
+.mode b{font:800 21px/1.1 var(--display);font-style:italic;text-transform:uppercase}
+.mode small{display:block;color:var(--muted);font-size:14px;margin-top:4px}
+.mode .arr{font-size:22px;color:var(--t)}
+
+/* forms */
+.top{display:flex;align-items:center;gap:12px}
+.top h2{font-size:22px;flex:1;text-transform:uppercase;font-style:italic}
+.card{background:var(--panel);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:13px;color:var(--muted);font-weight:600}
+.field input{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:16px;width:100%}
+.field input:focus{border-color:var(--t);outline:none}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
+.seg button{padding:10px 4px;border-radius:8px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--raise);color:var(--ink);box-shadow:inset 0 -2px 0 var(--t)}
+.code-in{text-transform:uppercase;letter-spacing:.3em;font-family:var(--display);font-size:24px!important;text-align:center}
+.or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.notice{border:1px solid var(--line);border-radius:12px;padding:14px;color:var(--muted);font-size:14px}
+
+/* draft */
+.dbar{display:flex;align-items:center;gap:10px}
+.cardno{flex:1;font-size:13px;color:var(--muted)}
+.cardno b{font:800 20px/1 var(--display);color:var(--ink)}
+.timer{--p:1;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--t) calc(var(--p)*360deg),var(--raise) 0);flex:none}
+.timer.b{background:conic-gradient(var(--ct) calc(var(--p)*360deg),var(--raise) 0)}
+.timer span{width:38px;height:38px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font:800 17px/1 var(--display);font-variant-numeric:tabular-nums}
+.timer.low{background:conic-gradient(var(--loss) calc(var(--p)*360deg),var(--raise) 0)}
+.timer.low span{color:var(--loss)}
+.timer.idle{opacity:.35}
+.mgrs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mgr{background:var(--panel);border-radius:12px;padding:10px;border-top:3px solid var(--t);min-width:0;display:flex;flex-direction:column;gap:6px;transition:box-shadow .2s}
+.mgr.b{border-top-color:var(--ct)}
+.mgr.on{box-shadow:0 0 0 2px var(--t)}
+.mgr.b.on{box-shadow:0 0 0 2px var(--ct)}
+.mgr .hd{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.mgr .nm{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.mgr .cash{font:800 24px/1 var(--display);color:var(--money);font-variant-numeric:tabular-nums}
+.mgr .cash.zero{color:var(--loss)}
+.seats{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+.seats span{height:10px;border-radius:3px;background:var(--bg);border:1px dashed var(--line)}
+.seats span.f{border:0;background:var(--t)}
+.mgr.b .seats span.f{background:var(--ct)}
+.mgr .who{font-size:12.5px;line-height:1.35;min-height:17px;overflow-wrap:anywhere}
+.mgr .meta{font-size:11.5px;color:var(--muted)}
+.block{display:flex;flex-direction:column;gap:12px;align-items:stretch}
+.pcard{position:relative;border-radius:18px;padding:18px 18px 16px;background:linear-gradient(135deg,#202a38 0%,#141a23 60%),var(--panel);border:1px solid #33425a;overflow:hidden;display:grid;grid-template-columns:auto 1fr;gap:4px 16px;align-items:center;min-height:132px}
+.pcard::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent 0 22px,rgba(255,255,255,.025) 22px 44px);pointer-events:none}
+.pcard.fresh{animation:deal .45s cubic-bezier(.2,.8,.3,1)}
+@keyframes deal{from{transform:translateY(16px) rotate(-2deg);opacity:0}to{transform:none;opacity:1}}
+.ovr{grid-row:1/3;width:74px;height:74px;border-radius:14px;background:#0b0f15;border:1px solid #3a4a63;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.ovr b{font:800 34px/1 var(--display);color:var(--led);font-variant-numeric:tabular-nums}
+.ovr small{font-size:9.5px;letter-spacing:.14em;color:var(--muted);margin-top:4px;font-weight:700}
+.pnick{font:800 clamp(30px,10vw,44px)/1 var(--display);font-style:italic;letter-spacing:-.01em;overflow-wrap:anywhere}
+.pmeta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;padding:3px 8px;border-radius:6px;font-size:11.5px;font-weight:700;background:var(--raise);color:var(--ink)}
+.chip.role-AWP{background:rgba(255,207,90,.16);color:var(--led)}
+.chip.role-IGL{background:rgba(74,210,149,.14);color:var(--money)}
+.chip.role-Entry{background:rgba(240,96,106,.15);color:#ff8b92}
+.chip.mn{background:#c4272f;color:#fff}
+.hints{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.hint{font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.hint.good{border-color:rgba(74,210,149,.5);color:var(--money)}
+.hint.bad{border-color:rgba(240,96,106,.5);color:var(--loss)}
+.price{display:flex;align-items:center;justify-content:center;gap:12px;min-height:46px}
+.price .amt{font:800 40px/1 var(--display);color:var(--money);font-variant-numeric:tabular-nums}
+.price .by{font-size:14px;color:var(--muted)}
+.status{font-size:15px;text-align:center;font-weight:600;min-height:22px}
+.status.sub{font-weight:500;color:var(--muted);font-size:14px}
+.acts{display:grid;gap:8px}
+.acts.g2{grid-template-columns:1fr 1fr}
+.acts.g3{grid-template-columns:repeat(3,1fr)}
+.raise .btn{min-height:54px;font-size:19px;font-family:var(--display);font-weight:800}
+.sold{text-align:center;padding:6px 0;font:800 24px/1.15 var(--display);font-style:italic;text-transform:uppercase}
+.log{list-style:none;display:flex;flex-direction:column;gap:4px}
+.log li{display:grid;grid-template-columns:1fr auto;gap:8px;font-size:13px;padding:7px 10px;border-radius:8px;background:var(--panel);border-left:3px solid var(--t)}
+.log li.b{border-left-color:var(--ct)}
+.log li.skip{border-left-color:var(--line);color:var(--muted)}
+.log .pr{font-weight:700;font-variant-numeric:tabular-nums}
+.flip{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:rgba(5,8,12,.84);animation:fadeout .35s ease 1.3s forwards}
+.flip div{text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;padding:0 20px}
+.coin{width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe7a6,var(--led) 45%,#b07c0c);box-shadow:0 0 30px rgba(255,207,90,.45);animation:spin 1s cubic-bezier(.3,.7,.4,1)}
+.flip h2{font-size:24px}
+@keyframes spin{from{transform:rotateY(0)}to{transform:rotateY(1440deg)}}
+@keyframes fadeout{to{opacity:0;visibility:hidden}}
+
+/* match */
+.board{border-radius:16px;padding:14px 12px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;background-color:#06090d;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1.3px);background-size:6px 6px;border:1px solid #1e2a3a}
+.bteam{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.bname{font:800 14px/1.1 var(--display);text-transform:uppercase;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.led{font-family:var(--display);font-weight:800;color:var(--led);text-shadow:0 0 14px rgba(255,207,90,.5),0 0 2px rgba(255,207,90,.9);font-variant-numeric:tabular-nums;font-size:clamp(46px,15vw,66px);line-height:1}
+.led.dimmed{color:#6a5a2d;text-shadow:none}
+.bmid{display:flex;flex-direction:column;align-items:center;gap:6px}
+.mapn{font:800 13px/1 var(--display);color:var(--muted);letter-spacing:.04em}
+.colon{font:800 34px/1 var(--display);color:#3a4658}
+.rstrip{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;min-height:12px}
+.rstrip i{width:9px;height:12px;border-radius:2px;background:var(--t)}
+.rstrip i.b{background:var(--ct)}
+.rstrip .half{width:2px;background:var(--line);margin:0 3px}
+.evals{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ev{background:var(--panel);border-radius:12px;padding:10px;border-top:3px solid var(--t);display:flex;flex-direction:column;gap:6px;min-width:0}
+.ev.b{border-top-color:var(--ct)}
+.ev .tot{display:flex;justify-content:space-between;align-items:baseline}
+.ev .tot b{font:800 22px/1 var(--display);font-variant-numeric:tabular-nums}
+.mods{display:flex;flex-wrap:wrap;gap:4px}
+.mod{font-size:11px;font-weight:700;padding:2px 6px;border-radius:5px;background:var(--raise)}
+.mod.p{color:var(--money)} .mod.n{color:var(--loss)}
+.sb{width:100%;border-collapse:collapse;font-size:13px}
+.sb th{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:right;padding:4px 6px;font-weight:700}
+.sb th:first-child,.sb td:first-child{text-align:left}
+.sb td{padding:7px 6px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+.sb td:first-child{font-weight:700;white-space:nowrap}
+.sb tr.mvp td:first-child::after{content:" MVP";color:var(--led);font-size:10px;font-weight:800}
+.sbwrap{background:var(--panel);border-radius:12px;padding:6px 6px 2px;border-left:3px solid var(--t)}
+.sbwrap.b{border-left-color:var(--ct)}
+.sbwrap h3{font-size:14px;padding:4px 6px;text-transform:uppercase}
+.pos{color:var(--money)} .neg{color:var(--loss)}
+.banner{text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center;padding:6px 0}
+.banner h2{font-size:clamp(28px,8vw,38px);line-height:1.05;text-transform:uppercase;font-style:italic}
+.after{display:flex;flex-direction:column;gap:10px}
+.stat{font-size:14px;color:var(--muted);text-align:center}
+
+/* lobby */
+.codebox{background:#06090d;border:1px solid #1e2a3a;border-radius:16px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:8px;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1.3px);background-size:6px 6px}
+.codebox .led{font-size:62px;letter-spacing:.14em}
+.lseats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lseat{background:var(--panel);border-radius:12px;padding:12px;border-top:3px solid var(--t);display:flex;flex-direction:column;gap:4px;min-width:0}
+.lseat.b{border-top-color:var(--ct)}
+.lseat b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ok{color:var(--money);font-size:13px;font-weight:600}
+.wait{color:var(--muted);font-size:13px}
+.net{font-size:12.5px;color:var(--muted);text-align:center}
+.net.bad{color:var(--loss)}
+
+/* modal + toast */
+.modal{position:fixed;inset:0;z-index:40;background:rgba(3,5,8,.74);display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--panel);width:100%;max-width:560px;max-height:88%;overflow:auto;border-radius:18px 18px 0 0;padding:20px 18px 28px;display:flex;flex-direction:column;gap:14px}
+@media (min-width:600px){.modal{align-items:center}.sheet{border-radius:18px}}
+.sheet h2{font-size:24px;text-transform:uppercase;font-style:italic}
+.sheet ol{padding-left:20px;display:flex;flex-direction:column;gap:8px;color:#cfd8e6}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:12px;font-weight:600;font-size:14px;opacity:0;transition:.25s;z-index:50;max-width:calc(100% - 32px);text-align:center;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.flip{display:none}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="modal"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+'use strict';
+/* ================= rules & data ================= */
+const BUDGET=20,SLOTS=5,GIVES=2,SKIPS=3,TURN_MS=15000,FLIP_MS=1600,SOLD_MS=1400,AUTO_MS=1500;
+const MAPS=['Mirage','Inferno','Nuke','Dust2','Ancient','Anubis','Cache'];
+// [nick, team (Nov 2026), role, country, game rating]
+const RAW=[
+['ZywOo','Vitality','AWP','FR',97],['ropz','Vitality','Rifler','EE',93],['flameZ','Vitality','Entry','IL',88],['mezii','Vitality','Rifler','GB',86],['apEX','Vitality','IGL','FR',81],
+['donk','Spirit','Entry','RU',96],['sh1ro','Spirit','AWP','RU',92],['zont1x','Spirit','Rifler','UA',84],['tN1R','Spirit','Rifler','BY',83],['magixx','Spirit','IGL','RU',78],
+['molodoy','FURIA','AWP','KZ',90],['KSCERATO','FURIA','Rifler','BR',89],['YEKINDAR','FURIA','Entry','LV',87],['yuurih','FURIA','Rifler','BR',84],['FalleN','FURIA','IGL','BR',80],
+['m0NESY','Falcons','AWP','RU',94],['NiKo','Falcons','Rifler','BA',88],['kyousuke','Falcons','Rifler','RU',86],['TeSeS','Falcons','Rifler','DK',80],['karrigan','Falcons','IGL','DK',78],
+['Spinx','MOUZ','Rifler','IL',88],['torzsi','MOUZ','AWP','HU',87],['xertioN','MOUZ','Entry','IL',86],['PR','MOUZ','Rifler','CZ',84],['xelex','MOUZ','Rifler','HU',80],
+['b1t','NAVI','Rifler','UA',86],['w0nderful','NAVI','AWP','UA',86],['iM','NAVI','Entry','RO',83],['makazze','NAVI','Rifler','XK',80],['Aleksib','NAVI','IGL','FI',76],
+['s1mple','BC.Game','AWP','UA',88],['Senzu','BC.Game','Rifler','MN',87],['mzinho','BC.Game','Rifler','MN',84],['electroNic','BC.Game','Rifler','RU',80],['Magisk','BC.Game','IGL','DK',76],
+['910','The MongolZ','AWP','MN',83],['bLitz','The MongolZ','IGL','MN',80],['Techno','The MongolZ','Rifler','MN',79],
+['frozen','FaZe','Rifler','SK',87],['Twistzz','FaZe','IGL','CA',84],['jcobbb','FaZe','Rifler','PL',80],
+['XANTARES','Aurora','Entry','TR',87],['Wicadia','Aurora','Rifler','TR',86],['woxic','Aurora','AWP','TR',82],
+['HeavyGod','G2','Rifler','IL',86],['MATYS','G2','Rifler','SK',82],['NertZ','G2','Rifler','IL',82],['huNter-','G2','IGL','BA',79]];
+const P=RAW.map((a,i)=>({id:i,nick:a[0],team:a[1],role:a[2],cc:a[3],ovr:a[4]}));
+const DIFF={easy:'Хялбар',mid:'Дунд',hard:'Хэцүү'};
+
+/* ================= utils ================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rid=(n,abc='abcdefghijkmnpqrstuvwxyz23456789')=>{let s='';for(let i=0;i<n;i++)s+=abc[Math.floor(Math.random()*abc.length)];return s;};
+const r1=x=>Math.round(x*10)/10;
+const cleanName=s=>String(s||'').replace(/[\u0000-\u001f<>]/g,'').trim().slice(0,16);
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+let toastT=0;
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600);}
+const reduceMotion=()=>window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ================= storage ================= */
+const KEY='cs2d20.v1';let MEM={};
+function loadDB(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return MEM;}}
+function saveDB(){MEM=DB;try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){}}
+const DB=loadDB();DB.rec=DB.rec||{};DB.last=DB.last||{};
+const recOf=n=>DB.rec[n]||{w:0,l:0};
+function record(n,r){const x=DB.rec[n]||(DB.rec[n]={w:0,l:0});x[r]++;saveDB();}
+function ssGet(k,d){try{const v=sessionStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function ssSet(k,v){try{sessionStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+const PID=ssGet('cs2d.pid',null)||rid(10);ssSet('cs2d.pid',PID);
+const SETTLED=new Set(ssGet('cs2d.settled',[]));
+function markSettled(g){SETTLED.add(g);ssSet('cs2d.settled',[...SETTLED].slice(-40));}
+
+/* ================= auction engine ================= */
+const slotsLeft=(g,t)=>SLOTS-g.rost[t].length;
+const canBid=(g,t)=>slotsLeft(g,t)>0&&g.money[t]>=1;
+const openerOf=g=>((g.cardNo-1)%2)^g.first;
+function newGame(mode,names,diff){
+  const g={mode,gid:rid(8),names,diff:diff||'mid',first:Math.random()<.5?0:1,deck:shuffle(P.map(p=>p.id)),ptr:0,cur:null,cardNo:0,
+    money:[BUDGET,BUDGET],rost:[[],[]],gives:[GIVES,GIVES],skips:[SKIPS,SKIPS],phase:'offer',kind:'normal',actor:0,bid:0,hi:-1,
+    deadline:0,log:[],seq:0,res:null,sold:null,autoTo:-1,startedAt:Date.now()};
+  nextCard(g,FLIP_MS);
+  return g;
+}
+function nextCard(g,extra=0){
+  g.seq++;g.sold=null;g.bid=0;g.hi=-1;g.cur=null;
+  if((slotsLeft(g,0)===0&&slotsLeft(g,1)===0)||g.ptr>=g.deck.length){toMatch(g);return;}
+  g.cur=g.deck[g.ptr++];g.cardNo++;
+  const o=openerOf(g),x=1-o,now=Date.now(),bo=canBid(g,o),bx=canBid(g,x);
+  g.deadline=now+TURN_MS+extra;
+  if(bo&&bx){g.phase='offer';g.kind='normal';g.actor=o;}
+  else if(bo||bx){const a=bo?o:x;g.phase='offer';g.actor=a;g.kind=slotsLeft(g,1-a)>0?'broke':'full';}
+  else{g.phase='auto';g.autoTo=slotsLeft(g,o)>0?o:x;g.actor=-1;g.deadline=now+AUTO_MS+extra;}
+}
+function award(g,t,price,how){
+  g.money[t]-=price;g.rost[t].push(g.cur);
+  g.log.unshift({id:g.cur,t,price,how});g.log=g.log.slice(0,10);
+  g.sold={id:g.cur,t,price,how};g.phase='sold';g.actor=-1;g.deadline=Date.now()+SOLD_MS;g.seq++;
+}
+function legalActs(g,t){
+  if(g.actor!==t)return [];
+  if(g.phase==='offer'){
+    if(g.kind==='normal'){const a=['take'];if(g.gives[t]>0&&slotsLeft(g,1-t)>0)a.push('give');return a;}
+    if(g.kind==='broke')return ['take','pass'];
+    if(g.kind==='full')return g.skips[t]>0?['take','skip']:['take'];
+  }
+  if(g.phase==='bid')return ['raise','pass'];
+  return [];
+}
+function act(g,t,a,v){
+  if(!legalActs(g,t).includes(a))return false;
+  const now=Date.now();
+  if(g.phase==='offer'){
+    if(a==='take'){
+      if(g.kind==='normal'&&g.money[1-t]>=2){g.phase='bid';g.bid=1;g.hi=t;g.actor=1-t;g.deadline=now+TURN_MS;g.seq++;}
+      else award(g,t,1,'bid');
+    }else if(a==='give'){g.gives[t]--;award(g,1-t,0,'give');}
+    else if(a==='pass')award(g,1-t,0,'zero');
+    else if(a==='skip'){g.skips[t]--;const id=g.cur;g.log.unshift({id,t,price:0,how:'skip'});g.log=g.log.slice(0,10);g.cur=null;g.sold={id,t,price:0,how:'skip'};g.phase='sold';g.actor=-1;g.deadline=now+900;g.seq++;}
+    return true;
+  }
+  if(g.phase==='bid'){
+    if(a==='pass'){award(g,g.hi,g.bid,'bid');return true;}
+    v=Math.floor(+v);
+    if(!(v>g.bid&&v<=g.money[t]))return false;
+    g.bid=v;g.hi=t;
+    if(g.money[1-t]>v){g.actor=1-t;g.deadline=now+TURN_MS;g.seq++;}
+    else award(g,t,v,'bid');
+    return true;
+  }
+  return false;
+}
+/* automatic steps; returns true if state changed */
+function stepClock(g){
+  const now=Date.now();
+  if(now<=g.deadline)return false;
+  if(g.phase==='offer')return act(g,g.actor,'take');
+  if(g.phase==='bid')return act(g,g.actor,'pass');
+  if(g.phase==='sold'){nextCard(g);return true;}
+  if(g.phase==='auto'){award(g,g.autoTo,0,'zero');return true;}
+  return false;
+}
+
+/* ================= team strength & match ================= */
+function evalTeam(ids){
+  const ps=ids.map(i=>P[i]),n=ps.length;
+  const avg=(ps.reduce((a,p)=>a+p.ovr,0)+(SLOTS-n)*60)/SLOTS;
+  const mods=[],cnt=r=>ps.filter(p=>p.role===r).length;
+  const awp=cnt('AWP'),igl=cnt('IGL');
+  if(awp===1)mods.push(['AWP-тай',3]);else if(awp===0)mods.push(['AWP байхгүй',-4]);else mods.push([awp+' AWP',-3*(awp-1)]);
+  if(igl===1)mods.push(['IGL-тэй',3]);else if(igl===0)mods.push(['IGL байхгүй',-3]);else mods.push([igl+' IGL',-2*(igl-1)]);
+  if(cnt('Entry'))mods.push(['Entry-тэй',1]);
+  const by={};ps.forEach(p=>by[p.team]=(by[p.team]||0)+1);
+  let pairs=0;Object.values(by).forEach(c=>pairs+=c*(c-1)/2);
+  if(pairs)mods.push(['Нэг багийн '+pairs+' хос',Math.min(4,pairs)]);
+  return {avg:r1(avg),mods,total:r1(avg+mods.reduce((a,m)=>a+m[1],0))};
+}
+function wpick(w){let r=Math.random()*w.reduce((a,b)=>a+b,0);for(let i=0;i<w.length;i++){r-=w[i];if(r<=0)return i;}return w.length-1;}
+function playMatch(g){
+  const E=[evalTeam(g.rost[0]),evalTeam(g.rost[1])];
+  const p=clamp(.5+(E[0].total-E[1].total)*.016,.22,.78);
+  const map=MAPS[Math.floor(Math.random()*MAPS.length)];
+  const KW={AWP:1.1,Entry:1.05,Rifler:1,IGL:.8},DW={Entry:1.35,IGL:1.1,Rifler:1,AWP:.85};
+  const WK=[0,1].map(t=>g.rost[t].map(id=>(1+(P[id].ovr-75)/30)*KW[P[id].role]));
+  const WD=[0,1].map(t=>g.rost[t].map(id=>DW[P[id].role]));
+  const K=[g.rost[0].map(()=>0),g.rost[1].map(()=>0)],D=[g.rost[0].map(()=>0),g.rost[1].map(()=>0)];
+  const s=[0,0];let target=13,rounds='';
+  const deaths=(t,n)=>{const w=WD[t].slice();for(let i=0;i<n&&i<w.length;i++){const j=wpick(w);D[t][j]++;w[j]=0;}};
+  for(let guard=0;guard<80;guard++){
+    const w=Math.random()<p?0:1,l=1-w;s[w]++;rounds+=w;
+    const kw=Math.random()<.62?5:(Math.random()<.5?4:3),kl=[0,1,1,2,2,2,3,3,4][Math.floor(Math.random()*9)];
+    for(let i=0;i<kw;i++)K[w][wpick(WK[w])]++;
+    for(let i=0;i<kl;i++)K[l][wpick(WK[l])]++;
+    deaths(l,kw);deaths(w,kl);
+    if(s[0]===target-1&&s[1]===target-1)target+=3;
+    else if(s[0]===target||s[1]===target)break;
+  }
+  const win=s[0]>s[1]?0:1;
+  let mvp=0;K[win].forEach((k,i)=>{if(k-D[win][i]*.5>K[win][mvp]-D[win][mvp]*.5)mvp=i;});
+  return {map,s,rounds,K,D,E:[E[0].total,E[1].total],win,mvp};
+}
+function toMatch(g){g.phase='match';g.actor=-1;g.cur=null;g.res=playMatch(g);g.seq++;}
+
+/* ================= bot ================= */
+function botValue(g,t,id){
+  const p=P[id],r=g.rost[t].map(i=>P[i]),left=slotsLeft(g,t),money=g.money[t];
+  if(left<=0)return 0;
+  let v=Math.max(0,(p.ovr-75)/2.1);
+  const has=role=>r.filter(q=>q.role===role).length;
+  if(p.role==='AWP')v=has('AWP')?v*.35:v*1.3+1;
+  if(p.role==='IGL')v=has('IGL')?v*.4:v*1.2+1.5;
+  v+=.8*r.filter(q=>q.team===p.team).length;
+  v*=clamp((money/left)/4,.6,1.5);
+  if(left===1)v=Math.max(v,money*(p.ovr>=85?1:.6));
+  v+=(Math.random()*2-1)*({easy:3,mid:1.5,hard:.6}[g.diff]||1.5);
+  const reserve=g.diff==='hard'?left-1:g.diff==='mid'?Math.floor((left-1)/2):0;
+  return clamp(Math.round(v),0,Math.max(0,money-reserve));
+}
+function botMove(g,t){
+  const acts=legalActs(g,t);if(!acts.length)return null;
+  const W=botValue(g,t,g.cur),p=P[g.cur];
+  if(g.phase==='offer'){
+    if(g.kind==='normal'){
+      if(W>=2||!acts.includes('give'))return ['take'];
+      return (W<1||p.ovr<81)?['give']:['take'];
+    }
+    if(g.kind==='broke')return W>=1?['take']:['pass'];
+    if(g.kind==='full')return (W>=1||!acts.includes('skip'))?['take']:['skip'];
+  }
+  if(g.phase==='bid'){
+    if(W<=g.bid)return ['pass'];
+    let step=(W-g.bid>=4&&Math.random()<.4)?2:1;
+    return ['raise',Math.min(W,g.bid+step,g.money[t])];
+  }
+  return null;
+}
+function scheduleBot(){
+  if(!G||G.mode!=='cpu'||G.actor!==1||(G.phase!=='offer'&&G.phase!=='bid'))return;
+  const seq=G.seq,gid=G.gid,first=G.cardNo===1&&G.phase==='offer'?Math.max(0,G.startedAt+FLIP_MS-Date.now()):0;
+  setTimeout(()=>{
+    if(!G||G.gid!==gid||G.seq!==seq||G.actor!==1)return;
+    const m=botMove(G,1);if(m&&act(G,1,m[0],m[1]))afterChange();
+  },first+650+Math.random()*900);
+}
+
+/* ================= app state ================= */
+let SCREEN='home',G=null,ANIM=null;
+const UI={diff:DB.last.diff||'mid',joinCode:'',lastCard:null,animGid:null};
+function go(s){SCREEN=s;render();}
+function render(){
+  if(ANIM&&SCREEN!=='match'){cancelAnimationFrame(ANIM.raf);clearTimeout(ANIM.to);ANIM=null;}
+  ({home:renderHome,cpu:renderCpuSetup,local:renderLocalSetup,online:renderOnlineSetup,lobby:renderLobby,draft:renderDraft,match:renderMatch})[SCREEN]();
+}
+const isAuthority=()=>!G||G.mode!=='online'||NET.role==='host';
+function controls(t){if(!G||t<0)return false;if(G.mode==='cpu')return t===0;if(G.mode==='local')return true;return t===NET.team;}
+function myTeam(){return !G?0:G.mode==='cpu'?0:G.mode==='online'?NET.team:(G.actor>=0?G.actor:0);}
+function afterChange(){
+  if(G.mode==='online'&&NET.role==='host')hostBroadcast();
+  if(G.phase==='match'){settle();go('match');return;}
+  renderDraft();scheduleBot();
+}
+
+/* ================= home & setup ================= */
+function renderHome(){
+  const n=DB.last.p1||'Тоглогч 1',r=recOf(n);
+  $('#app').innerHTML=`<main class="wrap">
+    <header class="brand"><div class="eyebrow">Counter-Strike 2 · дуудлага худалдаа</div>
+      <h1>Draft<span class="usd">$20</span></h1>
+      <p class="lede">Хоёулаа $20-той. Тамирчин нэг нэгээр гарч ирнэ, үнээ хаялцаж 5 хүнтэй баг бүрдүүл. Дараа нь хоёр баг тоглоно.</p></header>
+    <section class="rec"><div><div class="lbl">Таны амжилт · ${esc(n)}</div><div class="muted" style="font-size:13px;margin-top:4px">${P.length} тамирчин · 2026 оны 11-р сарын бүрэлдэхүүн</div></div>
+      <div style="text-align:right"><b class="num" style="color:var(--money)">${r.w}</b><span class="muted"> ялалт · </span><b class="num" style="color:var(--loss)">${r.l}</b><span class="muted"> ялагдал</span></div></section>
+    <nav class="modes" aria-label="Тоглох горим">
+      <button class="mode" data-act="nav" data-to="cpu"><span><b>Компьютерын эсрэг</b><small>Хялбар, дунд, хэцүү түвшин</small></span><span class="arr" aria-hidden="true">→</span></button>
+      <button class="mode" data-act="nav" data-to="local"><span><b>2 хүн нэг утсан дээр</b><small>Утсаа тойруулж үнэ хаялцана</small></span><span class="arr" aria-hidden="true">→</span></button>
+      <button class="mode" data-act="nav" data-to="online"><span><b>Онлайн</b><small>4 тэмдэгттэй кодоор найзтайгаа</small></span><span class="arr" aria-hidden="true">→</span></button>
+    </nav>
+    <button class="linkbtn" data-act="rules">Дүрэм</button>
+    <p class="fine">Мөнгө нь виртуал. Тамирчдын үнэлгээ зөвхөн энэ тоглоомд зориулсан.</p></main>`;
+}
+function topBar(title,act='home'){return `<div class="top"><button class="icon" data-act="${act}" aria-label="Буцах">←</button><h2>${title}</h2></div>`;}
+function renderCpuSetup(){
+  $('#app').innerHTML=`<main class="wrap">${topBar('Компьютерын эсрэг')}
+    <section class="card">
+      <div class="field"><label for="nm1">Таны нэр</label><input id="nm1" maxlength="16" value="${esc(DB.last.p1||'')}" placeholder="Тоглогч 1" autocomplete="off"></div>
+      <div class="field"><label id="dl">Компьютерын түвшин</label>
+        <div class="seg" role="group" aria-labelledby="dl">${Object.keys(DIFF).map(k=>`<button data-act="diff" data-d="${k}" aria-pressed="${UI.diff===k}">${DIFF[k]}</button>`).join('')}</div></div>
+    </section>
+    <button class="btn" data-act="start-cpu">Эхлэх</button>
+    <p class="fine">Хэцүү компьютер мөнгөө хэмнэж, AWP болон IGL-ээ заавал авахыг хичээнэ.</p></main>`;
+}
+function renderLocalSetup(){
+  $('#app').innerHTML=`<main class="wrap">${topBar('2 хүн нэг утсан дээр')}
+    <section class="card">
+      <div class="field"><label for="nm1"><span class="ta">●</span> T тал</label><input id="nm1" maxlength="16" value="${esc(DB.last.p1||'')}" placeholder="Тоглогч 1" autocomplete="off"></div>
+      <div class="field"><label for="nm2"><span class="tb">●</span> CT тал</label><input id="nm2" maxlength="16" value="${esc(DB.last.p2||'')}" placeholder="Тоглогч 2" autocomplete="off"></div>
+    </section>
+    <button class="btn" data-act="start-local">Эхлэх</button>
+    <p class="fine">Ээлжтэй хүний өнгө дэлгэц дээр тодорно. Утсаа түүнд өгөөрэй.</p></main>`;
+}
+function startCpu(){
+  const n=cleanName($('#nm1').value)||'Тоглогч 1';
+  DB.last.p1=n;DB.last.diff=UI.diff;saveDB();
+  G=newGame('cpu',[n,'Компьютер'],UI.diff);UI.lastCard=null;go('draft');scheduleBot();
+}
+function startLocal(){
+  let a=cleanName($('#nm1').value)||'Тоглогч 1',b=cleanName($('#nm2').value)||'Тоглогч 2';
+  if(a===b)b=b.slice(0,14)+' 2';
+  DB.last.p1=a;DB.last.p2=b;saveDB();
+  G=newGame('local',[a,b]);UI.lastCard=null;go('draft');
+}
+
+/* ================= draft screen ================= */
+function seatsHtml(g,t){return Array.from({length:SLOTS},(_,i)=>g.rost[t][i]==null?'<span></span>':'<span class="f"></span>').join('');}
+function hintsFor(g,id){
+  const t=myTeam(),r=g.rost[t].map(i=>P[i]),p=P[id],out=[];
+  if(slotsLeft(g,t)<=0)return '';
+  if(p.role==='AWP')out.push(r.some(q=>q.role==='AWP')?['bad','Танд AWP бий']:['good','AWP хэрэгтэй']);
+  if(p.role==='IGL')out.push(r.some(q=>q.role==='IGL')?['bad','Танд IGL бий']:['good','IGL хэрэгтэй']);
+  const mates=r.filter(q=>q.team===p.team).length;if(mates)out.push(['good',`Нэг багийн ${mates} хүн бий`]);
+  return out.length?`<div class="hints">${out.map(h=>`<span class="hint ${h[0]}">${h[1]}</span>`).join('')}</div>`:'';
+}
+function nameC(t){return `<span class="${t?'tb':'ta'}">${esc(G.names[t])}</span>`;}
+function waitText(t){if(G.mode==='cpu')return 'Компьютер бодож байна…';if(G.mode==='online')return `${esc(G.names[t])} шийдэж байна…`;return '';}
+function renderDraft(){
+  const g=G;
+  const showId=g.cur!=null?g.cur:(g.sold?g.sold.id:null);
+  const fresh=showId!=null&&showId!==UI.lastCard;UI.lastCard=showId;
+  const left=g.deck.length-g.ptr;
+  const mgr=t=>`<section class="mgr ${t?'b':''} ${g.actor===t?'on':''}">
+      <div class="hd"><span class="nm">${esc(g.names[t])}</span><span class="cash num ${g.money[t]?'':'zero'}">$${g.money[t]}</span></div>
+      <div class="seats" aria-label="${g.rost[t].length}/5 суудал">${seatsHtml(g,t)}</div>
+      <div class="who">${g.rost[t].length?g.rost[t].map(id=>esc(P[id].nick)).join(', '):'<span class="muted">Хоосон</span>'}</div>
+      <div class="meta">Өгөх эрх: ${g.gives[t]}${slotsLeft(g,1-t)===0?` · Алгасах: ${g.skips[t]}`:''}</div></section>`;
+  let card='';
+  if(showId!=null){const p=P[showId];
+    card=`<article class="pcard ${fresh?'fresh':''}" aria-label="${esc(p.nick)}">
+      <div class="ovr"><b>${p.ovr}</b><small>ҮНЭЛГЭЭ</small></div>
+      <div class="pnick">${esc(p.nick)}</div>
+      <div class="pmeta"><span class="chip role-${p.role}">${p.role}</span><span>${esc(p.team)}</span><span class="chip ${p.cc==='MN'?'mn':''}">${p.cc}</span></div>
+      ${g.cur!=null?hintsFor(g,showId):''}</article>`;}
+  let mid='',acts='';
+  const a=g.actor,mine=controls(a);
+  if(g.phase==='offer'){
+    const o=1-a;
+    if(g.kind==='normal'){
+      mid=`<p class="status">${G.mode==='local'||!mine?'Нээх ээлж: '+nameC(a):'Таны нээх ээлж'}</p><p class="status sub">$1-ээр нээвэл нөгөө нь үнээ өсгөж болно. Эсвэл ${esc(g.names[o])}-д үнэгүй өг.</p>`;
+      if(mine){const give=legalActs(g,a).includes('give');
+        acts=`<div class="acts g2"><button class="btn ${a?'blue':''}" data-act="do" data-a="take">$1-ээр нээх</button><button class="btn ghost" data-act="do" data-a="give" ${give?'':'disabled'}>Өгөх<small>${g.gives[a]} эрх үлдсэн</small></button></div>`;}
+    }else if(g.kind==='broke'){
+      mid=`<p class="status">${nameC(o)}: мөнгө дууссан</p><p class="status sub">${esc(g.names[a])} $1-ээр авах уу? Үгүй бол энэ тамирчин ${esc(g.names[o])}-д $0-оор очно.</p>`;
+      if(mine)acts=`<div class="acts g2"><button class="btn ${a?'blue':''}" data-act="do" data-a="take">$1-ээр авах</button><button class="btn ghost" data-act="do" data-a="pass">Түүнд өгөх<small>$0-оор</small></button></div>`;
+    }else{
+      mid=`<p class="status">${nameC(o)}: баг бүрэн</p><p class="status sub">${esc(g.names[a])} $1-ээр авах эсвэл алгасах.</p>`;
+      if(mine){const sk=legalActs(g,a).includes('skip');
+        acts=`<div class="acts g2"><button class="btn ${a?'blue':''}" data-act="do" data-a="take">$1-ээр авах</button><button class="btn ghost" data-act="do" data-a="skip" ${sk?'':'disabled'}>Алгасах<small>${g.skips[a]} эрх үлдсэн</small></button></div>`;}
+    }
+    if(!mine)acts=`<p class="status sub">${waitText(a)}</p>`;
+  }else if(g.phase==='bid'){
+    mid=`<div class="price"><span class="amt num">$${g.bid}</span><span class="by">${nameC(g.hi)}<br>хамгийн өндөр</span></div>
+      <p class="status">${G.mode==='local'||!mine?'Ээлж: '+nameC(a):'Үнээ өсгөх үү?'}</p>`;
+    if(mine){
+      const m=g.money[a],opts=[];
+      [1,2,5].forEach(d=>{if(g.bid+d<=m&&!opts.includes(g.bid+d))opts.push(g.bid+d);});
+      const allIn=m>g.bid&&!opts.includes(m);
+      acts=`<div class="acts g3 raise">${opts.map(v=>`<button class="btn ${a?'blue':''}" data-act="raise" data-v="${v}">$${v}</button>`).join('')}${allIn?`<button class="btn ghost" data-act="raise" data-v="${m}">Бүгд $${m}</button>`:''}</div>
+        <button class="btn ghost" data-act="do" data-a="pass">Өнжих<small>${esc(g.names[g.hi])} $${g.bid}-оор авна</small></button>`;
+    }else acts=`<p class="status sub">${waitText(a)}</p>`;
+  }else if(g.phase==='sold'&&g.sold){
+    const s=g.sold,p=P[s.id];
+    const how=s.how==='skip'?`<span class="muted">Алгасав</span>`:s.how==='give'?`→ ${nameC(s.t)} · өгөв`:s.how==='zero'?`→ ${nameC(s.t)} · $0`:`→ ${nameC(s.t)} · $${s.price}`;
+    mid=`<p class="sold">${s.how==='skip'?'':'Зарагдлаа! '}${esc(p.nick)} ${how}</p>`;
+  }else if(g.phase==='auto'){
+    mid=`<p class="status">Хоёулаа мөнгөгүй</p><p class="status sub">${esc(P[g.cur].nick)} ${esc(g.names[g.autoTo])}-д $0-оор очно.</p>`;
+  }
+  const log=g.log.map(l=>`<li class="${l.how==='skip'?'skip':l.t?'b':''}"><span>${esc(P[l.id].nick)} ${l.how==='skip'?'· алгасав':'→ '+esc(g.names[l.t])+(l.how==='give'?' (өгсөн)':'')}</span><span class="pr">${l.how==='skip'?'':'$'+l.price}</span></li>`).join('');
+  const flipLeft=g.startedAt+FLIP_MS-Date.now();
+  $('#app').innerHTML=`<main class="wrap">
+    <div class="dbar"><button class="icon" data-act="quit" aria-label="Гарах">×</button>
+      <div class="cardno">Карт <b class="num">${g.cardNo}</b> · ${left} үлдсэн${G.mode==='online'?` <span id="oppstat">${oppStatus()}</span>`:''}</div>
+      <div class="timer ${a===1?'b':''} ${a<0?'idle':''}" id="timer"><span id="tsec">15</span></div></div>
+    <div class="mgrs">${mgr(0)}${mgr(1)}</div>
+    <section class="block">${card}${mid}${acts}</section>
+    ${log?`<div><div class="lbl" style="margin-bottom:6px">Сүүлийн карт</div><ul class="log">${log}</ul></div>`:''}
+  </main>
+  ${g.cardNo===1&&flipLeft>0&&g.phase==='offer'?`<div class="flip" id="flip"><div><div class="coin"></div><h2>Эхний картыг нээх: ${nameC(g.first)}</h2><p class="muted">Дараа нь ээлжлэн нээнэ</p></div></div>`:''}`;
+  if(g.cardNo===1&&flipLeft>0)setTimeout(()=>{const f=$('#flip');if(f)f.remove();},flipLeft+250);
+  updateTimer();
+}
+function updateTimer(){
+  const el=$('#timer');if(!el||!G)return;
+  const total=G.phase==='sold'?SOLD_MS:G.phase==='auto'?AUTO_MS:TURN_MS;
+  const ms=Math.max(0,G.deadline-Date.now()),s=Math.min(15,Math.ceil(ms/1000));
+  $('#tsec').textContent=(G.phase==='offer'||G.phase==='bid')?s:'';
+  el.style.setProperty('--p',clamp(ms/total,0,1));
+  el.classList.toggle('low',(G.phase==='offer'||G.phase==='bid')&&s<=5);
+}
+function humanAct(a,v){
+  if(!G)return;const t=G.actor;
+  if(!controls(t)||!legalActs(G,t).includes(a))return;
+  if(G.mode==='online'&&NET.role==='guest'){
+    NET.pending={gid:G.gid,seq:G.seq,a,v,at:0};netTick();
+    document.querySelectorAll('[data-act="do"],[data-act="raise"]').forEach(b=>b.disabled=true);return;
+  }
+  if(act(G,t,a,v))afterChange();
+}
+
+/* ================= settlement ================= */
+function settle(){
+  if(!G||!G.res||SETTLED.has(G.gid))return;markSettled(G.gid);
+  const w=G.res.win,rec=(n,t)=>record(n,w===t?'w':'l');
+  if(G.mode==='cpu')rec(G.names[0],0);else if(G.mode==='local'){rec(G.names[0],0);rec(G.names[1],1);}else rec(NET.name,NET.team);
+}
+
+/* ================= match screen ================= */
+const mapTag=m=>'de_'+m.toLowerCase().replace(/\s/g,'');
+function renderMatch(){
+  if(ANIM){clearTimeout(ANIM.to);ANIM=null;}
+  const g=G,res=g.res;
+  const ev=t=>{const e=evalTeam(g.rost[t]);return `<section class="ev ${t?'b':''}"><div class="tot"><span class="nm" style="font-weight:700">${esc(g.names[t])}</span><b>${e.total.toFixed(1)}</b></div>
+    <div class="muted" style="font-size:12px">Дундаж үнэлгээ ${e.avg.toFixed(1)}</div>
+    <div class="mods">${e.mods.map(m=>`<span class="mod ${m[1]>0?'p':m[1]<0?'n':''}">${esc(m[0])} ${m[1]>0?'+':''}${m[1]}</span>`).join('')}</div></section>`;};
+  $('#app').innerHTML=`<main class="wrap">
+    <div class="top"><button class="icon" data-act="${g.mode==='online'?'leave':'home'}" aria-label="Гарах">×</button><h2>Тоглолт · BO1</h2><button class="linkbtn" data-act="skip" id="skipbtn">Алгасах</button></div>
+    <div class="board">
+      <div class="bteam"><span class="bname ta">${esc(g.names[0])}</span><span class="led num" id="s0">0</span></div>
+      <div class="bmid"><span class="mapn">${mapTag(res.map)}</span><span class="colon">:</span><span class="mapn" id="half">1-р хагас</span></div>
+      <div class="bteam"><span class="bname tb">${esc(g.names[1])}</span><span class="led num" id="s1">0</span></div>
+    </div>
+    <div class="rstrip" id="strip" aria-label="Раунд бүрийн ялагч"></div>
+    <div class="evals">${ev(0)}${ev(1)}</div>
+    <div id="after" class="after"></div>
+  </main>`;
+  const instant=reduceMotion()||UI.animGid===g.gid;UI.animGid=g.gid;
+  let i=0;const n=res.rounds.length,sc=[0,0];
+  const strip=$('#strip');
+  function step(){
+    if(!$('#strip'))return;
+    const w=+res.rounds[i];sc[w]++;
+    if(i===12)strip.insertAdjacentHTML('beforeend','<span class="half"></span>');
+    if(i>=24&&(i-24)%6===0)strip.insertAdjacentHTML('beforeend','<span class="half"></span>');
+    strip.insertAdjacentHTML('beforeend',`<i class="${w?'b':''}"></i>`);
+    $('#s0').textContent=sc[0];$('#s1').textContent=sc[1];
+    $('#half').textContent=i<12?'1-р хагас':i<24?'2-р хагас':'Нэмэлт цаг';
+    i++;
+    if(i<n){ANIM.to=setTimeout(step,instant?0:290);}else finishMatch();
+  }
+  ANIM={raf:0,to:setTimeout(step,instant?0:900),skip:()=>{clearTimeout(ANIM.to);instantAll();}};
+  function instantAll(){while(i<n){const w=+res.rounds[i];sc[w]++;if(i===12||(i>=24&&(i-24)%6===0))strip.insertAdjacentHTML('beforeend','<span class="half"></span>');strip.insertAdjacentHTML('beforeend',`<i class="${w?'b':''}"></i>`);i++;}
+    $('#s0').textContent=sc[0];$('#s1').textContent=sc[1];finishMatch();}
+  if(instant){clearTimeout(ANIM.to);instantAll();}
+}
+let finished=null;
+function finishMatch(){
+  const g=G,res=g.res;
+  if(finished===g.gid+'|'+SCREEN&&$('#after').innerHTML)return;finished=g.gid+'|'+SCREEN;
+  $('#half').textContent='Төгсгөл';
+  $('#s'+(1-res.win)).classList.add('dimmed');
+  const sb=$('#skipbtn');if(sb)sb.remove();
+  refreshAfter();
+}
+function scoreTable(t){
+  const g=G,res=g.res;
+  const rows=g.rost[t].map((id,i)=>({id,k:res.K[t][i],d:res.D[t][i],i})).sort((a,b)=>(b.k-b.d)-(a.k-a.d)||b.k-a.k);
+  return `<div class="sbwrap ${t?'b':''}"><h3 class="${t?'tb':'ta'}">${esc(g.names[t])}</h3><table class="sb"><thead><tr><th>Тамирчин</th><th>K</th><th>D</th><th>+/−</th></tr></thead><tbody>
+    ${rows.map(r=>{const df=r.k-r.d;return `<tr class="${res.win===t&&res.mvp===r.i?'mvp':''}"><td>${esc(P[r.id].nick)}</td><td>${r.k}</td><td>${r.d}</td><td class="${df>0?'pos':df<0?'neg':''}">${df>0?'+':''}${df}</td></tr>`;}).join('')}</tbody></table></div>`;
+}
+function refreshAfter(){
+  const el=$('#after');if(!el||!G||!G.res||!$('#half')||$('#half').textContent!=='Төгсгөл')return;
+  const g=G,res=g.res,w=res.win,sc=`${res.s[0]}–${res.s[1]}`;
+  let head;
+  if(g.mode==='local')head=`Ялагч: ${nameC(w)}`;
+  else{const me=g.mode==='cpu'?0:NET.team;head=w===me?'Та яллаа!':`${esc(g.names[w])} яллаа`;}
+  const mvp=P[g.rost[w][res.mvp]];
+  let acts='';
+  if(g.mode!=='online')acts=`<div class="row2"><button class="btn" data-act="again">Дахин тоглох</button><button class="btn ghost" data-act="home">Нүүр</button></div>`;
+  else if(NET.role==='host'){const ok=NET.opp&&NET.gr;
+    acts=`<p class="stat">${!NET.opp?'Өрсөлдөгч гарсан байна':ok?`${esc(NET.opp.name)} дахин тоглоход бэлэн`:`${esc(NET.opp.name)} бэлэн болохыг хүлээж байна…`}</p>
+      <div class="row2"><button class="btn" data-act="host-start" ${ok?'':'disabled'}>Дахин эхлүүлэх</button><button class="btn ghost" data-act="leave">Гарах</button></div>`;}
+  else acts=`<p class="stat">${NET.ready?'Хост эхлүүлэхийг хүлээж байна…':'Дахин тоглох уу?'}</p>
+      <div class="row2"><button class="btn ${NET.ready?'ghost':''}" data-act="ready">${NET.ready?'Бэлэн биш':'Бэлэн'}</button><button class="btn ghost" data-act="leave">Гарах</button></div>`;
+  el.innerHTML=`<div class="banner"><h2>${head}</h2><span class="muted">${mapTag(res.map)} · ${sc}</span></div>
+    <p class="stat">MVP: <b style="color:var(--led)">${esc(mvp.nick)}</b></p>
+    ${scoreTable(w)}${scoreTable(1-w)}${acts}`;
+}
+function again(){
+  const [a,b]=G.names;
+  G=G.mode==='cpu'?newGame('cpu',[a,'Компьютер'],G.diff):newGame('local',[a,b]);
+  UI.lastCard=null;go('draft');scheduleBot();
+}
+
+/* ================= online ================= */
+const NET={kind:undefined,room:null,tr:null,role:null,code:'',name:'',team:0,opp:null,oppSeen:0,gr:false,ready:false,conn:false,lastSt:0,lastHi:0,lastReady:0,pending:null,full:false,gotSt:0,openedAt:0,noHostShown:false,oppOn:false};
+async function detectTransport(){
+  if(NET.kind!==undefined)return NET.kind;
+  let k=null;
+  try{
+    if(window.claude&&typeof window.claude.use==='function'){
+      const room=await Promise.race([window.claude.use('room'),new Promise(r=>setTimeout(()=>r(null),11000))]);
+      if(room){NET.room=room;k='room';}
+    }else if(/^https?:$/.test(location.protocol))k='ws';
+  }catch(e){k=null;}
+  NET.kind=k;return k;
+}
+function wsTransport(code,onMsg,onStatus){
+  let ws=null,closed=false,tries=0;
+  function open(){
+    try{ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host+'/ws?room='+code);}catch(e){onStatus(false);return later();}
+    ws.onopen=()=>{tries=0;onStatus(true);};
+    ws.onmessage=e=>{let d;try{d=JSON.parse(e.data);}catch(_){return;}onMsg(d);};
+    ws.onclose=()=>{onStatus(false);if(!closed)later();};
+    ws.onerror=()=>{};
+  }
+  function later(){setTimeout(()=>{if(!closed)open();},Math.min(5000,700*(++tries)));}
+  open();
+  return {send(o){if(ws&&ws.readyState===1)ws.send(JSON.stringify(o));},close(){closed=true;try{ws.close();}catch(e){}}};
+}
+async function roomTransport(code,onMsg,onStatus){
+  const sub=await NET.room.join('cs2d-'+code.toLowerCase());
+  const u1=sub.on('msg',m=>{if(m.sameTab)return;if(m.data&&typeof m.data==='object')onMsg(m.data);},()=>onStatus(false));
+  const u2=sub.onConnection(c=>onStatus(!!c));
+  return {send(o){sub.emit('msg',o).catch(()=>{});},close(){try{u1();u2();}catch(e){}sub.leave().catch(()=>{});}};
+}
+function renderOnlineSetup(){
+  const n=DB.last.p1||'',k=NET.kind;let body;
+  if(k===undefined){body=`<div class="notice">Холболт шалгаж байна…</div>`;detectTransport().then(()=>{if(SCREEN==='online')render();});}
+  else if(k===null)body=`<div class="notice">Онлайн горим энэ хуудсан дээр ажиллахгүй байна. Тоглоомыг Cloudflare дээр байршуулсан хаягаар нээвэл найзтайгаа кодоор тоглоно.</div>`;
+  else body=`<section class="card"><div class="field"><label for="nm1">Таны нэр</label><input id="nm1" maxlength="16" value="${esc(n)}" placeholder="Тоглогч 1" autocomplete="off"></div></section>
+    <button class="btn" data-act="create-room">Өрөө үүсгэх</button>
+    <div class="or">эсвэл кодоор нэгдэх</div>
+    <section class="card"><div class="field"><label for="code">Өрөөний код</label><input id="code" class="code-in" maxlength="4" value="${esc(UI.joinCode)}" placeholder="ABCD" autocomplete="off" autocapitalize="characters"></div>
+      <button class="btn ghost" data-act="join-room">Нэгдэх</button></section>`;
+  $('#app').innerHTML=`<main class="wrap">${topBar('Онлайн')}${body}</main>`;
+}
+async function netOpen(role,code){
+  const name=cleanName(($('#nm1')||{}).value)||'Тоглогч 1';DB.last.p1=name;saveDB();
+  Object.assign(NET,{role,code,name,team:role==='host'?0:1,opp:null,oppSeen:0,gr:false,ready:false,conn:false,lastSt:0,lastHi:0,pending:null,full:false,gotSt:0,openedAt:Date.now(),noHostShown:false,oppOn:false});
+  G=null;
+  try{NET.tr=NET.kind==='room'?await roomTransport(code,netMsg,netStatus):wsTransport(code,netMsg,netStatus);}
+  catch(e){NET.tr=null;toast('Өрөөнд холбогдож чадсангүй');return;}
+  go('lobby');
+}
+function netStatus(c){const was=NET.conn;NET.conn=c;if(c&&!was){NET.lastHi=0;NET.lastSt=0;}refreshNet();}
+function netLeave(){if(NET.tr)NET.tr.close();NET.tr=null;NET.role=null;G=null;go('home');}
+function oppStatus(){
+  if(!NET.tr)return '';if(!NET.conn)return '<span style="color:var(--loss)">· холболт тасарсан</span>';if(!NET.opp)return '';
+  return Date.now()-NET.oppSeen<8000?'<span style="color:var(--money)">· ● онлайн</span>':'<span style="color:var(--loss)">· ● саатсан</span>';
+}
+const SYNC=['gid','first','deck','ptr','cur','cardNo','money','rost','gives','skips','phase','kind','actor','bid','hi','log','seq','res','sold','autoTo'];
+function hostSnapshot(){
+  let g=null;if(G){g={};SYNC.forEach(k=>g[k]=G[k]);g.rem=Math.max(0,G.deadline-Date.now());g.sa=Math.max(0,Date.now()-G.startedAt);}
+  return {t:'st',v:1,pid:PID,code:NET.code,hn:NET.name,gn:NET.opp?NET.opp.name:'',gp:NET.opp?NET.opp.pid:'',gr:NET.gr,g};
+}
+function hostBroadcast(){if(NET.tr){NET.tr.send(hostSnapshot());NET.lastSt=Date.now();}}
+function netMsg(d){
+  if(!d||typeof d!=='object'||d.pid===PID)return;
+  const now=Date.now();
+  if(NET.role==='host'){
+    if(NET.opp&&d.pid===NET.opp.pid)NET.oppSeen=now;
+    if(d.t==='hi'&&d.role==='guest'){
+      const free=!NET.opp||d.pid===NET.opp.pid||(now-NET.oppSeen>15000&&(!G||G.phase==='match'));
+      if(!free)return;
+      const fresh=!NET.opp||NET.opp.pid!==d.pid,nm=cleanName(d.name)||'Зочин',renamed=NET.opp&&NET.opp.name!==nm;
+      NET.opp={pid:d.pid,name:nm};NET.oppSeen=now;if(fresh)NET.gr=false;
+      if(fresh||renamed){if(G&&!fresh)G.names[1]=nm;hostBroadcast();refreshNet();}
+    }else if(d.t==='ready'&&NET.opp&&d.pid===NET.opp.pid){
+      if(NET.gr!==!!d.ready){NET.gr=!!d.ready;refreshNet();}hostBroadcast();
+    }else if(d.t==='act'&&NET.opp&&d.pid===NET.opp.pid&&G&&d.gid===G.gid&&d.seq===G.seq&&G.actor===1){
+      if(act(G,1,d.a,d.v))afterChange();else hostBroadcast();
+    }
+  }else if(NET.role==='guest'&&d.t==='st'&&d.code===NET.code)guestState(d);
+}
+function guestState(S){
+  const now=Date.now();NET.gotSt=now;NET.oppSeen=now;
+  const wasFull=NET.full;NET.full=!!(S.gp&&S.gp!==PID);
+  if(NET.full){if(!wasFull)render();return;}
+  const oppChanged=!NET.opp||NET.opp.name!==S.hn;
+  NET.opp={pid:S.pid,name:cleanName(S.hn)||'Хост'};
+  const grChanged=NET.gr!==!!S.gr;NET.gr=!!S.gr;
+  const g=S.g;
+  if(!g||(g.phase==='match'&&(!G||G.gid!==g.gid))){
+    if(SCREEN!=='lobby'&&SCREEN!=='match'){G=null;go('lobby');}
+    else if(SCREEN==='lobby'&&(oppChanged||grChanged||wasFull))render();
+    else refreshNet();
+    return;
+  }
+  const fresh=!G||G.gid!==g.gid,moved=fresh||G.seq!==g.seq;
+  if(fresh){G={mode:'online',diff:'mid'};NET.ready=false;NET.pending=null;UI.lastCard=null;}
+  SYNC.forEach(k=>G[k]=g[k]);
+  G.names=[NET.opp.name,NET.name];G.deadline=now+(+g.rem||0);G.startedAt=now-(+g.sa||0);
+  if(NET.pending&&(NET.pending.gid!==G.gid||NET.pending.seq!==G.seq))NET.pending=null;
+  if(G.phase==='match'&&G.res){if(moved||SCREEN!=='match'){settle();go('match');}else refreshNet();}
+  else if(moved||SCREEN!=='draft')go('draft');
+  else{refreshNet();if(oppChanged)renderDraft();}
+}
+function sendHi(){if(NET.tr){NET.tr.send({t:'hi',role:NET.role,pid:PID,name:NET.name,code:NET.code});NET.lastHi=Date.now();}}
+function sendReady(){if(NET.tr){NET.tr.send({t:'ready',pid:PID,ready:NET.ready,code:NET.code});NET.lastReady=Date.now();}}
+function netTick(){
+  if(!NET.tr)return;const now=Date.now();
+  if(NET.role==='host'){if(now-NET.lastSt>2000)hostBroadcast();}
+  else{
+    if(now-NET.lastHi>3000)sendHi();
+    if(NET.pending&&now-NET.pending.at>1200){const p=NET.pending;NET.tr.send({t:'act',pid:PID,gid:p.gid,seq:p.seq,a:p.a,v:p.v,code:NET.code});p.at=now;}
+    if(NET.ready!==NET.gr&&now-NET.lastReady>1500)sendReady();
+  }
+  const on=!!(NET.oppSeen&&now-NET.oppSeen<8000);if(on!==NET.oppOn){NET.oppOn=on;refreshNet();}
+}
+function refreshNet(){
+  if(SCREEN==='lobby'){render();return;}
+  const os=$('#oppstat');if(os)os.innerHTML=oppStatus();
+  if(SCREEN==='match')refreshAfter();
+}
+function renderLobby(){
+  const host=NET.role==='host',opp=NET.opp,oppOn=opp&&Date.now()-NET.oppSeen<8000;
+  const hostName=host?NET.name:(opp?opp.name:'…'),guestName=host?(opp?opp.name:''):NET.name;
+  const noHost=!host&&!NET.gotSt&&Date.now()-NET.openedAt>6000;
+  const link=NET.kind==='ws'?location.origin+location.pathname+'#room-'+NET.code:'';
+  let main;
+  if(NET.full)main=`<div class="notice">Энэ өрөөнд өөр хүн аль хэдийн нэгдсэн байна. Өөр код ашиглана уу.</div>`;
+  else if(noHost)main=`<div class="notice">${esc(NET.code)} кодтой өрөө олдсонгүй. Кодоо шалгаад дахин оролдоно уу.</div>`;
+  else{
+    const gReady=host?NET.gr:NET.ready;
+    const seatB=guestName?`<b>${esc(guestName)}</b>${gReady?'<span class="ok">Бэлэн</span>':'<span class="wait">Бэлэн биш</span>'}`:'<b class="muted">Хүлээж байна…</b><span class="wait">Кодоо найздаа илгээ</span>';
+    const btn=host?`<button class="btn" data-act="host-start" ${opp&&NET.gr?'':'disabled'}>Эхлүүлэх</button><p class="stat">${!opp?'Найз тань нэгдэхийг хүлээж байна…':NET.gr?'Бүгд бэлэн. Эхлүүлээрэй!':'Зочин «Бэлэн» дарахыг хүлээж байна…'}</p>`
+      :`<button class="btn ${NET.ready?'ghost':''}" data-act="ready">${NET.ready?'Бэлэн биш болох':'Бэлэн'}</button><p class="stat">${NET.ready?'Хост эхлүүлэхийг хүлээж байна…':'Бэлэн болмогц хост тоглолтыг эхлүүлнэ'}</p>`;
+    main=`<div class="lseats"><div class="lseat"><span class="lbl">Хост · T</span><b>${esc(hostName)}</b><span class="wait">${host?'Та':(oppOn?'● онлайн':'')}</span></div>
+      <div class="lseat b"><span class="lbl">Зочин · CT</span>${seatB}</div></div>${btn}`;
+  }
+  $('#app').innerHTML=`<main class="wrap">${topBar('Онлайн өрөө','leave')}
+    <div class="codebox"><span class="lbl">Өрөөний код</span><span class="led num">${esc(NET.code)}</span>
+      ${host?`<span class="muted" style="font-size:13px;text-align:center">Найз тань «Онлайн → Нэгдэх» хэсэгт энэ кодыг оруулна</span>`:''}
+      ${host&&link?`<button class="btn ghost" data-act="copy" style="min-height:40px;padding:8px 14px">Холбоос хуулах</button>`:''}</div>
+    ${main}<p class="net ${NET.conn?'':'bad'}">${NET.conn?'Сервертэй холбогдсон':'Сервертэй холбогдож байна…'}</p></main>`;
+}
+function hostStart(){
+  if(NET.role!=='host'||!NET.opp||!NET.gr)return;
+  G=newGame('online',[NET.name,NET.opp.name]);NET.gr=false;UI.lastCard=null;
+  hostBroadcast();go('draft');
+}
+
+/* ================= modals ================= */
+function modal(html){$('#modal').innerHTML=`<div class="modal" data-act="close-bg"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`;const b=$('#modal .sheet button');if(b)b.focus();}
+function closeModal(){$('#modal').innerHTML='';}
+function rulesModal(){
+  modal(`<h2>$20 Draft-ын дүрэм</h2><ol>
+    <li>Хоёулаа $20-той, 5 хоосон суудалтай эхэлнэ. Мөнгө нь виртуал.</li>
+    <li>Тамирчдын карт санамсаргүй дарааллаар нэг нэгээр гарна. Карт бүрийг ээлжлэн нэг нь «нээнэ».</li>
+    <li>Нээх ээлжтэй хүн картыг $1-ээр нээнэ, эсвэл өрсөлдөгчдөө үнэгүй өгнө. Өгөх эрх тоглолтод 2 удаа байна.</li>
+    <li>Нээсний дараа нөгөө нь үнээ +$1, +$2, +$5 эсвэл бүх мөнгөөрөө өсгөнө. Өнжвөл хамгийн сүүлд үнэ хэлсэн нь авна. Байгаа мөнгөнөөсөө илүү хэлж болохгүй.</li>
+    <li>Мөнгө дуусаад суудал үлдсэн бол үнэ хаялцаж чадахгүй. Өрсөлдөгч тань хүсээгүй картаа танд $0-оор өгнө.</li>
+    <li>Нэг талын баг бүрдсэн бол нөгөө нь картыг $1-ээр авна, эсвэл алгасна. Алгасах эрх 3 удаа байна.</li>
+    <li>Ээлж бүрт 15 секунд өгнө. Цаг дуусвал нээх үед $1-ээр авна, хаялцах үед өнжинө.</li>
+    <li>Хоёр баг бүрдмэгц BO1 тоглолт эхэлнэ (MR12, 13 раунд хожсон нь ялна). Багийн хүчийг 5 тамирчны дундаж үнэлгээгээр тооцоод AWP-тай бол +3, IGL-тэй бол +3, Entry-тэй бол +1 нэмнэ. Нэг багаас ирсэн хос бүрт +1 (хамгийн ихдээ +4). AWP байхгүй бол −4, IGL байхгүй бол −3, давхар AWP эсвэл IGL байвал хасна.</li>
+  </ol>
+  <p class="fine">Бүрэлдэхүүн 2026 оны 11-р сарын байдлаар. Үнэлгээг HLTV-ийн 2025 оны Top 20 болон 2026 оны тоглолтын хэлбэрт тулгуурлан энэ тоглоомд зориулж гаргасан.</p>
+  <button class="btn" data-act="close">Ойлголоо</button>`);
+}
+function quitModal(){modal(`<h2>Тоглоомоос гарах уу?</h2><p class="muted">Энэ draft дуусахгүй, ялалт ялагдал бүртгэгдэхгүй.</p>
+  <div class="row2"><button class="btn ghost" data-act="close">Үргэлжлүүлэх</button><button class="btn" data-act="quit-yes">Гарах</button></div>`);}
+
+/* ================= events ================= */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const a=b.dataset.act;
+  if(a==='close-bg'){if(e.target===b)closeModal();return;}
+  switch(a){
+    case 'nav':go(b.dataset.to);break;
+    case 'home':G=null;go('home');break;
+    case 'rules':rulesModal();break;
+    case 'close':closeModal();break;
+    case 'diff':UI.diff=b.dataset.d;document.querySelectorAll('[data-act="diff"]').forEach(x=>x.setAttribute('aria-pressed',x===b));break;
+    case 'start-cpu':startCpu();break;
+    case 'start-local':startLocal();break;
+    case 'do':humanAct(b.dataset.a);break;
+    case 'raise':humanAct('raise',+b.dataset.v);break;
+    case 'quit':quitModal();break;
+    case 'quit-yes':closeModal();if(G&&G.mode==='online')netLeave();else{G=null;go('home');}break;
+    case 'skip':if(ANIM&&ANIM.skip)ANIM.skip();break;
+    case 'again':again();break;
+    case 'create-room':netOpen('host',rid(4,'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'));break;
+    case 'join-room':{const c=(($('#code')||{}).value||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+      if(c.length!==4){toast('4 тэмдэгттэй код оруулна уу');return;}UI.joinCode=c;netOpen('guest',c);break;}
+    case 'ready':NET.ready=!NET.ready;sendReady();if(SCREEN==='lobby')render();else refreshAfter();break;
+    case 'host-start':hostStart();break;
+    case 'leave':if(G&&G.phase!=='match')quitModal();else netLeave();break;
+    case 'copy':{const link=location.origin+location.pathname+'#room-'+NET.code;
+      (navigator.clipboard?navigator.clipboard.writeText(link):Promise.reject()).then(()=>toast('Холбоос хуулагдлаа'),()=>toast(link));break;}
+  }
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+/* ================= loop & boot ================= */
+setInterval(()=>{
+  if(SCREEN==='draft'&&G&&G.phase!=='match'){
+    updateTimer();
+    if(isAuthority()&&stepClock(G))afterChange();
+  }
+  netTick();
+  if(SCREEN==='lobby'&&NET.role==='guest'&&!NET.gotSt&&Date.now()-NET.openedAt>6000&&!NET.noHostShown){NET.noHostShown=true;render();}
+},200);
+(function boot(){
+  const m=location.hash.match(/^#room-([A-Za-z0-9]{4})$/);
+  if(m){UI.joinCode=m[1].toUpperCase();go('online');}else go('home');
+  setTimeout(()=>{detectTransport();},0);
+})();
+</script>
+</body>
+</html>
