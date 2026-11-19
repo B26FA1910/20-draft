@@ -305,6 +305,7 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 .tile:hover{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--acc) 60%,transparent),0 12px 30px -18px var(--acc)}
 .tile:active{transform:scale(.97)}
 .tile:first-child{grid-column:1/-1;min-height:96px;flex-direction:row;align-items:center}
+@media (max-width:899px){.tile:last-child:nth-child(even){grid-column:1/-1;min-height:96px;flex-direction:row;align-items:center}}
 .ticon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--acc) 18%,var(--raise));color:var(--acc);flex:none}
 .ticon svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tile b{display:block;font:800 18px/1.15 var(--display)}
@@ -312,7 +313,7 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 .backhub{position:absolute;top:14px;left:16px;z-index:2}
 .home .gname{color:var(--acc);font-size:clamp(38px,11vw,72px);text-wrap:balance}
 .nbaseg button{font:800 15px/1 var(--num)}
-@media (min-width:900px){.hub{display:block}.tiles{grid-template-columns:repeat(3,1fr)}.tile:first-child{grid-column:auto;flex-direction:column;align-items:flex-start;min-height:118px}
+@media (min-width:900px){.hub{display:block}.tiles{grid-template-columns:repeat(3,1fr)}.tile:first-child{grid-column:span 2;min-height:118px}
   .hub .me{max-width:520px;margin:0 auto}.hub .tiles{margin-top:40px}.hub .hubhero{padding-top:40px;margin-bottom:6px}}
 /* other-game match feed */
 .feed2 .dl2{font-size:13.5px;padding:4px 2px;border-bottom:1px solid var(--line);animation:slidein .25s var(--out)}
@@ -357,6 +358,23 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 .rv-door .dr{right:0;border-left:2px solid #4cc3ff;box-shadow:inset 0 0 0 1px #24324d,-6px 0 18px -4px #4cc3ff;animation:doorr .5s cubic-bezier(.6,0,.3,1) calc(var(--rd,0ms) + 520ms) both}
 @keyframes doorl{to{transform:translateX(-102%)}}
 @keyframes doorr{to{transform:translateX(102%)}}
+.rv-pour{background:#0a0d14;--lq1:#ffd25e;--lq2:#e8921d;--fm:#fff6df}
+.rv-pour.st-dark{--lq1:#5a2c12;--lq2:#1d0d06;--fm:#e9cfa6}
+.rv-pour.st-wheat{--lq1:#ffe08a;--lq2:#f0b443;--fm:#fffaf0}
+.rv-pour.st-light{--lq1:#fff0a8;--lq2:#f3cf5c;--fm:#ffffff}
+.rv-pour .glass{position:relative;width:96px;height:140px;filter:drop-shadow(0 0 16px color-mix(in srgb,var(--rc,#4DB8FF) 45%,transparent));animation:cheers .24s ease-in calc(var(--rd,0ms) + 860ms) both}
+.rv-pour .gin{position:absolute;inset:0;clip-path:polygon(4% 1%,96% 1%,85% 97%,15% 97%);background:rgba(220,235,255,.05)}
+.rv-pour svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.rv-pour svg path{fill:none;stroke:rgba(225,238,255,.75);stroke-width:3;stroke-linejoin:round}
+.rv-pour .liq{position:absolute;left:0;right:0;bottom:0;height:0;background:linear-gradient(var(--lq1),var(--lq2));animation:fillup .6s cubic-bezier(.3,.6,.4,1) calc(var(--rd,0ms) + 120ms) both}
+.rv-pour .foam{position:absolute;left:0;right:0;bottom:76%;height:0;background:var(--fm);border-radius:10px 10px 0 0;animation:foamup .28s ease-out calc(var(--rd,0ms) + 640ms) both}
+.rv-pour .bub{position:absolute;bottom:3%;left:var(--x);width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.75);opacity:0;animation:bub .6s ease-in calc(var(--rd,0ms) + var(--d)) both}
+.rv-pour .stream{position:absolute;left:calc(50% - 3px);top:calc(50% - 130px);width:6px;height:0;border-radius:3px;background:linear-gradient(var(--lq1),var(--lq2));animation:stream .7s linear calc(var(--rd,0ms) + 40ms) both}
+@keyframes fillup{to{height:76%}}
+@keyframes foamup{to{height:20%}}
+@keyframes bub{0%{opacity:0;transform:translateY(0)}25%{opacity:1}100%{opacity:0;transform:translateY(-92px)}}
+@keyframes stream{0%{height:0}18%,82%{height:140px;transform:none;opacity:1}100%{height:0;transform:translateY(140px);opacity:0}}
+@keyframes cheers{to{transform:translateY(-26px) rotate(-10deg) scale(1.08);opacity:0}}
 .stage.rs-door .pcard,.stage.rs-assemble .pcard{visibility:visible}
 .stage.reeling.rs-door .pcard,.stage.reeling.rs-assemble .pcard{visibility:visible}
 .flagw{fill:#e9eef5;opacity:.35}
@@ -558,7 +576,9 @@ const rarOf=hc=>{const t=(GM||{rar:[125,115,110,105,100]}).rar;return hc>=t[0]?'
 // neutral placeholder avatar (no real photos): silhouette tinted by rarity
 // short team tag shown on the avatar (text only, no real logos)
 const TAG={'Vitality':'VIT','MOUZ':'MZ','FURIA':'FUR','Spirit':'TS','Aurora':'AUR','Falcons':'FAL','NAVI':'NAVI','FUT':'FUT','The MongolZ':'MGZ','G2':'G2','PARIVISION':'PARI','Legacy':'LGC','Liquid':'TL','FaZe':'FAZE','9z':'9Z','BC.Game':'BCG','100 Thieves':'100T','TYLOO':'TYL','Chinggis Warriors':'CW','5star':'5S','The Huns':'HUNS','NAVI 2021':'NAVI'};
-const avatar=(p,size='')=>`<span class="avw ${size}" aria-hidden="true"><span class="ava ${size}"><svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7.5"/><path d="M5 40c1.5-9 7.5-14 15-14s13.5 5 15 14z"/></svg></span>${size==='xs'?'':`<i class="ttag">${esc(GM?GM.tag(p):'')}</i>`}</span>`;
+const AV_PERSON='<svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7.5"/><path d="M5 40c1.5-9 7.5-14 15-14s13.5 5 15 14z"/></svg>';
+const AV_BEER='<svg viewBox="0 0 40 40"><path d="M10 15h17l-1.6 21a2.5 2.5 0 0 1-2.5 2.3h-8.8a2.5 2.5 0 0 1-2.5-2.3z"/><path d="M9 15.5a4.2 4.2 0 0 1 4.5-5 5.2 5.2 0 0 1 9-.6 4.2 4.2 0 0 1 5.6 5.6z"/></svg>';
+const avatar=(p,size='')=>`<span class="avw ${size}" aria-hidden="true"><span class="ava ${size}">${GK==='beer'?AV_BEER:AV_PERSON}</span>${size==='xs'?'':`<i class="ttag">${esc(GM?GM.tag(p):'')}</i>`}</span>`;
 const rcls=p=>'r-'+rarOf(p.hc)+(p.special?' goat':'');
 const miniCard=p=>`<div class="mini ${rcls(p)}">${avatar(p)}<b>${esc(pName(p))}</b><span class="r num">${fmtR(p.hl)}</span></div>`;
 const fmtR=x=>(+x).toFixed(GM?GM.dec:2);
@@ -619,37 +639,40 @@ mn:{
   hostSide:'Хост, T тал',guestSide:'Зочин, CT тал',you:'Та',onlineDot:'● онлайн',onlineRoom:'Онлайн өрөө',
   codeHint:'Найз тань «Онлайн → Нэгдэх» хэсэгт энэ кодыг оруулна',copyLink:'Холбоос хуулах',
   srvOk:'Сервертэй холбогдсон',srvWait:'Сервертэй холбогдож байна…',gotIt:'Ойлголоо',close:'Хаах',
-  search:'Нэр эсвэл баг хайх',searchA:'Хайх',sortA:'Эрэмбэ',byTeam:'Багаар',byRating:'Rating-аар',
+  search:'Нэр эсвэл баг хайх',searchA:'Хайх',sortA:'Эрэмбэ',byTeam:'Багаар',byRating:'Rating-аар',search_beer:'Нэр эсвэл үйлдвэр хайх',byTeam_beer:'Бүсээр',
   rare:'Ховор карт',dropChance:p=>`гарах магадлал ${p}%`,noneFound:'Ийм тамирчин олдсонгүй',
   quitQ:'Тоглоомоос гарах уу?',quitSub:'Энэ draft дуусахгүй, ялалт ялагдал бүртгэгдэхгүй.',keep:'Үргэлжлүүлэх',
   code4:'4 тэмдэгттэй код оруулна уу',copied:'Холбоос хуулагдлаа',lang:'Хэл',
   hubLede:'Тоглоомоо сонгоод $20-оор багаа цуглуул.',chooseGame:'Тоглоом сонгох',gameL:'Тоглоом',format:'Формат',
-  g_cs2:'CS2',g_f1:'F1',g_nba:'NBA',g_fifa:'FIFA',g_food:'Монгол хоол',g_anime:'Аниме',g_marvel:'Marvel',
+  g_cs2:'CS2',g_f1:'F1',g_nba:'NBA',g_fifa:'FIFA',g_food:'Монгол хоол',g_beer:'Шар айраг',g_anime:'Аниме',g_marvel:'Marvel',
   gsub_cs2:n=>`${n} тамирчин, 5v5, HLTV rating`,gsub_f1:n=>`${n} нисгэгч, хүн бүр 2 нисгэгчтэй`,gsub_nba:n=>`${n} тоглогч, 3x3 ба 5x5, NBA 2K27`,
-  gsub_fifa:n=>`${n} тоглогч, 5v5, EA FC 27`,gsub_food:n=>`${n} хоол, 5v5, шүүгчид шийднэ`,gsub_anime:n=>`${n} дүр, 5v5 тулаан`,gsub_marvel:n=>`${n} баатар, 5v5 тулаан`,
+  gsub_fifa:n=>`${n} тоглогч, 5v5, EA FC 27`,gsub_food:n=>`${n} хоол, 5v5, шүүгчид шийднэ`,gsub_beer:n=>`${n} шар айраг, 5v5, сохор амталгаа`,gsub_anime:n=>`${n} дүр, 5v5 тулаан`,gsub_marvel:n=>`${n} баатар, 5v5 тулаан`,
   lede_cs2:n=>`CS2-ын ${n} тамирчнаас $20-оор 5 хүнтэй баг цуглуулж, 13 раунд тоглуул.`,
   lede_f1:n=>`${n} нисгэгчээс $20-оор 2 нисгэгчтэй баг бүрдүүлж, 15 тойргийн уралдаанд оруул.`,
   lede_nba:n=>`${n} NBA тоглогчоос $20-оор 3x3 эсвэл 5x5 баг цуглуулж, тоглолт хийлгэ.`,
   lede_fifa:n=>`${n} хөлбөмбөгчнөөс $20-оор 5 хүнтэй баг цуглуулж, 90 минут тоглуул.`,
   lede_food:n=>`${n} монгол хоолноос $20-оор 5 хоолтой цэс бүрдүүлж, шүүгчдэд үнэлүүл.`,
+  lede_beer:n=>`Монголд түгээмэл ${n} шар айрагнаас $20-оор 5-ыг сонгож, сохор амталгаанд оруул.`,
   lede_anime:n=>`${n} аниме дүрээс $20-оор 5 хүнтэй баг цуглуулж, 1v1 тулаанд оруул.`,
   lede_marvel:n=>`${n} Marvel баатраас $20-оор 5 хүнтэй баг цуглуулж, 1v1 тулаанд оруул.`,
-  rl_cs2:'Rating',rl_f1:'OVR',rl_nba:'OVR',rl_fifa:'OVR',rl_food:'Амт',rl_anime:'Хүч',rl_marvel:'Хүч',
-  match_cs2:'Тоглолт',match_f1:'Уралдаан',match_nba:'Тоглолт',match_fifa:'Тоглолт',match_food:'Шүүлт',match_anime:'Тулаан',match_marvel:'Тулаан',
-  goal_cs2:'',goal_f1:'P1 25, P2 18, P3 15, P4 12 оноо',goal_nba:'Их оноо авсан нь ялна',goal_fifa:'Тэнцвэл пенальти',goal_food:'5 хоолноос 3-ыг нь хожсон нь ялна',goal_anime:'5 тулаанаас 3-ыг хожсон нь ялна',goal_marvel:'5 тулаанаас 3-ыг хожсон нь ялна',
-  feed_cs2:'',feed_f1:'Уралдааны явц',feed_nba:'Оноо авалт',feed_fifa:'Тоглолтын үйл явдал',feed_food:'Шүүгчдийн санал',feed_anime:'Тулааны явц',feed_marvel:'Тулааны явц',
+  rl_cs2:'Rating',rl_f1:'OVR',rl_nba:'OVR',rl_fifa:'OVR',rl_food:'Амт',rl_beer:'Untappd',rl_anime:'Хүч',rl_marvel:'Хүч',
+  match_cs2:'Тоглолт',match_f1:'Уралдаан',match_nba:'Тоглолт',match_fifa:'Тоглолт',match_food:'Шүүлт',match_beer:'Амталгаа',match_anime:'Тулаан',match_marvel:'Тулаан',
+  goal_cs2:'',goal_f1:'P1 25, P2 18, P3 15, P4 12 оноо',goal_nba:'Их оноо авсан нь ялна',goal_fifa:'Тэнцвэл пенальти',goal_food:'5 хоолноос 3-ыг нь хожсон нь ялна',goal_beer:'5 тойргоос 3-ыг нь хожсон нь ялна',goal_anime:'5 тулаанаас 3-ыг хожсон нь ялна',goal_marvel:'5 тулаанаас 3-ыг хожсон нь ялна',
+  feed_cs2:'',feed_f1:'Уралдааны явц',feed_nba:'Оноо авалт',feed_fifa:'Тоглолтын үйл явдал',feed_food:'Шүүгчдийн санал',feed_beer:'Шүүгчдийн оноо',feed_anime:'Тулааны явц',feed_marvel:'Тулааны явц',
   ctag_meat:'МАХ',ctag_soup:'ШӨЛ',ctag_dairy:'ИДЭЭ',ctag_pastry:'ГУРИЛ',ctag_drink:'УНДАА',cat_meat:'Махан хоол',cat_soup:'Шөл',cat_dairy:'Цагаан идээ',cat_pastry:'Гурилан',cat_drink:'Ундаа',
+  st_lager:'Лагер',st_dark:'Хар',st_wheat:'Улаан буудайн',st_light:'Хөнгөн',reg_mn:'Монгол',reg_asia:'Ази',reg_eu:'Европ',reg_am:'Америк',
   side_H:'Баатар',side_V:'Хорон санаат',side_N:'Хоёрдмол',
   ptsShort:'оноо',pensShort:'пен',lapN:(l,L)=>`${l}/${L} тойрог`,grid:'Гараа',lightsOut:'Гараа!',passes:'гүйцэж түрүүлэв',pits:'пит-стоп хийв',winsRace:'түрүүлэв',
   assist:'дамжуулалт',saves:'хамгаалж авав, цохисон нь',halftime:'Завсарлага',fulltime:'Тоглолт дууслаа',penScored:'пенальти оруулав',penMissed:'пенальти алдав',pens:'Пенальти',
-  courseN:n=>`${n}-р хоол`,judgeN:n=>`Шүүгч ${n}`,winsCourse:'хожив',fightN:n=>`${n}-р тулаан`,winsFight:'ялав',
+  courseN:n=>`${n}-р хоол`,judgeN:n=>`Шүүгч ${n}`,winsCourse:'хожив',fightN:n=>`${n}-р тулаан`,winsFight:'ялав',roundN:n=>`${n}-р тойрог`,winsRound:'хожив',cr_foam:'Хөөс',cr_aroma:'Үнэр',cr_taste:'Амт',
   nbaNeed:r=>`Танд ${r} байхгүй`,nbaPG:'PG: алдаа багасна, шидэлт +2%',nbaC:'C: самбар, хамгаалалт сайжирна',
-  gkHave:'Танд хаалгач аль хэдийн байгаа',gkNeed:'Хаалгачгүй бол хаалга тань сул',foodNew:'Шинэ төрөл: цэс олон янз болно',
+  gkHave:'Танд хаалгач аль хэдийн байгаа',gkNeed:'Хаалгачгүй бол хаалга тань сул',foodNew:'Шинэ төрөл: цэс олон янз болно',beerNew:'Шинэ төрөл: 3-4 төрөл цуглуулбал бонус',beerLocal:'Монгол шар айраг: шүүгчдээс нутгийн бонус',
   rulesCommon:['Хоёулаа $20 мөнгөтэй эхэлнэ. Карт нэг нэгээр гарч, ээлжлэн нээнэ.','Нээх ээлжтэй үедээ $1-ээр нээнэ эсвэл өрсөлдөгчдөө үнэгүй өгнө (2 удаа). Нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.','Мөнгө дуусвал өрсөлдөгч $0-оор өгнө. Нэг талын баг бүрдвэл нөгөө нь $1-ээр авна эсвэл алгасна. Ээлж бүрт 15 секунд.'],
   rules_f1:['Хүн бүр 2 нисгэгчтэй баг бүрдүүлнэ. Rating нь 2026 оны улирлын оноогоор тооцсон.','Дөрвөн машин 15 тойрог уралдана: гараа, пит-стоп, гүйцэж түрүүлэлт, ховор DNF бий. Хурд нь rating-ээс шалтгаална.','Байр: P1 25, P2 18, P3 15, P4 12 оноо. Нийт оноо их баг ялна. Нэг багийн 2 нисгэгч +3%.'],
   rules_nba:['3x3 бол 3 тоглогч, 5x5 бол 5 тоглогч. Rating нь NBA 2K27.','5x5: 4 үе, тэнцвэл нэмэлт цаг. 3x3: 21 оноо түрүүлж авсан нь ялна, дотроос 1, гаднаас 2 оноо.','Үүрэг чухал: PG алдааг багасгаж шидэлтийг сайжруулна, C самбар болон хамгаалалтыг сайжруулна. Шидэгчийг rating болон үүргээр сонгоно.'],
   rules_fifa:['5 хүнтэй баг (futsal шиг). Rating нь EA FC 27.','90 минутад довтолгоо бүрийн боломжийг довтлогч, хагас хамгаалагчийн хүч хамгаалалтынхтай харьцуулж тооцно. Хаалгачгүй бол хамгийн сул тоглогч хаалга хамгаална.','Тэнцвэл пенальти цохино. Нэг клубын тоглогчид +3% ба түүнээс дээш.'],
   rules_food:['5 хоолтой цэс бүрдүүлнэ. Амтны оноо нь Draftly-н үнэлгээ.','Хоолнууд дарааллаараа нэг нэгээрээ өрсөлдөнө. 5 шүүгч тус бүр санал өгнө, амт сайн нь илүү санал авах магадлалтай.','Цэс олон янз байвал (4-5 төрөл) хоол бүрт нэмэлт оноо. 5 хоолноос 3-ыг хожсон нь ялна.'],
+  rules_beer:['5 шар айрагтай багц бүрдүүлнэ. Үнэлгээ нь Untappd дээрх бодит дундаж оноо (5-аас).','Шар айрагнууд дарааллаараа нэг нэгээрээ сохор амталгаанд орно. Шүүгчид хөөс, үнэр, амтыг тус бүр 10 онооноос дүгнэнэ. Хар болон улаан буудайн шар айраг хөөс, үнэрээрээ, лагер амтаараа давуу.','Монгол шар айраг бүр нутгийн бонус авна. 3 төрөл (лагер, хар, улаан буудайн, хөнгөн) цуглуулбал бага, 4 төрөл бол их бонус. 5 тойргоос 3-ыг хожсон нь ялна.'],
   rules_anime:['5 дүртэй баг. Хүчний үнэлгээ нь Draftly-н фэн үнэлгээ.','Дүрүүд дарааллаараа 1v1 тулалдана. Цохилт бүрийн магадлалыг хүчээр тооцно, заримдаа CRIT гарна.','5 тулаанаас 3-ыг хожсон нь ялна. Нэг цувралын дүрүүд +3% ба түүнээс дээш.'],
   rules_marvel:['5 баатартай баг. Хүчний үнэлгээ нь Draftly-н фэн үнэлгээ.','Баатрууд дарааллаараа 1v1 тулалдана. Цохилт бүрийн магадлалыг хүчээр тооцно, заримдаа CRIT гарна.','5 тулаанаас 3-ыг хожсон нь ялна. Нэг багийн (Avengers, X-Men гэх мэт) баатрууд +3% ба түүнээс дээш.'],
   rules:x=>[
@@ -719,37 +742,40 @@ en:{
   hostSide:'Host, T side',guestSide:'Guest, CT side',you:'You',onlineDot:'● online',onlineRoom:'Online room',
   codeHint:'Your friend enters this code under Online → Join',copyLink:'Copy link',
   srvOk:'Connected',srvWait:'Connecting…',gotIt:'Got it',close:'Close',
-  search:'Search name or team',searchA:'Search',sortA:'Sort',byTeam:'By team',byRating:'By rating',
+  search:'Search name or team',searchA:'Search',sortA:'Sort',byTeam:'By team',byRating:'By rating',search_beer:'Search name or brewery',byTeam_beer:'By region',
   rare:'Rare card',dropChance:p=>`drop chance ${p}%`,noneFound:'No players found',
   quitQ:'Quit the game?',quitSub:'This draft will not finish and will not count as a win or loss.',keep:'Keep playing',
   code4:'Enter a 4-character code',copied:'Link copied',lang:'Language',
   hubLede:'Pick a game and build your team with $20.',chooseGame:'Choose a game',gameL:'Game',format:'Format',
-  g_cs2:'CS2',g_f1:'F1',g_nba:'NBA',g_fifa:'FIFA',g_food:'Mongolian food',g_anime:'Anime',g_marvel:'Marvel',
+  g_cs2:'CS2',g_f1:'F1',g_nba:'NBA',g_fifa:'FIFA',g_food:'Mongolian food',g_beer:'Beer',g_anime:'Anime',g_marvel:'Marvel',
   gsub_cs2:n=>`${n} pros, 5v5, HLTV rating`,gsub_f1:n=>`${n} drivers, 2 per team`,gsub_nba:n=>`${n} players, 3x3 and 5x5, NBA 2K27`,
-  gsub_fifa:n=>`${n} players, 5v5, EA FC 27`,gsub_food:n=>`${n} dishes, 5v5, judged`,gsub_anime:n=>`${n} characters, 5v5 battles`,gsub_marvel:n=>`${n} heroes, 5v5 battles`,
+  gsub_fifa:n=>`${n} players, 5v5, EA FC 27`,gsub_food:n=>`${n} dishes, 5v5, judged`,gsub_beer:n=>`${n} beers, 5v5, blind tasting`,gsub_anime:n=>`${n} characters, 5v5 battles`,gsub_marvel:n=>`${n} heroes, 5v5 battles`,
   lede_cs2:n=>`Build a 5-player team from ${n} CS2 pros with $20, then play it out to 13 rounds.`,
   lede_f1:n=>`Sign 2 of ${n} drivers with $20 and send them into a 15-lap race.`,
   lede_nba:n=>`Build a 3x3 or 5x5 team from ${n} NBA players with $20 and play the game.`,
   lede_fifa:n=>`Build a 5-a-side team from ${n} footballers with $20 and play 90 minutes.`,
   lede_food:n=>`Put together a 5-dish menu from ${n} Mongolian dishes with $20 and let the judges taste it.`,
+  lede_beer:n=>`Pick 5 of ${n} beers you can buy in Mongolia with $20 and send them to a blind tasting.`,
   lede_anime:n=>`Build a 5-character team from ${n} anime characters with $20 and fight 1v1.`,
   lede_marvel:n=>`Build a 5-hero team from ${n} Marvel heroes with $20 and fight 1v1.`,
-  rl_cs2:'Rating',rl_f1:'OVR',rl_nba:'OVR',rl_fifa:'OVR',rl_food:'Taste',rl_anime:'Power',rl_marvel:'Power',
-  match_cs2:'Match',match_f1:'Race',match_nba:'Game',match_fifa:'Match',match_food:'Tasting',match_anime:'Battle',match_marvel:'Battle',
-  goal_cs2:'',goal_f1:'P1 25, P2 18, P3 15, P4 12 points',goal_nba:'Most points wins',goal_fifa:'Penalties if level',goal_food:'Win 3 of 5 dishes',goal_anime:'Win 3 of 5 fights',goal_marvel:'Win 3 of 5 fights',
-  feed_cs2:'',feed_f1:'Race feed',feed_nba:'Scoring',feed_fifa:'Match events',feed_food:'Judges’ votes',feed_anime:'Fight feed',feed_marvel:'Fight feed',
+  rl_cs2:'Rating',rl_f1:'OVR',rl_nba:'OVR',rl_fifa:'OVR',rl_food:'Taste',rl_beer:'Untappd',rl_anime:'Power',rl_marvel:'Power',
+  match_cs2:'Match',match_f1:'Race',match_nba:'Game',match_fifa:'Match',match_food:'Tasting',match_beer:'Tasting',match_anime:'Battle',match_marvel:'Battle',
+  goal_cs2:'',goal_f1:'P1 25, P2 18, P3 15, P4 12 points',goal_nba:'Most points wins',goal_fifa:'Penalties if level',goal_food:'Win 3 of 5 dishes',goal_beer:'Win 3 of 5 rounds',goal_anime:'Win 3 of 5 fights',goal_marvel:'Win 3 of 5 fights',
+  feed_cs2:'',feed_f1:'Race feed',feed_nba:'Scoring',feed_fifa:'Match events',feed_food:'Judges’ votes',feed_beer:'Judges’ scores',feed_anime:'Fight feed',feed_marvel:'Fight feed',
   ctag_meat:'MEAT',ctag_soup:'SOUP',ctag_dairy:'DAIRY',ctag_pastry:'BAKE',ctag_drink:'DRINK',cat_meat:'Meat dish',cat_soup:'Soup',cat_dairy:'Dairy',cat_pastry:'Pastry',cat_drink:'Drink',
+  st_lager:'Lager',st_dark:'Dark',st_wheat:'Wheat',st_light:'Light',reg_mn:'Mongolia',reg_asia:'Asia',reg_eu:'Europe',reg_am:'Americas',
   side_H:'Hero',side_V:'Villain',side_N:'Antihero',
   ptsShort:'pts',pensShort:'pens',lapN:(l,L)=>`Lap ${l}/${L}`,grid:'Grid',lightsOut:'Lights out!',passes:'passes',pits:'pits',winsRace:'wins the race',
   assist:'assist',saves:'saves from',halftime:'Half-time',fulltime:'Full-time',penScored:'scores the penalty',penMissed:'misses the penalty',pens:'Penalties',
-  courseN:n=>`Dish ${n}`,judgeN:n=>`Judge ${n}`,winsCourse:'wins',fightN:n=>`Fight ${n}`,winsFight:'wins',
+  courseN:n=>`Dish ${n}`,judgeN:n=>`Judge ${n}`,winsCourse:'wins',fightN:n=>`Fight ${n}`,winsFight:'wins',roundN:n=>`Round ${n}`,winsRound:'wins',cr_foam:'Head',cr_aroma:'Aroma',cr_taste:'Taste',
   nbaNeed:r=>`You have no ${r}`,nbaPG:'PG: fewer turnovers, +2% shooting',nbaC:'C: rebounds and defense',
-  gkHave:'You already have a goalkeeper',gkNeed:'Without a goalkeeper your goal is weak',foodNew:'New type: a more varied menu',
+  gkHave:'You already have a goalkeeper',gkNeed:'Without a goalkeeper your goal is weak',foodNew:'New type: a more varied menu',beerNew:'New style: 3 or 4 styles earn a bonus',beerLocal:'Mongolian beer: home bonus from the judges',
   rulesCommon:['You both start with $20. Cards come up one at a time and you take turns opening them.','On your turn, open at $1 or give the card to your opponent for free (twice per game). The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.','If you run out of money your opponent can hand you cards for $0. If one side is full, the other takes the card for $1 or skips it. 15 seconds per turn.'],
   rules_f1:['Each of you signs 2 drivers. Ratings come from 2026 season points.','The four cars race 15 laps with a start, pit stops, overtakes and the odd DNF. Pace depends on rating.','P1 25, P2 18, P3 15, P4 12 points. Most team points wins. Two drivers from the same team get +3%.'],
   rules_nba:['3x3 uses 3 players, 5x5 uses 5. Ratings are NBA 2K27.','5x5: four quarters, overtime if tied. 3x3: first to 21, 1 point inside and 2 outside.','Roles matter: a PG cuts turnovers and helps shooting, a C helps rebounds and defense. Shooters are picked by rating and role.'],
   rules_fifa:['5-a-side teams. Ratings are EA FC 27.','Over 90 minutes, each attack’s chance comes from your forwards and midfield against their defense. Without a goalkeeper your weakest player goes in goal.','Penalties if level. Players from the same club get +3% and up.'],
   rules_food:['Build a 5-dish menu. Taste scores are Draftly ratings.','Dishes face off in order. 5 judges each vote, and tastier dishes are more likely to get the vote.','A varied menu (4 or 5 types) adds bonus points to every dish. Win 3 of 5 dishes.'],
+  rules_beer:['Build a 5-beer lineup. Ratings are real average Untappd scores (out of 5).','Beers face off in order in a blind tasting. Judges score head, aroma and taste out of 10 each. Dark and wheat beers do better on head and aroma, lagers on taste.','Every Mongolian beer gets a home bonus. 3 styles (lager, dark, wheat, light) give a small bonus to every beer, 4 styles a bigger one. Win 3 of 5 rounds.'],
   rules_anime:['5-character teams. Power ratings are Draftly fan ratings.','Characters fight 1v1 in order. Each hit’s chance comes from power, with the odd CRIT.','Win 3 of 5 fights. Characters from the same series get +3% and up.'],
   rules_marvel:['5-hero teams. Power ratings are Draftly fan ratings.','Heroes fight 1v1 in order. Each hit’s chance comes from power, with the odd CRIT.','Win 3 of 5 fights. Heroes from the same team (Avengers, X-Men and so on) get +3% and up.'],
   rules:x=>[
@@ -846,7 +872,7 @@ function setMap(key){
   layers.forEach(l=>{if(l!==nl){l.classList.remove('in');setTimeout(()=>l.remove(),1100);}});
 }
 /* ================= themed backgrounds for the other games (original generic art) ================= */
-Object.assign(MAPCOL,{hub:'#7c5cff',f1:'#ff4a3d',nba:'#ff8a2e',fifa:'#46d17a',food:'#ffb547',anime:'#ff7eb6',marvel:'#ff3d55'});
+Object.assign(MAPCOL,{hub:'#7c5cff',f1:'#ff4a3d',nba:'#ff8a2e',fifa:'#46d17a',food:'#ffb547',beer:'#ffb43d',anime:'#ff7eb6',marvel:'#ff3d55'});
 Object.assign(MAPART,{
   // hub: a fanned hand of blank draft cards, one accent stripe per game
   hub(){
@@ -896,6 +922,23 @@ Object.assign(MAPART,{
     const steam=[680,720,760].map((x,k)=>`<path class="stk thin" style="stroke:var(--mc);opacity:.35" d="M${x} ${GY-70}q-14 -30 0 -60q14 -30 0 -60"/>`).join('');
     return {far,near,extra:doors+steam,lit:''};
   },
+  // beer: a bar at night: back shelf of bottles, tap tower, a neon mug, pints on the counter
+  beer(){
+    const CT=GY-92;
+    const bottle=(x,y,h)=>{const b=h*.62;return `M${x} ${y}V${y-b}Q${x} ${y-b-10} ${x+7} ${y-b-14}V${y-h}H${x+15}V${y-b-14}Q${x+22} ${y-b-10} ${x+22} ${y-b}V${y}Z`;};
+    const shelf=(y,xs)=>bx(0,1440,6,y)+xs.map((x,k)=>bottle(x,y-6,52+(k*17)%30)).join('');
+    const left=[30,64,98,140,176,214,250,300,336,372,410,450,486],right=[960,998,1034,1076,1112,1150,1190,1226,1262,1300,1340,1376,1410];
+    const far=shelf(CT-130,left.concat(right))+shelf(CT-30,left.filter((_,k)=>k%2).concat(right.filter((_,k)=>!(k%2))));
+    const handle=x=>`M${x} ${CT-136}h14v-36a7 7 0 0 0-14 0z`;
+    const near=bx(0,1440,92)+bx(0,1440,12,CT+2)+bx(1010,26,118,CT)+bx(930,186,18,CT-118)+[948,994,1040,1086].map(x=>handle(x)+bx(x+3,8,16,CT-100)).join('');
+    const pint=(x,h,lq)=>`<path style="fill:${lq};opacity:.8" d="M${x} ${CT}L${x-5} ${CT-h}H${x+40}L${x+35} ${CT}Z"/><path style="fill:#fff3d6;opacity:.85" d="M${x-5} ${CT-h}h45v-12a6 6 0 0 0-6-6h-33a6 6 0 0 0-6 6z"/>`+
+      [8,20,28].map((d,k)=>`<circle class="lit" style="opacity:.9;fill:#fff" cx="${x+d}" cy="${CT-14-k*16}" r="2"/>`).join('');
+    const pints=pint(300,76,'#f2a82a')+pint(368,66,'#4a2410')+pint(560,72,'#f6c24a')+pint(1180,80,'#f2a82a');
+    const mug=`M650 ${CT-224}h120v96a14 14 0 0 1-14 14h-92a14 14 0 0 1-14-14z M770 ${CT-206}h22a16 16 0 0 1 16 16v32a16 16 0 0 1-16 16h-22 M642 ${CT-226}q8-28 34-20q18-26 46-8q30-16 50 14`;
+    const neon=`<path d="${mug}" style="fill:none;stroke:#4DB8FF;stroke-width:16;opacity:.12;stroke-linecap:round;stroke-linejoin:round"/><path d="${mug}" style="fill:none;stroke:#8fd4ff;stroke-width:4;opacity:.75;stroke-linecap:round;stroke-linejoin:round"/>`;
+    const bulbs=Array.from({length:19},(_,k)=>{const x=40+k*76,y=34+Math.round(28*Math.sin(Math.PI*((k%6)/6)));return `<circle class="lit" style="opacity:.4" cx="${x}" cy="${y}" r="3"/>`;}).join('');
+    return {far,near,extra:neon+pints+bulbs,lit:''};
+  },
   anime(){
     const far=[[60,140],[160,220],[260,170],[1120,240],[1230,180],[1330,260]].map(([x,h])=>bx(x,80,h)).join('')+`M700 ${GY}V${GY-280}h6V${GY}z`;
     const torii=`M520 ${GY}V${GY-190}h26V${GY}zM894 ${GY}V${GY-190}h26V${GY}zM470 ${GY-205}h500v22H470zM450 ${GY-240}q270 -26 540 0v20q-270 -18 -540 0zM700 ${GY-205}h40v-35h-40z`;
@@ -916,6 +959,8 @@ Object.assign(MAPART,{
 
 const LANG=()=>DB.last&&DB.last.lang==='en'?'en':'mn';
 const T=(k,...a)=>{const v=I18N[LANG()][k]!==undefined?I18N[LANG()][k]:I18N.mn[k];return typeof v==='function'?v(...a):v;};
+// per-game wording when a game defines it (e.g. byTeam_beer), else the shared text
+const TG=k=>I18N.mn[k+'_'+GK]!==undefined?T(k+'_'+GK):T(k);
 
 /* ================= utils ================= */
 const $=s=>document.querySelector(s);
@@ -1121,6 +1166,20 @@ const MARVEL_DATA=[
  ['Guardians','GOG',[['Gamora','H',80],['Groot','H',79],['Drax','H',78],['Nebula','N',77],['Star-Lord','H',76],['Rocket','H',74],['Mantis','H',70]]],
  ['Fantastic Four','FF',[['Silver Surfer','H',96],['Invisible Woman','H',87],['Mr. Fantastic','H',84],['Human Torch','H',83],['The Thing','H',82]]],
  ['Defenders','DEF',[['Ghost Rider','N',88],['Shang-Chi','H',84],['Moon Knight','N',82],['Blade','N',81],['Luke Cage','H',80],['Iron Fist','H',79],['Daredevil','H',78],['Jessica Jones','H',76]]]];
+// Beer sold in Mongolia: average Untappd rating out of 5 (checked Nov 2026).
+// [name, English name, rating, style, country, brewery]
+const BEER_DATA=[
+ ['mn',[['Чингис Шүүлтгүй','Chinggis Unfiltered',3.46,'lager','MN','Chinggis Beer'],['Чингис Дарк','Chinggis Dark',3.40,'dark','MN','Chinggis Beer'],['Чингис Дункель','Chinggis Dunkel',3.37,'wheat','MN','Chinggis Beer'],
+   ['Боргио Wheat','Borgio Wheat',3.22,'wheat','MN','APU'],['Чингис Пилснер','Chinggis Pilsner',3.06,'lager','MN','Chinggis Beer'],['Боргио Бок','Borgio Bock',3.06,'dark','MN','APU'],['Хар Хорум','Khar Khorum',3.05,'dark','MN','APU'],
+   ['Сэнгүр White','Sengur White',3.03,'wheat','MN','MCS'],['Сэнгүр Радлер','Sengur Radler',3.01,'light','MN','MCS'],['Алтан Говь','Golden Gobi',2.99,'lager','MN','APU'],['Сэнгүр','Sengur',2.90,'lager','MN','MCS'],
+   ['Боргио','Borgio',2.88,'lager','MN','APU'],['Нийслэл','Niislel',2.87,'lager','MN','APU'],['Легенд','Legend',2.82,'lager','MN','MCS'],['Чингис Лагер','Chinggis Lager',2.77,'lager','MN','Chinggis Beer'],
+   ['Сэрүүн Light','Seruun Light',2.66,'light','MN','MCS'],['Жалам Хар Gold','Jalam Khar Gold',2.63,'lager','MN','MCS']]],
+ ['asia',[['Asahi Super Dry','Asahi Super Dry',3.16,'lager','JP','Asahi'],['Terra','Terra',3.06,'lager','KR','HiteJinro'],['Tiger','Tiger',2.97,'lager','SG','Heineken AP'],
+   ['Tsingtao','Tsingtao',2.92,'lager','CN','Tsingtao'],['Cass Fresh','Cass Fresh',2.87,'lager','KR','OB'],['Hite','Hite',2.78,'lager','KR','HiteJinro']]],
+ ['eu',[['Guinness Draught','Guinness Draught',3.77,'dark','IE','Guinness'],['Paulaner Hefe-Weißbier','Paulaner Hefe-Weissbier',3.67,'wheat','DE','Paulaner'],['Hoegaarden','Hoegaarden',3.54,'wheat','BE','Hoegaarden'],
+   ['Kozel Dark','Kozel Dark',3.32,'dark','CZ','Velké Popovice'],['Kozel Premium','Kozel Premium',3.19,'lager','CZ','Velké Popovice'],['Carlsberg','Carlsberg',3.04,'lager','DK','Carlsberg'],
+   ['Балтика 7','Baltika 7',3.02,'lager','RU','Baltika'],['Heineken','Heineken',2.96,'lager','NL','Heineken']]],
+ ['am',[['Corona Extra','Corona Extra',3.16,'light','MX','Grupo Modelo'],['Budweiser','Budweiser',2.65,'lager','US','Anheuser-Busch']]]];
 
 const buildP=(groups,map)=>{const out=[];groups.forEach(g=>g[g.length-1].forEach(a=>out.push(Object.assign({id:out.length,team:g[0]},map(a,g)))));return out;};
 const f1r=pts=>Math.round(75+24*Math.sqrt(pts/390));
@@ -1141,6 +1200,8 @@ const GAMES={
    groups:()=>FIFA_DATA.map(([t,,ps])=>[t,ps]),mk:()=>buildP(FIFA_DATA,(a,g)=>({nick:a[0],role:a[1],cc:a[2],hl:a[3],hc:a[3],tg:g[1]})),tag:p=>p.tg},
  food:{tile:'food',acc:'#F2B544',slots:{d:5},dec:0,rar:[95,92,88,84,80],val:[78,.75],rl:'Taste',reveal:'assemble',syn:'none',stepMs:260,fan:['Бууз','Хорхог','Хуушуур'],
    groups:()=>FOOD_DATA.map(([t,,ps])=>[t,ps]),mk:()=>buildP(FOOD_DATA,(a,g)=>({nick:a[0],en:a[1],role:g[1],cat:g[0],cc:'',hl:a[2],hc:a[2]})),tag:p=>T('ctag_'+p.cat)},
+ beer:{tile:'beer',acc:'#4DB8FF',slots:{d:5},dec:2,rar:[360,330,305,290,275],val:[262,.11],rl:'Untappd',reveal:'pour',syn:'none',stepMs:300,fan:['Алтан Говь','Guinness Draught','Чингис Дарк'],
+   groups:()=>BEER_DATA,mk:()=>buildP(BEER_DATA,a=>({nick:a[0],en:a[1],hl:a[2],hc:Math.round(a[2]*100),role:a[3],cc:a[4],br:a[5]})),tag:p=>p.cc},
  anime:{tile:'anime',acc:'#FF6FA8',slots:{d:5},dec:0,rar:[99,96,92,88,84],val:[83,.7],rl:'Power',reveal:'capsule',syn:'group',stepMs:170,fan:['Gojo','Goku','Luffy'],
    groups:()=>ANIME_DATA.map(([t,,ps])=>[t,ps]),mk:()=>buildP(ANIME_DATA,(a,g)=>({nick:a[0],role:a[1],cc:'',hl:a[2],hc:a[2],tg:g[1]})),tag:p=>p.tg},
  marvel:{tile:'marvel',acc:'#E23B4E',slots:{d:5},dec:0,rar:[97,94,90,86,82],val:[80,.7],rl:'Power',reveal:'door',syn:'group',stepMs:170,fan:['Thor','Scarlet Witch','Iron Man'],
@@ -1154,8 +1215,9 @@ function useGame(key,sub){
   const s=GM.slots;GM.sub=s[sub]?sub:Object.keys(s)[0];SLOTS=s[GM.sub];
 }
 const gsub=()=>GK==='nba'?' '+GM.sub:'';
-const roleName=p=>GK==='food'?T('cat_'+p.cat):GK==='anime'||GK==='marvel'?T('side_'+p.role):p.role;
-const teamName=p=>GK==='food'?T('cat_'+p.cat):p.team;
+const roleName=p=>GK==='food'?T('cat_'+p.cat):GK==='beer'?T('st_'+p.role):GK==='anime'||GK==='marvel'?T('side_'+p.role):p.role;
+const teamName=p=>GK==='food'?T('cat_'+p.cat):GK==='beer'?p.br:p.team;
+const grpName=k=>GK==='food'?T('cat_'+k):GK==='beer'?T('reg_'+k):k;
 
 /* ================= simulations (seeded, so host and guest replay the same match) ================= */
 const mkRng=seed=>{let a=seed>>>0;return ()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};};
@@ -1276,6 +1338,29 @@ function simFood(R,sub,seed){
   return {score,win,mvp:[win,mi],mvpS:votes[win][mi]+'/5',steps,stats:votes.map(a=>a.map(v=>v+'/5')),variety:V};
 }
 
+// Blind tasting: each round pours one beer per side; judges score head, aroma and taste out of 10.
+// Untappd rating drives the score; styles suit some criteria; local beers get a home bonus; 3-4 styles add a variety bonus.
+const BEER_CR=['foam','aroma','taste'],BEER_LOCAL=.35,BEER_VAR=[0,0,0,.25,.5];
+const BEER_AFF={foam:{wheat:.35,dark:.25,lager:0,light:-.2},aroma:{dark:.35,wheat:.3,lager:0,light:-.1},taste:{lager:.2,light:.25,dark:0,wheat:0}};
+function simBeer(R,sub,seed){
+  const r=mkRng(seed),score=[0,0],tot=[R[0].map(()=>0),R[1].map(()=>0)],steps=[];
+  const V=[0,1].map(t=>BEER_VAR[new Set(R[t].map(id=>P[id].role)).size]||0);
+  const judge=(t,id,c)=>{const p=P[id];return clamp(Math.round((5+(p.hl-3)*3.2+BEER_AFF[c][p.role]+V[t]+(p.cc==='MN'?BEER_LOCAL:0)+gauss(r)*.85)*10)/10,1,10);};
+  for(let k=0;k<SLOTS;k++){
+    const a=R[0][k],b=R[1][k];
+    if(a==null||b==null){const w=a==null?1:0;score[w]++;steps.push({ph:['round',k+1],sc:score.slice(),ev:[{e:'rwin',w,k}]});continue;}
+    const c=[0,0];
+    steps.push({ph:['round',k+1],sc:score.slice(),ev:[{e:'pour',k}]});
+    BEER_CR.forEach((cr,j)=>{const v=[judge(0,a,cr),judge(1,b,cr)];c[0]+=v[0];c[1]+=v[1];
+      steps.push({ph:['round',k+1],sc:score.slice(),ev:[{e:'crit',j,k,v}]});});
+    c[0]=Math.round(c[0]*10)/10;c[1]=Math.round(c[1]*10)/10;tot[0][k]=c[0];tot[1][k]=c[1];
+    const w=c[0]>c[1]?0:c[1]>c[0]?1:P[a].hl>=P[b].hl?0:1;score[w]++;
+    steps.push({ph:['round',k+1],sc:score.slice(),ev:[{e:'rwin',w,k,c}]});
+  }
+  const win=score[0]>score[1]?0:1;let mi=0;tot[win].forEach((v,i)=>{if(v>tot[win][mi])mi=i;});
+  return {score,win,mvp:[win,mi],mvpS:tot[win][mi].toFixed(1)+'/30',steps,stats:tot.map(a=>a.map(v=>v?v.toFixed(1):'–')),variety:V};
+}
+
 function simBattle(R,sub,seed){
   const r=mkRng(seed),score=[0,0],steps=[],res=[R[0].map(()=>'–'),R[1].map(()=>'–')],dmgSum=[R[0].map(()=>0),R[1].map(()=>0)];
   const E=[0,1].map(t=>R[t].map(id=>P[id].hl*(1+grpBuff(R[t],id))));
@@ -1295,7 +1380,7 @@ function simBattle(R,sub,seed){
   const win=score[0]>score[1]?0:1;let mi=0;dmgSum[win].forEach((v,i)=>{if(res[win][i]==='W'&&(res[win][mi]!=='W'||v>dmgSum[win][mi]))mi=i;});
   return {score,win,mvp:[win,mi],mvpS:dmgSum[win][mi]+' DMG',steps,stats:res};
 }
-const SIMS={f1:simF1,nba:simNBA,fifa:simFIFA,food:simFood,anime:simBattle,marvel:simBattle};
+const SIMS={f1:simF1,nba:simNBA,fifa:simFIFA,food:simFood,beer:simBeer,anime:simBattle,marvel:simBattle};
 function playOther(g){
   const seed=(Math.random()*4294967296)>>>0,d=SIMS[g.game](g.rost,g.sub,seed);
   return {seed,score:d.score,win:d.win,mvp:d.mvp,mvpS:d.mvpS,pens:d.pens||null};
@@ -1313,6 +1398,7 @@ function phText(ph){
     case 'pens':return T('pens');
     case 'course':return T('courseN',ph[1]);
     case 'fight':return T('fightN',ph[1]);
+    case 'round':return T('roundN',ph[1]);
   }
   return '';
 }
@@ -1325,11 +1411,11 @@ function evHtml(ev,g){
     case 'pit':return `🔧 ${nm(ev.a)} ${T('pits')}`;
     case 'dnf':return `💥 ${nm(ev.a)} DNF`;
     case 'finish':return `🏁 ${nm(ev.a)} ${T('winsRace')}`;
-    case 'ft':return `${nm(ev.a)} FT ${ev.v}/2 <b class="num">+${ev.v}</b>`;
+    case 'ft':return ev.a?`${nm(ev.a)} FT ${ev.v}/2 <b class="num">+${ev.v}</b>`:T('fulltime');   // NBA free throw, or FIFA full time
     case 'shot':return `${nm(ev.a)} ${ev.out?(GM.sub==='3x3'?'2PT':'3PT'):(GM.sub==='3x3'?'1PT':'2PT')} <b class="num">+${ev.v}</b>`;
     case 'goal':return `⚽ ${nm(ev.a)}${ev.as?` <small>(${T('assist')} ${nm(ev.as)})</small>`:''}`;
     case 'save':return `🧤 ${nm(ev.a)} ${T('saves')} ${nm(ev.b)}`;
-    case 'ht':return T('halftime');case 'ft':return T('fulltime');
+    case 'ht':return T('halftime');
     case 'pen':return `✅ ${nm(ev.a)} ${T('penScored')}`;case 'penx':return `❌ ${nm(ev.a)} ${T('penMissed')}`;
     case 'serve':return `🍽 ${dish(0,ev.k)} <i>vs</i> ${dish(1,ev.k)}`;
     case 'vote':return `${T('judgeN',ev.j)} → ${dish(ev.t,ev.k)} <span class="muted num">${ev.c[0]}:${ev.c[1]}</span>`;
@@ -1337,6 +1423,9 @@ function evHtml(ev,g){
     case 'vs':return `⚔ ${dish(0,ev.k)} <i>vs</i> ${dish(1,ev.k)}`;
     case 'hit':return `${dish(ev.t,ev.k)} → <b class="num">−${ev.d}</b>${ev.crit?' <i class="cl">CRIT</i>':''}`;
     case 'ko':return `💥 ${dish(ev.w,ev.k)} ${T('winsFight')}`;
+    case 'pour':return `🍺 ${dish(0,ev.k)} <i>vs</i> ${dish(1,ev.k)}`;
+    case 'crit':return `${T('cr_'+BEER_CR[ev.j])} <b class="num ta">${ev.v[0].toFixed(1)}</b> <span class="muted">:</span> <b class="num tb">${ev.v[1].toFixed(1)}</b>`;
+    case 'rwin':return `🏆 ${dish(ev.w,ev.k)} ${T('winsRound')}${ev.c?` <span class="muted num">${ev.c[0].toFixed(1)}:${ev.c[1].toFixed(1)}</span>`:''}`;
   }
   return '';
 }
@@ -1387,8 +1476,10 @@ function finishMatch2(D){
 }
 
 /* ================= reveal animations ================= */
-function revealHtml(style){
+function revealHtml(style,p){
   switch(style){
+    case 'pour':return `<div class="rv rv-pour ${p?rcls(p)+' st-'+p.role:''}"><i class="stream"></i><div class="glass"><div class="gin"><b class="liq"></b><b class="foam"></b>${[18,34,52,66,80].map((x,k)=>`<i class="bub" style="--x:${x}%;--d:${220+k*90}ms"></i>`).join('')}</div>`+
+      `<svg viewBox="0 0 96 140"><path d="M4 2h88l-10 134H14z"/></svg></div></div>`;
     case 'lights':return `<div class="rv rv-lights">${'<i></i>'.repeat(5)}</div>`;
     case 'crate':return `<div class="rv rv-crate"><div class="crate"><b class="lid"></b><b class="box"></b></div></div>`;
     case 'walkout':return `<div class="rv rv-walk"><i class="flash"></i></div>`;
@@ -1409,7 +1500,7 @@ function startReveal(stage,id,delay){
 function botValue(g,t,id){
   const p=P[id],left=slotsLeft(g,t),money=g.money[t];
   if(left<=0)return 0;
-  const cur=g.rost[t].length?g.rost[t].reduce((a,i)=>a+P[i].hc,0)/g.rost[t].length:0,near=GK==='cs2'?4:2;
+  const cur=g.rost[t].length?g.rost[t].reduce((a,i)=>a+P[i].hc,0)/g.rost[t].length:0,near=GK==='cs2'?4:GK==='beer'?8:2;
   const mates=GM.syn==='group'?g.rost[t].filter(i=>P[i].team===p.team).length:0;
   let v=Math.max(0,(p.hc-GM.val[0])*GM.val[1]);     // cs2: 0.95 → $0, 1.32 → $11.8
   if(mates)v+=[0,1.5,2.5,3,3][mates];               // same-team boost
@@ -1419,6 +1510,7 @@ function botValue(g,t,id){
   }else if(GK==='nba'&&!g.rost[t].some(i=>P[i].role===p.role))v+=1.2;
   else if(GK==='fifa'&&p.role==='GK'&&!g.rost[t].some(i=>P[i].role==='GK'))v+=4;
   else if(GK==='food'&&!g.rost[t].some(i=>P[i].cat===p.cat))v+=1;
+  else if(GK==='beer'){if(!g.rost[t].some(i=>P[i].role===p.role))v+=.8;if(p.cc==='MN')v+=.6;}
   if(cur&&p.hc<cur-near)v*=.6;                         // would drag the average down
   v*=clamp((money/left)/4,.6,1.5);
   if(left===1)v=Math.max(v,money*(p.hc>=GM.rar[1]?1:p.hc>=GM.rar[3]?.6:.25));
@@ -1432,7 +1524,7 @@ function botMove(g,t){
   if(g.phase==='offer'){
     if(g.kind==='normal'){
       if(W>=2||!acts.includes('give'))return ['take'];
-      return (W<1||p.hc<105)?['give']:['take'];
+      return (W<1||GK!=='cs2'||p.hc<105)?['give']:['take'];
     }
     if(g.kind==='broke')return W>=1?['take']:['pass'];
     if(g.kind==='full')return (W>=1||!acts.includes('skip'))?['take']:['skip'];
@@ -1487,6 +1579,7 @@ const ICON={
   nba:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5v19M5.2 5.2c3 3 3 10.6 0 13.6M18.8 5.2c-3 3-3 10.6 0 13.6"/></svg>',
   fifa:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M12 7.5l4.2 3-1.6 5h-5.2l-1.6-5z"/><path d="M12 2.5v5M16.2 10.5l4.8-1.6M14.6 15.5l2.9 4.1M9.4 15.5l-2.9 4.1M7.8 10.5L3 8.9"/></svg>',
   food:'<svg viewBox="0 0 24 24"><path d="M3 12h18a9 9 0 0 1-18 0z"/><path d="M8 8c0-2 2-2 2-4M12 8c0-2 2-2 2-4M16 8c0-2 2-2 2-4"/></svg>',
+  beer:'<svg viewBox="0 0 24 24"><path d="M5 9h10v10.5a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/><path d="M15 11h2.5a2 2 0 0 1 2 2v2.5a2 2 0 0 1-2 2H15"/><path d="M4.5 9a2.6 2.6 0 0 1 2.8-3.2 3.2 3.2 0 0 1 5.6-.6A2.6 2.6 0 0 1 15.5 9"/><path d="M8.5 13v5M11.5 13v5"/></svg>',
   anime:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19"/><circle cx="12" cy="12" r="3"/></svg>',
   marvel:'<svg viewBox="0 0 24 24"><path d="M13 2L5 13.5h6L10 22l9-12.5h-6z"/></svg>'};
 function renderHub(){
@@ -1580,6 +1673,9 @@ function hintsFor(g,id){
     if(p.role==='C'&&!r.some(i=>P[i].role==='C'))out.push(['good',T('nbaC')]);
   }else if(GK==='fifa'){
     if(p.role==='GK')out.push(r.some(i=>P[i].role==='GK')?['',T('gkHave')]:['good',T('gkNeed')]);
+  }else if(GK==='beer'){
+    if(!r.some(i=>P[i].role===p.role))out.push(['good',T('beerNew')]);
+    if(p.cc==='MN')out.push(['good',T('beerLocal')]);
   }else if(GK==='food'){
     if(!r.some(i=>P[i].cat===p.cat))out.push(['good',T('foodNew')]);
   }
@@ -1616,7 +1712,7 @@ function renderDraft(){
         ${g.cur!=null?hintsFor(g,showId):''}
         ${s&&s.how!=='skip'?`<div class="stamp ${s.t?'tb':'ta'}">${s.how==='give'?T('free'):'$'+s.price}</div>`:''}
       </article>
-      ${reel?(GM.reveal==='reel'?'<div class="reel" aria-hidden="true"><div class="track"></div><i class="marker"></i></div>':revealHtml(GM.reveal)):''}
+      ${reel?(GM.reveal==='reel'?'<div class="reel" aria-hidden="true"><div class="track"></div><i class="marker"></i></div>':revealHtml(GM.reveal,p)):''}
     </div>`;}
   let mid='',acts='';
   const a=g.actor,mine=controls(a);
@@ -1985,8 +2081,8 @@ function rulesModal(){
 }
 function playersModal(){
   modal(`<div class="ph"><h2>${T('allPlayers')}: ${T('g_'+GK)}</h2><button class="icon" data-act="close" aria-label="${T('close')}">×</button></div>
-    <div class="ptools"><input id="psearch" placeholder="${T('search')}" autocomplete="off" aria-label="${T('searchA')}">
-      <div class="seg two" role="group" aria-label="${T('sortA')}"><button data-act="psort" data-k="team" aria-pressed="${UI.psort!=='rating'}">${T('byTeam')}</button><button data-act="psort" data-k="rating" aria-pressed="${UI.psort==='rating'}">${T('byRating')}</button></div></div>
+    <div class="ptools"><input id="psearch" placeholder="${TG('search')}" autocomplete="off" aria-label="${T('searchA')}">
+      <div class="seg two" role="group" aria-label="${T('sortA')}"><button data-act="psort" data-k="team" aria-pressed="${UI.psort!=='rating'}">${TG('byTeam')}</button><button data-act="psort" data-k="rating" aria-pressed="${UI.psort==='rating'}">${T('byRating')}</button></div></div>
     <div id="plist" class="plist"></div>`);
   $('#modal .sheet').classList.add('tall');
   fillPlayers();
@@ -2000,7 +2096,7 @@ function fillPlayers(){
   const list=P.filter(p=>!p.special&&(!q||p.nick.toLowerCase().includes(q)||(p.en||'').toLowerCase().includes(q)||teamName(p).toLowerCase().includes(q)));
   let html='';
   if(UI.psort==='rating')html=`<ul>${list.slice().sort((a,b)=>b.hc-a.hc).map(row).join('')}</ul>`;
-  else TEAMS.forEach(([team])=>{const ps=list.filter(p=>p.team===team);if(ps.length)html+=`<h3>${esc(GK==='food'?T('cat_'+team):team)}</h3><ul>${ps.map(row).join('')}</ul>`;});
+  else TEAMS.forEach(([team])=>{const ps=list.filter(p=>p.team===team);if(ps.length)html+=`<h3>${esc(grpName(team))}</h3><ul>${ps.map(row).join('')}</ul>`;});
   const pr=P[PRIME];
   if(PRIME>=0&&(!q||'s1mple prime goat'.includes(q)))html+=`<h3>${T('rare')}</h3><ul>${row(pr).replace('</small>',`, ${T('dropChance',Math.round(PRIME_CHANCE*100))}</small>`)}</ul>`;
   el.innerHTML=html||`<p class="muted" style="padding:12px 4px">${T('noneFound')}</p>`;
