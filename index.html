@@ -292,6 +292,8 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* ---- v3 additions ---- */
+.otsep{font:800 9px/12px var(--num);color:var(--r-gold);padding:0 4px;margin:0 2px;border-radius:3px;background:rgba(228,174,57,.14);align-self:center}
+.mapn.ot{color:var(--r-gold);font-weight:700}
 /* map backgrounds */
 .mapbg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .mapbg .ml{position:absolute;inset:0;opacity:0;transition:opacity 1s ease}
@@ -532,7 +534,7 @@ mn:{
   skipped:': алгаслаа',gaveFree:', үнэгүй өгсөн',bothBroke:'Хоёулаа мөнгөгүй',autoSub:(p,n)=>`${p} ${n}-д $0-оор очно.`,
   logSkip:'алгасав',logFree:' (үнэгүй)',quit:'Гарах',cardNo:n=>`${n}-р карт`,cardsLeft:n=>`${n} карт үлдсэн`,recent:'Сүүлийн картууд',
   goatChance:p=>`Гарч ирэх магадлал ${p}%`,firstOpen:n=>`Эхний картыг ${n} нээнэ`,thenAlt:'Дараа нь ээлжлэн нээнэ',
-  streakT:'Дараалсан ялалт',match:'Тоглолт',round:n=>`${n}-р раунд`,to13:'13 раунд хожсон нь ялна',roundDuels:n=>`${n}-р раундын тулаанууд`,
+  streakT:'Дараалсан ялалт',match:'Тоглолт',round:n=>`${n}-р раунд`,to13:'13 раунд хожсон нь ялна, 12:12 бол овертайм',otN:n=>`Овертайм ${n}`,otAfter:n=>n>1?`${n} овертайм`:'овертайм',otShort:'OT',roundDuels:n=>`${n}-р раундын тулаанууд`,
   final:'Эцсийн дүн',roundsN:n=>`${n} раунд`,winner:n=>'Ялагч: '+n,youWon:'Та яллаа!',xWon:n=>`${n} яллаа`,
   streakLine:(n,s)=>`🔥 ${n}: ${s} дараалсан ялалт`,again:'Дахин тоглох',home:'Нүүр',
   oppLeft:'Өрсөлдөгч гарсан байна',oppReady:n=>`${n} дахин тоглоход бэлэн`,waitReady:n=>`${n} бэлэн болохыг хүлээж байна…`,
@@ -560,7 +562,7 @@ mn:{
     'Нээсний дараа нөгөө нь үнээ +$1, +$2, +$5, бүх мөнгөөрөө эсвэл өөрийн бичсэн дүнгээр өсгөнө. Өнжвөл хамгийн сүүлд үнэ хэлсэн нь авна.',
     'Мөнгө дуусаад суудал үлдсэн бол өрсөлдөгч тань хүсээгүй картаа танд $0-оор өгнө. Нэг талын баг бүрдсэн бол нөгөө нь $1-ээр авна эсвэл алгасна (3 удаа).',
     'Ээлж бүрт 15 секунд. Цаг дуусвал нээх үед $1-ээр авна, хаялцах үед өнжинө.',
-    'Хоёр баг бүрдмэгц тоглолт эхэлнэ. 13 раунд түрүүлж хожсон баг ялна.',
+    'Хоёр баг бүрдмэгц тоглолт эхэлнэ. 13 раунд түрүүлж хожсон баг ялна. 12:12 болбол овертайм: 6 раундаас 4-ийг түрүүлж авсан нь ялна, 3:3 болбол дахин овертайм.',
     `Раунд бүр 1v1 тулаанаас бүрдэнэ. Тулаан бүрт хожих магадлалыг хоёр тамирчны HLTV rating-ээр тооцно. Жишээ нь 1.30 ба 1.00 бол ${x.a}% ба ${100-x.a}%, 1.10 ба 1.00 бол ${x.b}% ба ${100-x.b}%.`,
     'Нэг багийн тамирчдыг цуглуулбал бонус авна: 2 хүн бол rating нь +3%, 3 бол +6%, 4 бол +8%, 5 бол +10%.',
     `IGL нь багийнхаа бусад тамирчдад +${x.lead}% өгнө (нэг IGL-ийнх л тооцогдоно). Rating нь 1.00-аас доош тамирчин багтаа ганцаараа үлдэхдээ +${x.clutch}% хүчтэй тулалдана. Тиймээс rating муутай тамирчин ч хэрэгтэй.`,
@@ -603,7 +605,7 @@ en:{
   skipped:': skipped',gaveFree:', given for free',bothBroke:'Both are out of money',autoSub:(p,n)=>`${p} goes to ${n} for $0.`,
   logSkip:'skipped',logFree:' (free)',quit:'Quit',cardNo:n=>`Card ${n}`,cardsLeft:n=>`${n} cards left`,recent:'Recent cards',
   goatChance:p=>`Drop chance ${p}%`,firstOpen:n=>`${n} opens the first card`,thenAlt:'Then you take turns',
-  streakT:'Win streak',match:'Match',round:n=>`Round ${n}`,to13:'First to 13 rounds',roundDuels:n=>`Round ${n} duels`,
+  streakT:'Win streak',match:'Match',round:n=>`Round ${n}`,to13:'First to 13, overtime at 12:12',otN:n=>`Overtime ${n}`,otAfter:n=>n>1?`${n} overtimes`:'overtime',otShort:'OT',roundDuels:n=>`Round ${n} duels`,
   final:'Final',roundsN:n=>`${n} rounds`,winner:n=>'Winner: '+n,youWon:'You won!',xWon:n=>`${n} won`,
   streakLine:(n,s)=>`🔥 ${n}: ${s} wins in a row`,again:'Play again',home:'Home',
   oppLeft:'Your opponent left',oppReady:n=>`${n} is ready for a rematch`,waitReady:n=>`Waiting for ${n} to get ready…`,
@@ -631,7 +633,7 @@ en:{
     'After a card is opened, the other player can raise by +$1, +$2, +$5, all in, or any amount you type. Pass and the last bidder gets him.',
     'If you run out of money with seats left, your opponent can hand you players for $0. If one side is full, the other takes the card for $1 or skips it (3 skips).',
     'You get 15 seconds per turn. If time runs out you take the card at $1 when opening, or pass when bidding.',
-    'When both teams are full, the match starts. First team to 13 rounds wins.',
+    'When both teams are full, the match starts. First team to 13 rounds wins. At 12:12 it goes to overtime: first to 4 of 6 rounds, and at 3:3 another overtime starts.',
     `Each round is a series of 1v1 duels. Each duel’s win chance comes from the two players’ HLTV ratings. For example 1.30 vs 1.00 is ${x.a}% vs ${100-x.a}%, and 1.10 vs 1.00 is ${x.b}% vs ${100-x.b}%.`,
     'Players from the same team boost each other: 2 players +3% rating, 3 +6%, 4 +8%, 5 +10%.',
     `An IGL gives every teammate +${x.lead}% (only one IGL counts). A player rated below 1.00 duels +${x.clutch}% stronger when he is the last one alive. So low-rated players are worth taking too.`,
@@ -822,7 +824,7 @@ function stepClock(g){
 
 /* ================= match: 1v1 duels, first to 13 rounds ================= */
 // Players from the same real team get a small boost: 2 → +3%, 3 → +6%, 4 → +8%, 5 → +10%.
-const BUFF=[0,0,.03,.06,.08,.10],WIN_ROUNDS=13,DUEL_K=3;
+const BUFF=[0,0,.03,.06,.08,.10],WIN_ROUNDS=13,OT_ROUNDS=3,DUEL_K=3;
 function teamCounts(ids){const c={};ids.forEach(i=>{const t=P[i].team;c[t]=(c[t]||0)+1;});return c;}
 // Reasons to take weaker players: an IGL lifts every teammate, and a sub-1.00 player is stronger in a clutch.
 const LEAD=.03,CLUTCH=.20,UNDERDOG=100;
@@ -836,7 +838,10 @@ function rosterAvg(ids){return ids.length?ids.reduce((a,i)=>a+P[i].hl,0)/ids.len
 function playMatch(g){
   const R=g.rost,E=[effOf(R[0]),effOf(R[1])],score=[0,0],rounds=[];
   const K=[R[0].map(()=>0),R[1].map(()=>0)],D=[R[0].map(()=>0),R[1].map(()=>0)];
-  while(score[0]<WIN_ROUNDS&&score[1]<WIN_ROUNDS){
+  let target=WIN_ROUNDS,ot=0;
+  for(;;){
+    if(score[0]===target-1&&score[1]===target-1){target+=OT_ROUNDS;ot++;}   // 12:12, 15:15, … → overtime
+    if(rounds.length>=80)target=Math.max(score[0],score[1])+1;               // safety: sudden death
     const alive=[R[0].map((_,i)=>i),R[1].map((_,i)=>i)],duels=[];
     while(alive[0].length&&alive[1].length){
       const a=alive[0][Math.floor(Math.random()*alive[0].length)],b=alive[1][Math.floor(Math.random()*alive[1].length)];
@@ -846,12 +851,16 @@ function playMatch(g){
       if(w===0){K[0][a]++;D[1][b]++;alive[1].splice(alive[1].indexOf(b),1);}
       else{K[1][b]++;D[0][a]++;alive[0].splice(alive[0].indexOf(a),1);}
     }
-    const rw=alive[0].length?0:1;score[rw]++;rounds.push([rw,duels]);
+    const rw=alive[0].length?0:1;score[rw]++;
+    rounds.push(rw+duels.map(d=>`${d[0]}${d[1]}${String(clamp(d[2],1,99)).padStart(2,'0')}${d[3]}${d[4]}`).join(''));
+    if(score[0]>=target||score[1]>=target)break;
   }
   const win=score[0]>score[1]?0:1;
   let mvp=0;R[win].forEach((_,i)=>{if(K[win][i]-D[win][i]>K[win][mvp]-D[win][mvp])mvp=i;});
-  return {score,rounds,K,D,win,mvp,E:E.map(e=>e.map(x=>Math.round(x*1000)/1000))};
+  return {score,rounds,K,D,win,mvp,ot,E:E.map(e=>e.map(x=>Math.round(x*1000)/1000))};
 }
+// decode one round string back to [winner,[[a,b,p,w,c],…]]
+const decR=s=>[+s[0],Array.from({length:(s.length-1)/6},(_,k)=>{const q=s.substr(1+k*6,6);return [+q[0],+q[1],+q.substr(2,2),+q[4],+q[5]];})];
 function toMatch(g){g.phase='match';g.actor=-1;g.cur=null;g.res=playMatch(g);g.seq++;}
 
 /* ================= bot ================= */
@@ -1140,7 +1149,7 @@ const stk=n=>n>0?`<span class="stk" title="${T('streakT')}">🔥${n}</span>`:'';
 /* ================= match screen ================= */
 function renderMatch(){
   if(ANIM){clearTimeout(ANIM.to);ANIM=null;}
-  const g=G,res=g.res,st=g.streak||[0,0];
+  const g=G,res=g.res,st=g.streak||[0,0],RR=res.rounds.map(decR);
   const col=t=>`<section class="rcol ${t?'b':''}">${g.rost[t].map((id,i)=>{const p=P[id],bf=buffOf(g.rost[t],id);
       return `<div class="rrow ${rcls(p)}" id="p${t}-${i}" style="--i:${i}">${avatar(p,'sm')}<span class="n">${esc(pName(p))}<small>${bf?`<em class="bf">+${Math.round(bf*100)}%</em> `:''}${fmtR(p.hl)}, ${esc(p.team)}</small></span><b class="kd num">0-0</b></div>`;}).join('')}</section>`;
   $('#app').innerHTML=`<main class="wrap wide">
@@ -1165,20 +1174,23 @@ function renderMatch(){
     if(w===0){K[0][a]++;D[1][b]++;}else{K[1][b]++;D[0][a]++;}
     kd(0,a);kd(1,b);
     if(show){const ol=$('#duels');if(ol)ol.insertAdjacentHTML('beforeend',duelLi(x));}}
-  function endRound(show){const rw=res.rounds[r][0];score[rw]++;
+  const isOT=k=>k>=24,otNo=k=>Math.floor((k-24)/6)+1;
+  function endRound(show){const rw=RR[r][0];score[rw]++;
+    if(isOT(r)&&(r-24)%6===0){const sp=$('#strip');if(sp)sp.insertAdjacentHTML('beforeend',`<b class="otsep" title="${T('otN',otNo(r))}">OT</b>`);}
     const el=$('#s'+rw);if(el){el.textContent=score[rw];if(show){el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump');}}
     const sp=$('#strip');if(sp)sp.insertAdjacentHTML('beforeend',`<i class="${rw?'b':'a'}"></i>`);}
-  function title(){const t=$('#ftitle'),n=$('#rno');if(t)t.textContent=T('roundDuels',r+1);if(n)n.textContent=T('round',r+1);}
+  function title(){const t=$('#ftitle'),n=$('#rno'),h=$('#half');if(t)t.textContent=T('roundDuels',r+1);if(n)n.textContent=T('round',r+1);
+    if(h&&!h.dataset.done&&isOT(r)){h.textContent=T('otN',otNo(r));h.classList.add('ot');}}
   function step(){
     if(!$('#duels'))return;
-    const ds=res.rounds[r][1];
+    const ds=RR[r][1];
     if(d<ds.length){apply(ds[d++],true);ANIM.to=setTimeout(step,95);return;}
     endRound(true);r++;d=0;
     if(r<res.rounds.length)ANIM.to=setTimeout(()=>{const ol=$('#duels');if(ol)ol.innerHTML='';title();step();},420);
     else ANIM.to=setTimeout(finishMatch,350);
   }
   function rest(){
-    while(r<res.rounds.length){const ds=res.rounds[r][1];const last=r===res.rounds.length-1;
+    while(r<RR.length){const ds=RR[r][1];const last=r===RR.length-1;
       if(last){const ol=$('#duels');if(ol)ol.innerHTML='';title();}
       while(d<ds.length)apply(ds[d++],last);endRound(false);r++;d=0;}
     finishMatch();
@@ -1191,7 +1203,7 @@ function finishMatch(){
   const g=G,res=g.res;
   if(finished===g.gid+'|'+SCREEN&&$('#after').innerHTML)return;finished=g.gid+'|'+SCREEN;
   [0,1].forEach(t=>{$('#s'+t).textContent=res.score[t];g.rost[t].forEach((_,i)=>{const el=$(`#p${t}-${i} .kd`);if(el)el.textContent=res.K[t][i]+'-'+res.D[t][i];});});
-  const h=$('#half');h.textContent=T('final');h.dataset.done='1';
+  const h=$('#half');h.textContent=res.ot?`${T('final')}, ${T('otAfter',res.ot)}`:T('final');h.dataset.done='1';h.classList.toggle('ot',!!res.ot);
   $('#rno').textContent=T('roundsN',res.rounds.length);
   $('#s'+(1-res.win)).classList.add('dimmed');$('#bt'+res.win).classList.add('won');
   const mv=$(`#p${res.win}-${res.mvp}`);if(mv)mv.classList.add('mvp');
@@ -1224,7 +1236,7 @@ function refreshAfter(){
       <div class="row2"><button class="btn" data-act="host-start" ${ok?'':'disabled'}>${T('restart')}</button><button class="btn ghost" data-act="leave">${T('leave')}</button></div>`;}
   else acts=`<p class="stat">${NET.ready?T('waitHost'):T('againQ')}</p>
       <div class="row2"><button class="btn ${NET.ready?'ghost':''}" data-act="ready">${NET.ready?T('notReady'):T('ready')}</button><button class="btn ghost" data-act="leave">${T('leave')}</button></div>`;
-  el.innerHTML=`<div class="banner"><h2>${head}</h2><span class="muted num">${res.score[0]} : ${res.score[1]}</span></div>
+  el.innerHTML=`<div class="banner"><h2>${head}</h2><span class="muted num">${res.score[0]} : ${res.score[1]}${res.ot?` (${T('otShort')})`:''}</span></div>
     <p class="stat">MVP: <b style="color:var(--r-gold)">${esc(pName(mvp))}</b> <span class="num">${res.K[w][res.mvp]}-${res.D[w][res.mvp]}</span></p>
     ${streakLine}${acts}`;
 }

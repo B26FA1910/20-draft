@@ -3,7 +3,7 @@ import { DurableObject } from "cloudflare:workers";
 import html from "./index.html";
 
 const MAX_PEERS = 4;
-const MAX_MSG_BYTES = 8192;
+const MAX_MSG_BYTES = 32768;
 
 export default {
   async fetch(request, env) {
