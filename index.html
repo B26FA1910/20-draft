@@ -448,7 +448,7 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 .rp{display:inline-flex;align-items:center;gap:4px;padding:2px 7px 2px 2px;border-radius:99px;background:rgba(255,255,255,.05);font-size:12px;max-width:100%}
 .rp i{font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .rp b{display:none;font:700 11px/1 var(--num);color:var(--rc);margin-left:auto}
-.bf{font-style:normal;font-size:10.5px;font-weight:700;color:var(--money);background:rgba(63,211,143,.12);border-radius:5px;padding:1px 4px}
+.bf{font-style:normal;font-size:10.5px;font-weight:700;white-space:nowrap;flex-shrink:0;color:var(--money);background:rgba(63,211,143,.12);border-radius:5px;padding:1px 4px}
 .pc-nick .prime{display:block;font:700 13px/1.2 var(--display);color:var(--r-gold);margin-top:3px}
 .ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 .who-line{font-size:15px;color:var(--muted)}
@@ -507,7 +507,7 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 .plist ul{list-style:none;display:flex;flex-direction:column}
 .prow{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center;padding:7px 2px;border-bottom:1px solid var(--line)}
 .prow .n{font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.prow .n small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.prow .n small{display:block;font-weight:400;font-size:12px;color:var(--muted);white-space:normal}
 .prow b{font:700 15px/1 var(--num);color:var(--rc)}
 .own{font-size:11.5px;font-weight:700;padding:2px 7px;border-radius:99px;background:rgba(255,255,255,.06);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* phone: keep the draft on one screen */
@@ -596,8 +596,9 @@ const TEAMS_CS2=[
  ['Chinggis Warriors',[['ROUX','Rifler','MN',1.06],['sk0R','Rifler','MN',1.14],['fury5k','Rifler','MN',0.98],['tikuak','Rifler','MN',1.17],['cool4st','Rifler','MN',1.03]]],
  ['5star',[['ariucle','Rifler','MN',0.95],['clouden','Rifler','MN',1.03],['hoolig4n','Rifler','MN',1.07],['NEUZ','Rifler','MN',1.04],['rate','Rifler','MN',1.08]]],
  ['The Huns',[['Bart4k','Rifler','MN',0.95],['controlez','Rifler','MN',1.00],['bexyz','Rifler','MN',0.97],['Cozen','Rifler','MN',0.99],['DarkMeister','Rifler','MN',1.00]]]];
-let P=[],TEAMS=[],PRIME=-1;   // set by useGame()
-// Rare card: s1mple at his 2021 peak (HLTV Top 20 of 2021: 1.41 rating). Shows up in PRIME_CHANCE of drafts.
+let P=[],TEAMS=[],PRIMES=[];   // set by useGame(); PRIMES = ids of the game's rare cards
+// Rare cards: players at their peak (CS2: s1mple, HLTV 2021 rating 1.41; FIFA: Messi and Ronaldo at their best FIFA rating, 94).
+// Each one shows up in PRIME_CHANCE of drafts, rolled separately.
 const PRIME_CHANCE=.05,GOAT_MS=2600;
 const pName=p=>(p.en&&DB.last.lang==='en'?p.en:p.nick)+(p.special?' (prime)':'');
 // rarity colour from rating (CS2 item grades)
@@ -690,7 +691,7 @@ mn:{
   codeHint:'Найз тань «Онлайн → Нэгдэх» хэсэгт энэ кодыг оруулна',copyLink:'Холбоос хуулах',
   srvOk:'Сервертэй холбогдсон',srvWait:'Сервертэй холбогдож байна…',gotIt:'Ойлголоо',close:'Хаах',
   search:'Нэр эсвэл баг хайх',searchA:'Хайх',sortA:'Эрэмбэ',byTeam:'Багаар',byRating:'Rating-аар',search_beer:'Нэр эсвэл үйлдвэр хайх',byTeam_beer:'Бүсээр',
-  rare:'Ховор карт',dropChance:p=>`гарах магадлал ${p}%`,noneFound:'Ийм тамирчин олдсонгүй',
+  rare:'Ховор карт',dropChance:p=>`гарах магадлал ${p}%`,rareRule:(names,p)=>`Ховор карт: ${names}. Тус бүр нь ${p}% магадлалтайгаар draft-д гарч ирнэ.`,noneFound:'Ийм тамирчин олдсонгүй',
   quitQ:'Тоглоомоос гарах уу?',quitSub:'Энэ draft дуусахгүй, ялалт ялагдал бүртгэгдэхгүй.',keep:'Үргэлжлүүлэх',
   code4:'4 тэмдэгттэй код оруулна уу',copied:'Холбоос хуулагдлаа',lang:'Хэл',
   hubLede:'Тоглоомоо сонгоод $20-оор багаа цуглуул.',chooseGame:'Тоглоом сонгох',gameL:'Тоглоом',format:'Формат',
@@ -795,7 +796,7 @@ en:{
   codeHint:'Your friend enters this code under Online → Join',copyLink:'Copy link',
   srvOk:'Connected',srvWait:'Connecting…',gotIt:'Got it',close:'Close',
   search:'Search name or team',searchA:'Search',sortA:'Sort',byTeam:'By team',byRating:'By rating',search_beer:'Search name or brewery',byTeam_beer:'By region',
-  rare:'Rare card',dropChance:p=>`drop chance ${p}%`,noneFound:'No players found',
+  rare:'Rare card',dropChance:p=>`drop chance ${p}%`,rareRule:(names,p)=>`Rare cards: ${names}. Each one shows up in ${p}% of drafts.`,noneFound:'No players found',
   quitQ:'Quit the game?',quitSub:'This draft will not finish and will not count as a win or loss.',keep:'Keep playing',
   code4:'Enter a 4-character code',copied:'Link copied',lang:'Language',
   hubLede:'Pick a game and build your team with $20.',chooseGame:'Choose a game',gameL:'Game',format:'Format',
@@ -1068,8 +1069,12 @@ function voteSkip(g,t,on){
 const openerOf=g=>((g.cardNo-1)%2)^g.first;
 function newGame(mode,names,diff){
   const deck=drawOrder(P.filter(p=>!p.special).map(p=>p.id));
-  // the rare card goes into the first 10 cards, which are always drawn, so its chance is exactly PRIME_CHANCE per draft
-  if(PRIME>=0&&(Math.random()<PRIME_CHANCE||(typeof FORCE_PRIME!=='undefined'&&FORCE_PRIME)))deck.splice(1+Math.floor(Math.random()*Math.min(9,SLOTS*2-1)),0,PRIME);
+  // rare cards go into the first 10 cards, which are always drawn, so each one's chance is exactly PRIME_CHANCE per draft
+  const force=typeof FORCE_PRIME!=='undefined'&&FORCE_PRIME;
+  const rolled=PRIMES.filter(()=>force||Math.random()<PRIME_CHANCE).sort(()=>Math.random()-.5);
+  const span=Math.min(9,SLOTS*2-1),spots=[];
+  while(spots.length<Math.min(rolled.length,span)){const k=1+Math.floor(Math.random()*span);if(!spots.includes(k))spots.push(k);}
+  spots.sort((a,b)=>a-b).forEach((k,i)=>deck.splice(k,0,rolled[i]));
   const g={mode,gid:rid(8),names,diff:diff||'mid',game:GK,sub:GM.sub,map:GK==='cs2'?MAPKEYS[Math.floor(Math.random()*MAPKEYS.length)]:GK,first:Math.random()<.5?0:1,deck,ptr:0,cur:null,cardNo:0,streak:[0,0],
     money:[BUDGET,BUDGET],rost:[[],[]],gives:[GIVES,GIVES],votes:[0,0],phase:'offer',kind:'normal',actor:0,bid:0,hi:-1,
     deadline:0,log:[],seq:0,res:null,sold:null,autoTo:-1,startedAt:Date.now()};
@@ -1082,7 +1087,7 @@ function nextCard(g,extra=0){
   while(g.ptr<g.deck.length&&!canHold(g,0,g.deck[g.ptr])&&!canHold(g,1,g.deck[g.ptr]))g.ptr++;
   if((slotsLeft(g,0)===0&&slotsLeft(g,1)===0)||g.ptr>=g.deck.length){toMatch(g);return;}
   g.cur=g.deck[g.ptr++];g.cardNo++;
-  if(PRIME>=0&&g.cur===PRIME)extra+=GOAT_MS;
+  if(P[g.cur].special)extra+=GOAT_MS;
   const o=openerOf(g),x=1-o,now=Date.now(),c=g.cur,bo=canHold(g,o,c)&&g.money[o]>=1,bx=canHold(g,x,c)&&g.money[x]>=1;
   g.deadline=now+TURN_MS+extra+REVEAL_MS;g.cardAt=now+extra;
   if(bo&&bx){g.phase='offer';g.kind='normal';g.actor=o;}
@@ -1205,6 +1210,8 @@ const NBA_DATA=[['Shai Gilgeous-Alexander','PG','CA',97],['Victor Wembanyama','C
  ['Dylan Harper','SG','US',85],['Jaden McDaniels','SF','US',85],['Ausar Thompson','SF','US',85],['Tyler Herro','SG','US',85],['Domantas Sabonis','C','LT',85],
  ['Jarrett Allen','C','US',85],['Brandon Miller','SF','US',85],["De'Aaron Fox",'PG','US',84],['Rudy Gobert','C','FR',84],['Ja Morant','PG','US',84]];
 // Football: EA SPORTS FC 27 launch ratings (top 27 men + top goalkeepers).
+// Rare cards: best-ever FIFA ratings. Messi 94 at Barcelona (FIFA 12-14), Ronaldo 94 at Real Madrid (FIFA 17-18).
+const FIFA_PRIMES=[['Lionel Messi','RW','AR',94,'Barcelona 2012','BAR','Barcelona, FIFA 12–14'],['Cristiano Ronaldo','ST','PT',94,'Real Madrid 2017','RMA','Real Madrid, FIFA 17–18']];
 const FIFA_DATA=[
  ['Real Madrid','RMA',[['Kylian Mbappé','ST','FR',91],['Thibaut Courtois','GK','BE',90],['Jude Bellingham','CAM','GB',90],['Vinícius Júnior','LW','BR',89]]],
  ['Manchester City','MCI',[['Erling Haaland','ST','NO',91],['Rodri','CDM','ES',90],['Gianluigi Donnarumma','GK','IT',89]]],
@@ -1272,14 +1279,15 @@ const LINE=r=>r==='GK'?'G':/^(CB|LB|RB)$/.test(r)?'D':/^(ST|LW|RW)$/.test(r)?'F'
 const GAMES={
  cs2:{tile:'cs2',acc:'#F0A93E',slots:{d:5},dec:2,rar:[125,115,110,105,100],val:[95,.32],rl:'Rating',reveal:'reel',syn:'group',stepMs:0,fan:['ZywOo','donk','m0NESY'],
    groups:()=>TEAMS_CS2,mk:()=>{const p=buildP(TEAMS_CS2.map(([t,ps])=>[t,ps]),a=>({nick:a[0],role:a[1],cc:a[2],hl:a[3],hc:Math.round(a[3]*100)}));
-     p.push({id:p.length,nick:'s1mple',tag:'prime',team:'NAVI 2021',role:'AWP',cc:'UA',hl:1.41,hc:141,special:true});return p;},
+     p.push({id:p.length,nick:'s1mple',tag:'prime',team:'NAVI 2021',role:'AWP',cc:'UA',hl:1.41,hc:141,special:true,peak:'NAVI 2021'});return p;},
    tag:p=>TAG[p.team]||''},
  f1:{tile:'f1',acc:'#E8443A',slots:{d:4},types:{drv:2,car:2},dec:0,rar:[97,93,89,85,80],val:[78,.9],rl:'OVR',reveal:'lights',syn:'group',stepMs:320,fan:['Max Verstappen','Kimi Antonelli','Lewis Hamilton'],
    groups:()=>F1_DATA.map(([t,,ps])=>[t,ps]),mk:mkF1,tag:p=>p.tg},
  nba:{tile:'nba',acc:'#F28A2E',slots:{'5x5':5,'3x3':3},dec:0,rar:[96,93,90,87,85],val:[84,.95],rl:'OVR',reveal:'crate',syn:'role',stepMs:55,fan:['Nikola Jokić','Shai Gilgeous-Alexander','Victor Wembanyama'],
    groups:()=>NBA_POS.map(pos=>[pos,NBA_DATA.filter(a=>a[1]===pos)]),mk:()=>buildP(NBA_POS.map(pos=>[pos,NBA_DATA.filter(a=>a[1]===pos)]),a=>({nick:a[0],role:a[1],cc:a[2],hl:a[3],hc:a[3]})),tag:p=>p.role},
  fifa:{tile:'fifa',acc:'#3FCF6E',slots:{d:5},dec:0,rar:[91,90,89,88,87],val:[86,1.2],rl:'OVR',reveal:'walkout',syn:'group',stepMs:240,fan:['Erling Haaland','Kylian Mbappé','Lamine Yamal'],
-   groups:()=>FIFA_DATA.map(([t,,ps])=>[t,ps]),mk:()=>buildP(FIFA_DATA,(a,g)=>({nick:a[0],role:a[1],cc:a[2],hl:a[3],hc:a[3],tg:g[1]})),tag:p=>p.tg},
+   groups:()=>FIFA_DATA.map(([t,,ps])=>[t,ps]),mk:()=>{const p=buildP(FIFA_DATA,(a,g)=>({nick:a[0],role:a[1],cc:a[2],hl:a[3],hc:a[3],tg:g[1]}));
+     FIFA_PRIMES.forEach(([nick,role,cc,r,team,tg,peak])=>p.push({id:p.length,nick,role,cc,hl:r,hc:r,team,tg,peak,special:true}));return p;},tag:p=>p.tg},
  food:{tile:'food',acc:'#F2B544',slots:{d:5},dec:0,rar:[95,92,88,84,80],val:[78,.75],rl:'Taste',reveal:'assemble',syn:'none',stepMs:260,fan:['Бууз','Хорхог','Хуушуур'],
    groups:()=>FOOD_DATA.map(([t,,ps])=>[t,ps]),mk:()=>buildP(FOOD_DATA,(a,g)=>({nick:a[0],en:a[1],role:g[1],cat:g[0],cc:'',hl:a[2],hc:a[2]})),tag:p=>T('ctag_'+p.cat)},
  beer:{tile:'beer',acc:'#4DB8FF',slots:{d:5},dec:2,rar:[360,330,305,290,275],val:[262,.11],rl:'Untappd',reveal:'pour',syn:'none',stepMs:300,fan:['Алтан Говь','Guinness Draught','Чингис Дарк'],
@@ -1293,7 +1301,7 @@ Object.values(GAMES).forEach(g=>{g.P=g.mk();});
 let GK='cs2',GM=GAMES.cs2;
 function useGame(key,sub){
   GK=GAMES[key]?key:'cs2';GM=GAMES[GK];
-  P=GM.P;TEAMS=GM.groups();PRIME=P.findIndex(p=>p.special);
+  P=GM.P;TEAMS=GM.groups();PRIMES=P.filter(p=>p.special).map(p=>p.id);
   const s=GM.slots;GM.sub=s[sub]?sub:Object.keys(s)[0];SLOTS=s[GM.sub];
 }
 const gsub=()=>GK==='nba'?' '+GM.sub:'';
@@ -1818,7 +1826,7 @@ function renderDraft(){
       <div class="seats" aria-label="${T('seatsAria',n)}">${seatsHtml(g,t,ns)}</div>
       <div class="who">${n?g.rost[t].map(id=>{const q=P[id],bf=buffOf(g.rost[t],id);return `<span class="rp ${rcls(q)}">${avatar(q,'xs')}<i>${esc(pName(q))}</i>${bf?`<em class="bf">+${Math.round(bf*100)}%</em>`:''}<b class="num">${fmtR(q.hl)}</b></span>`;}).join(''):`<span class="muted">${T('empty')}</span>`}</div>
       <div class="meta">${T('metaAvg')} <b class="num">${n?rosterAvg(g.rost[t]).toFixed(3):'—'}</b>${canGiftGame()?`, ${T('metaGive')} ${g.gives[t]}`:''}</div></section>`;};
-  const goat=PRIME>=0&&fresh&&showId===PRIME&&g.cur===PRIME;
+  const goat=fresh&&showId!=null&&showId===g.cur&&!!P[showId].special;
   let card='';
   if(showId!=null){const p=P[showId],s=g.phase==='sold'?g.sold:null;
     const fx=s?(s.how==='skip'?'drop':'fly'+s.t):(fresh&&!reel&&motion?'land':'');
@@ -1885,7 +1893,7 @@ function renderDraft(){
       ${log?`<div class="logwrap"><div class="lbl" style="margin-bottom:8px">${T('recent')}</div><ul class="log">${log}</ul></div>`:''}
     </div>
   </main>
-  ${goat?`<div class="goatov" id="goat" data-act="goat-x" style="--gd:${goatAt}ms"><div class="goat-in"><span class="goat-k">THE GOAT</span>${miniCard(P[PRIME])}<b>s1mple (prime)</b><span class="muted">NAVI 2021, rating ${fmtR(P[PRIME].hl)}</span><span class="goat-c">${T('goatChance',Math.round(PRIME_CHANCE*100))}</span></div></div>`:''}
+  ${goat?`<div class="goatov" id="goat" data-act="goat-x" style="--gd:${goatAt}ms"><div class="goat-in"><span class="goat-k">THE GOAT</span>${miniCard(P[showId])}<b>${esc(pName(P[showId]))}</b><span class="muted">${esc(P[showId].peak)}, ${T('rl_'+GK)} ${fmtR(P[showId].hl)}</span><span class="goat-c">${T('goatChance',Math.round(PRIME_CHANCE*100))}</span></div></div>`:''}
   ${g.cardNo===1&&flipLeft>0&&g.phase==='offer'?`<div class="flip" id="flip"><div><div class="coin"></div><h2>${T('firstOpen',nameC(g.first))}</h2><p class="muted">${T('thenAlt')}</p></div></div>`:''}`;
   if(g.cardNo===1&&flipLeft>0)setTimeout(()=>{const f=$('#flip');if(f)f.remove();},flipLeft+250);
   if(bump){const el=$('.price .amt');if(el)el.classList.add('bump');}
@@ -2197,8 +2205,9 @@ function hostStart(){
 function modal(html){$('#modal').innerHTML=`<div class="modal" data-act="close-bg"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`;const b=$('#modal .sheet button');if(b)b.focus();}
 function closeModal(){$('#modal').innerHTML='';}
 function rulesModal(){
-  const x={a:Math.round(duelP(1.3,1)*100),b:Math.round(duelP(1.1,1)*100),lead:Math.round(LEAD*100),clutch:Math.round(CLUTCH*100),prime:Math.round(PRIME_CHANCE*100),pr:PRIME>=0?fmtR(P[PRIME].hl):''};
+  const x={a:Math.round(duelP(1.3,1)*100),b:Math.round(duelP(1.1,1)*100),lead:Math.round(LEAD*100),clutch:Math.round(CLUTCH*100),prime:Math.round(PRIME_CHANCE*100),pr:PRIMES.length?fmtR(P[PRIMES[0]].hl):''};
   const list=GK==='cs2'?T('rules',x):T('rulesCommon',GIFT_FEE,canGiftGame()).concat(T('rules_'+GK));
+  if(GK!=='cs2'&&PRIMES.length)list.push(T('rareRule',PRIMES.map(id=>`${pName(P[id])} ${fmtR(P[id].hl)}`).join(', '),x.prime));
   modal(`<h2>${T('howTo')}: ${T('g_'+GK)}</h2><ol>${list.map(li=>`<li>${li}</li>`).join('')}</ol>
   <button class="btn" data-act="close">${T('gotIt')}</button>`);
 }
@@ -2220,8 +2229,8 @@ function fillPlayers(){
   let html='';
   if(UI.psort==='rating')html=`<ul>${list.slice().sort((a,b)=>b.hc-a.hc).map(row).join('')}</ul>`;
   else TEAMS.forEach(([team])=>{const ps=list.filter(p=>p.team===team);if(ps.length)html+=`<h3>${esc(grpName(team))}</h3><ul>${ps.map(row).join('')}</ul>`;});
-  const pr=P[PRIME];
-  if(PRIME>=0&&(!q||'s1mple prime goat'.includes(q)))html+=`<h3>${T('rare')}</h3><ul>${row(pr).replace('</small>',`, ${T('dropChance',Math.round(PRIME_CHANCE*100))}</small>`)}</ul>`;
+  const rare=PRIMES.map(id=>P[id]).filter(p=>!q||'prime goat'.includes(q)||p.nick.toLowerCase().includes(q)||teamName(p).toLowerCase().includes(q));
+  if(rare.length)html+=`<h3>${T('rare')}</h3><ul>${rare.map(p=>row(p).replace('</small>',`, ${T('dropChance',Math.round(PRIME_CHANCE*100))}</small>`)).join('')}</ul>`;
   el.innerHTML=html||`<p class="muted" style="padding:12px 4px">${T('noneFound')}</p>`;
 }
 function quitModal(){modal(`<h2>${T('quitQ')}</h2><p class="muted">${T('quitSub')}</p>
