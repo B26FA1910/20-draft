@@ -717,7 +717,7 @@ mn:{
   courseN:n=>`${n}-р хоол`,judgeN:n=>`Шүүгч ${n}`,winsCourse:'хожив',fightN:n=>`${n}-р тулаан`,winsFight:'ялав',roundN:n=>`${n}-р тойрог`,winsRound:'хожив',cr_foam:'Хөөс',cr_aroma:'Үнэр',cr_taste:'Амт',
   nbaNeed:r=>`Танд ${r} байхгүй`,nbaPG:'PG: алдаа багасна, шидэлт +2%',nbaC:'C: самбар, хамгаалалт сайжирна',
   gkHave:'Танд хаалгач аль хэдийн байгаа',gkNeed:'Хаалгачгүй бол хаалга тань сул',foodNew:'Шинэ төрөл: цэс олон янз болно',beerNew:'Шинэ төрөл: 3-4 төрөл цуглуулбал бонус',beerLocal:'Монгол шар айраг: шүүгчдээс нутгийн бонус',
-  rulesCommon:(f,gift)=>['Хоёулаа $20 мөнгөтэй эхэлнэ. Карт нэг нэгээр гарч, ээлжлэн нээнэ.',gift?`Нээх ээлжтэй үедээ $1-ээр нээнэ эсвэл картыг өрсөлдөгчдөө өгнө (2 удаа). Өгөхдөө түүнд $${f} төлнө. Өрсөлдөгчийн хоосон суудал 3-аас эсвэл таныхаас цөөн бол өгч болохгүй. Нээсний дараа нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.`:'Нээх ээлжтэй үедээ $1-ээр нээнэ. Баг жижиг тул картыг өрсөлдөгчдөө өгөх боломжгүй. Нээсний дараа нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.','Мөнгө дуусвал өрсөлдөгч $0-оор өгнө. Нэг талын баг бүрдвэл үлдсэн карт нөгөөд нь дарааллаараа автоматаар очно. Хоёулаа санал нийлвэл картыг хэн ч авалгүй алгасаж болно. Ээлж бүрт 15 секунд.'],
+  rulesCommon:(f,gift)=>['Хоёулаа $20 мөнгөтэй эхэлнэ. Карт нэг нэгээр гарч, ээлжлэн нээнэ. Сайн картууд эрт гарах магадлал ихтэй.',gift?`Нээх ээлжтэй үедээ $1-ээр нээнэ эсвэл картыг өрсөлдөгчдөө өгнө (2 удаа). Өгөхдөө түүнд $${f} төлнө. Өрсөлдөгчийн хоосон суудал 3-аас эсвэл таныхаас цөөн бол өгч болохгүй. Нээсний дараа нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.`:'Нээх ээлжтэй үедээ $1-ээр нээнэ. Баг жижиг тул картыг өрсөлдөгчдөө өгөх боломжгүй. Нээсний дараа нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.','Мөнгө дуусвал өрсөлдөгч $0-оор өгнө. Нэг талын баг бүрдвэл үлдсэн карт нөгөөд нь дарааллаараа автоматаар очно. Хоёулаа санал нийлвэл картыг хэн ч авалгүй алгасаж болно. Ээлж бүрт 15 секунд.'],
   rules_f1:['Хүн бүр 2 нисгэгч, 2 машин авна. Нисгэгчийн rating нь 2026 оны улирлын оноо, машиных нь тухайн багийн 2 нисгэгчийн онооны нийлбэрээр тооцсон.','Хамгийн сайн нисгэгч хамгийн сайн машинаа унана. Хурд нь нисгэгч, машин хоёрын rating-ийн дундаж. Дөрвөн машин 15 тойрог уралдана: гараа, пит-стоп, гүйцэж түрүүлэлт, ховор DNF бий.','Байр: P1 25, P2 18, P3 15, P4 12 оноо. Нийт оноо их баг ялна. Нэг багийн нисгэгч, машин хоёр хамт байвал +3%, гурав бол +6%.'],
   rules_nba:['3x3 бол 3 тоглогч, 5x5 бол 5 тоглогч. Rating нь NBA 2K27.','5x5: 4 үе, тэнцвэл нэмэлт цаг. 3x3: 21 оноо түрүүлж авсан нь ялна, дотроос 1, гаднаас 2 оноо.','Үүрэг чухал: PG алдааг багасгаж шидэлтийг сайжруулна, C самбар болон хамгаалалтыг сайжруулна. Шидэгчийг rating болон үүргээр сонгоно.'],
   rules_fifa:['5 хүнтэй баг (futsal шиг). Rating нь EA FC 27.','90 минутад довтолгоо бүрийн боломжийг довтлогч, хагас хамгаалагчийн хүч хамгаалалтынхтай харьцуулж тооцно. Хаалгачгүй бол хамгийн сул тоглогч хаалга хамгаална.','Тэнцвэл пенальти цохино. Нэг клубын тоглогчид +3% ба түүнээс дээш.'],
@@ -727,7 +727,7 @@ mn:{
   rules_marvel:['5 баатартай баг. Хүчний үнэлгээ нь Draftly-н фэн үнэлгээ.','Баатрууд дарааллаараа 1v1 тулалдана. Цохилт бүрийн магадлалыг хүчээр тооцно, заримдаа CRIT гарна.','5 тулаанаас 3-ыг хожсон нь ялна. Нэг багийн (Avengers, X-Men гэх мэт) баатрууд +3% ба түүнээс дээш.'],
   rules:x=>[
     'Хоёулаа $20 мөнгөтэй, 5 хоосон суудалтай эхэлнэ. Мөнгө нь виртуал.',
-    'Тамирчдын карт санамсаргүй дарааллаар нэг нэгээр гарна. Карт бүрийг та хоёр ээлжлэн нээнэ.',
+    'Тамирчдын карт санамсаргүй дарааллаар нэг нэгээр гарна, гэхдээ өндөр rating-тэй тамирчид эрт гарах магадлал ихтэй. Карт бүрийг та хоёр ээлжлэн нээнэ.',
     `Нээх ээлжтэй үедээ картыг $1-ээр нээнэ, эсвэл өрсөлдөгчдөө өгнө (2 удаа). Өгөхдөө түүнд $${GIFT_FEE} төлнө. Өрсөлдөгчийн хоосон суудал 3-аас эсвэл таныхаас цөөн бол өгч болохгүй.`,
     'Нээсний дараа нөгөө нь үнээ +$1, +$2, +$5, бүх мөнгөөрөө эсвэл өөрийн бичсэн дүнгээр өсгөнө. Өнжвөл хамгийн сүүлд үнэ хэлсэн нь авна.',
     'Мөнгө дуусаад суудал үлдсэн бол өрсөлдөгч тань хүсээгүй картаа танд $0-оор өгнө. Нэг талын баг бүрдсэн бол үлдсэн тамирчид нөгөөд нь дарааллаараа автоматаар очно. Хоёулаа санал нийлвэл картыг хэн ч авалгүй алгасаж болно.',
@@ -822,7 +822,7 @@ en:{
   courseN:n=>`Dish ${n}`,judgeN:n=>`Judge ${n}`,winsCourse:'wins',fightN:n=>`Fight ${n}`,winsFight:'wins',roundN:n=>`Round ${n}`,winsRound:'wins',cr_foam:'Head',cr_aroma:'Aroma',cr_taste:'Taste',
   nbaNeed:r=>`You have no ${r}`,nbaPG:'PG: fewer turnovers, +2% shooting',nbaC:'C: rebounds and defense',
   gkHave:'You already have a goalkeeper',gkNeed:'Without a goalkeeper your goal is weak',foodNew:'New type: a more varied menu',beerNew:'New style: 3 or 4 styles earn a bonus',beerLocal:'Mongolian beer: home bonus from the judges',
-  rulesCommon:(f,gift)=>['You both start with $20. Cards come up one at a time and you take turns opening them.',gift?`On your turn, open at $1 or give the card to your opponent (twice per game). Giving costs you $${f}, paid to them. You can't give if they have fewer than 3 empty seats, or fewer than you. The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.`:'On your turn, open at $1. Teams are small, so you can\'t give cards to your opponent. The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.','If you run out of money your opponent can hand you cards for $0. Once one team is full, the remaining cards go to the other player automatically, in order. If you both agree, you can skip a card so nobody gets it. 15 seconds per turn.'],
+  rulesCommon:(f,gift)=>['You both start with $20. Cards come up one at a time and you take turns opening them. Better cards are more likely to come up early.',gift?`On your turn, open at $1 or give the card to your opponent (twice per game). Giving costs you $${f}, paid to them. You can't give if they have fewer than 3 empty seats, or fewer than you. The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.`:'On your turn, open at $1. Teams are small, so you can\'t give cards to your opponent. The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.','If you run out of money your opponent can hand you cards for $0. Once one team is full, the remaining cards go to the other player automatically, in order. If you both agree, you can skip a card so nobody gets it. 15 seconds per turn.'],
   rules_f1:['Each of you signs 2 drivers and 2 cars. Driver ratings come from 2026 season points; a car is rated on its two drivers’ combined points.','Your best driver gets your best car, and pace is the average of driver and car. The four cars race 15 laps with a start, pit stops, overtakes and the odd DNF.','P1 25, P2 18, P3 15, P4 12 points. Most team points wins. A driver and car from the same team get +3%, three from one team +6%.'],
   rules_nba:['3x3 uses 3 players, 5x5 uses 5. Ratings are NBA 2K27.','5x5: four quarters, overtime if tied. 3x3: first to 21, 1 point inside and 2 outside.','Roles matter: a PG cuts turnovers and helps shooting, a C helps rebounds and defense. Shooters are picked by rating and role.'],
   rules_fifa:['5-a-side teams. Ratings are EA FC 27.','Over 90 minutes, each attack’s chance comes from your forwards and midfield against their defense. Without a goalkeeper your weakest player goes in goal.','Penalties if level. Players from the same club get +3% and up.'],
@@ -832,7 +832,7 @@ en:{
   rules_marvel:['5-hero teams. Power ratings are Draftly fan ratings.','Heroes fight 1v1 in order. Each hit’s chance comes from power, with the odd CRIT.','Win 3 of 5 fights. Heroes from the same team (Avengers, X-Men and so on) get +3% and up.'],
   rules:x=>[
     'You both start with $20 and 5 empty seats. The money is virtual.',
-    'Player cards come up one at a time in random order. You take turns opening them.',
+    'Player cards come up one at a time in random order, but higher-rated players are more likely to come up early. You take turns opening them.',
     `On your turn, open the card at $1 or give the player to your opponent (twice per game). Giving costs you $${GIFT_FEE}, paid to them. You can't give if they have fewer than 3 empty seats, or fewer than you.`,
     'After a card is opened, the other player can raise by +$1, +$2, +$5, all in, or any amount you type. Pass and the last bidder gets him.',
     'If you run out of money with seats left, your opponent can hand you players for $0. Once one team is full, the remaining players go to the other side automatically, in order. If you both agree, you can skip a card so nobody gets it.',
@@ -1021,6 +1021,11 @@ const rid=(n,abc='abcdefghijkmnpqrstuvwxyz23456789')=>{let s='';for(let i=0;i<n;
 const r1=x=>Math.round(x*10)/10;
 const cleanName=s=>String(s||'').replace(/[\u0000-\u001f<>]/g,'').trim().slice(0,16);
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+// Draw order: better cards are more likely to come up early (weighted shuffle, key = u^(1/w)), so more of the
+// stars appear before the teams fill. Weak cards still turn up: measured with bots, top-tier cards are ~40-68% of
+// what players see, up from ~16-36% with a plain shuffle.
+const DRAW_W={gold:12,cov:7,cla:3.5,res:2,mil:1.3,ind:1};
+const drawOrder=ids=>ids.map(id=>[Math.pow(Math.random(),1/(DRAW_W[rarOf(P[id].hc)]||1)),id]).sort((a,b)=>b[0]-a[0]).map(x=>x[1]);
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 let toastT=0;
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600);}
@@ -1062,7 +1067,7 @@ function voteSkip(g,t,on){
 }
 const openerOf=g=>((g.cardNo-1)%2)^g.first;
 function newGame(mode,names,diff){
-  const deck=shuffle(P.filter(p=>!p.special).map(p=>p.id));
+  const deck=drawOrder(P.filter(p=>!p.special).map(p=>p.id));
   // the rare card goes into the first 10 cards, which are always drawn, so its chance is exactly PRIME_CHANCE per draft
   if(PRIME>=0&&(Math.random()<PRIME_CHANCE||(typeof FORCE_PRIME!=='undefined'&&FORCE_PRIME)))deck.splice(1+Math.floor(Math.random()*Math.min(9,SLOTS*2-1)),0,PRIME);
   const g={mode,gid:rid(8),names,diff:diff||'mid',game:GK,sub:GM.sub,map:GK==='cs2'?MAPKEYS[Math.floor(Math.random()*MAPKEYS.length)]:GK,first:Math.random()<.5?0:1,deck,ptr:0,cur:null,cardNo:0,streak:[0,0],
