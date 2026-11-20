@@ -71,6 +71,7 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 .ava svg{width:84%;height:84%;fill:color-mix(in srgb,var(--rc,#8b97ad) 45%,#d9e0ec)}
 .ava.lg{width:72px;height:72px;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--rc) 80%,transparent),0 0 0 6px color-mix(in srgb,var(--rc) 14%,transparent)}
 .ava.sm{width:30px;height:30px}
+.ava.bev{place-items:center}.ava.bev svg{width:104%;height:104%}
 
 /* mini item tile (home fan + reel) */
 .mini{position:relative;flex:none;width:104px;height:140px;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;padding:10px 8px 14px;background:radial-gradient(120% 70% at 50% 0%,color-mix(in srgb,var(--rc) 40%,transparent),transparent 72%),linear-gradient(#1a2130,#121722);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--rc) 45%,transparent)}
@@ -577,8 +578,23 @@ const rarOf=hc=>{const t=(GM||{rar:[125,115,110,105,100]}).rar;return hc>=t[0]?'
 // short team tag shown on the avatar (text only, no real logos)
 const TAG={'Vitality':'VIT','MOUZ':'MZ','FURIA':'FUR','Spirit':'TS','Aurora':'AUR','Falcons':'FAL','NAVI':'NAVI','FUT':'FUT','The MongolZ':'MGZ','G2':'G2','PARIVISION':'PARI','Legacy':'LGC','Liquid':'TL','FaZe':'FAZE','9z':'9Z','BC.Game':'BCG','100 Thieves':'100T','TYLOO':'TYL','Chinggis Warriors':'CW','5star':'5S','The Huns':'HUNS','NAVI 2021':'NAVI'};
 const AV_PERSON='<svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7.5"/><path d="M5 40c1.5-9 7.5-14 15-14s13.5 5 15 14z"/></svg>';
-const AV_BEER='<svg viewBox="0 0 40 40"><path d="M10 15h17l-1.6 21a2.5 2.5 0 0 1-2.5 2.3h-8.8a2.5 2.5 0 0 1-2.5-2.3z"/><path d="M9 15.5a4.2 4.2 0 0 1 4.5-5 5.2 5.2 0 0 1 9-.6 4.2 4.2 0 0 1 5.6 5.6z"/></svg>';
-const avatar=(p,size='')=>`<span class="avw ${size}" aria-hidden="true"><span class="ava ${size}">${GK==='beer'?AV_BEER:AV_PERSON}</span>${size==='xs'?'':`<i class="ttag">${esc(GM?GM.tag(p):'')}</i>`}</span>`;
+// Original bottle/can drawing per beer (no brand labels or logos): container, glass tint and liquid follow the style;
+// a stable hash of the name varies the shape so the list doesn't look identical. Label colour = rarity colour.
+const BEER_LQ={lager:'#f2b33d',dark:'#3a1c0c',wheat:'#f3cd6b',light:'#f6df85'},BEER_GL={brown:'#6b3a17',green:'#2f6b3a',clear:'#d8ecf2'};
+function beerSvg(p){
+  const h=[...(p.en||p.nick)].reduce((a,c)=>(a*31+c.charCodeAt(0))>>>0,7);
+  const kind=p.role==='light'?'can':['long','stubby','can','long'][h%4];
+  const glass=p.role==='dark'||p.role==='wheat'?'brown':['brown','green','clear'][(h>>4)%3];
+  const lq=BEER_LQ[p.role]||BEER_LQ.lager,lab='style="fill:color-mix(in srgb,var(--rc,#8b97ad) 85%,#fff)"',hi='<rect x="15" y="19" width="1.6" height="17" rx=".8" fill="#fff" opacity=".35"/>';
+  if(kind==='can')return `<svg viewBox="0 0 40 40"><rect x="12" y="12" width="16" height="26" rx="2.2" ${lab}/><rect x="12.6" y="10" width="14.8" height="3" rx="1.4" fill="#d5dae2"/><rect x="12.6" y="36.4" width="14.8" height="2" rx="1" fill="#aab2be"/>`+
+    `<rect x="12" y="20" width="16" height="9" fill="#0b0f17" opacity=".45"/><circle cx="20" cy="24.5" r="2.6" fill="${lq}"/><rect x="14" y="13" width="1.6" height="22" rx=".8" fill="#fff" opacity=".35"/></svg>`;
+  const body=kind==='long'?'M13 38V22Q13 17 17.5 14V6H22.5V14Q27 17 27 22V38Z':'M12 38V24Q12 18.5 16.5 16.5V11H23.5V16.5Q28 18.5 28 24V38Z';
+  const cap=kind==='long'?'<rect x="17" y="3.5" width="6" height="3" rx="1" fill="#c9ced6"/>':'<rect x="16" y="9" width="8" height="2.6" rx="1" fill="#c9ced6"/>';
+  const label=kind==='long'?`<rect x="13" y="25" width="14" height="9" ${lab}/><rect x="17.5" y="9" width="5" height="3" ${lab}/>`:`<rect x="12" y="26" width="16" height="8.5" ${lab}/>`;
+  const fill=glass==='clear'?`<path d="${body}" fill="${lq}"/><path d="${body}" fill="${BEER_GL.clear}" opacity=".3"/><rect x="${kind==='long'?13:12}" y="${kind==='long'?19:21}" width="${kind==='long'?14:16}" height="1.4" fill="#fff6df" opacity=".9"/>`:`<path d="${body}" fill="${BEER_GL[glass]}"/>`;
+  return `<svg viewBox="0 0 40 40">${fill}${label}${cap}${hi}</svg>`;
+}
+const avatar=(p,size='')=>`<span class="avw ${size}" aria-hidden="true"><span class="ava ${size}${GK==='beer'?' bev':''}">${GK==='beer'?beerSvg(p):AV_PERSON}</span>${size==='xs'?'':`<i class="ttag">${esc(GM?GM.tag(p):'')}</i>`}</span>`;
 const rcls=p=>'r-'+rarOf(p.hc)+(p.special?' goat':'');
 const miniCard=p=>`<div class="mini ${rcls(p)}">${avatar(p)}<b>${esc(pName(p))}</b><span class="r num">${fmtR(p.hl)}</span></div>`;
 const fmtR=x=>(+x).toFixed(GM?GM.dec:2);
