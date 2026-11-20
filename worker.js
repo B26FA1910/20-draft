@@ -12,6 +12,7 @@ const ICONS = {
 };
 
 const MAX_PEERS = 4;
+const MAX_LOBBY_PEERS = 64;   // public lobbies (codes starting with LB) are shared by everyone looking for a game
 const MAX_MSG_BYTES = 32768;
 
 export default {
@@ -38,8 +39,10 @@ export default {
 
 export class DraftRoom extends DurableObject {
   async fetch(request) {
+    const code = (new URL(request.url).searchParams.get("room") || "").toUpperCase();
+    const max = code.startsWith("LB") ? MAX_LOBBY_PEERS : MAX_PEERS;
     const open = this.ctx.getWebSockets();
-    if (open.length >= MAX_PEERS) {
+    if (open.length >= max) {
       try { open[0].close(4000, "replaced"); } catch (e) {}
     }
     const pair = new WebSocketPair();

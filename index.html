@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0E121B">
 <title>Draftly</title>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -557,22 +558,147 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
   .strip .rh{width:14px;height:16px}
   .dl{font-size:14.5px}
 }
+
+/* ---- top bar ---- */
+.appbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 76%,transparent);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);box-shadow:0 1px 0 color-mix(in srgb,var(--line) 80%,transparent)}
+.appbar[hidden]{display:none}
+.bar-in{max-width:1140px;margin:0 auto;height:56px;padding:0 16px;display:flex;align-items:center;gap:12px}
+.brandbtn{display:inline-flex;align-items:center;gap:8px;font:800 18px/1 var(--num);letter-spacing:-.02em;padding:6px 8px 6px 4px;border-radius:12px;color:var(--ink)}
+.brandbtn .mark{width:30px;height:30px;overflow:visible}
+.brandbtn .mark .lf,.brandbtn .mark .rt{transition:transform .35s var(--out)}
+.brandbtn:hover .mark .lf{transform:rotate(-26deg)}.brandbtn:hover .mark .rt{transform:rotate(26deg)}
+.tabs{display:flex;align-self:stretch;gap:2px}
+.tabs button{position:relative;padding:0 12px;font-weight:600;font-size:14.5px;color:var(--muted);transition:color .2s}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-current="page"]{color:var(--ink)}
+.tabs button[aria-current="page"]::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:2.5px;border-radius:2px 2px 0 0;background:var(--t)}
+.bar-r{margin-left:auto;display:flex;align-items:center;gap:8px}
+.icon.sm{width:36px;height:36px;border-radius:10px}
+.appbar .langsw{position:static}
+@media (max-width:440px){.brandbtn span{display:none}.bar-in{gap:6px;padding:0 10px}.tabs button{padding:0 9px}}
+.hub .hubhero{padding-top:18px}
+@media (max-width:899px){.home .hero{padding-top:44px}}
+
+/* ---- guide ---- */
+.guide{max-width:760px}
+.ghead{padding:18px 0 4px;display:flex;flex-direction:column;gap:8px}
+.ghead h1{font:800 clamp(34px,9vw,52px)/1 var(--num);letter-spacing:-.03em}
+.gsec{display:flex;flex-direction:column;gap:10px}
+.gsec>h2{font-size:18px}
+.steps{list-style:none;counter-reset:st;display:flex;flex-direction:column;gap:8px}
+.steps li{counter-increment:st;position:relative;padding:12px 14px 12px 50px;background:var(--panel);border-radius:14px;box-shadow:inset 0 0 0 1px var(--line);font-size:14.5px}
+.steps li::before{content:counter(st);position:absolute;left:14px;top:11px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font:800 12px/1 var(--num);background:var(--t);color:#2a1700}
+.gcards{display:flex;flex-direction:column;gap:8px}
+.gcard{background:radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,var(--acc) 14%,transparent),transparent 60%),var(--panel);border-radius:16px;box-shadow:inset 0 0 0 1px var(--line)}
+.gcard summary{list-style:none;display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer}
+.gcard summary::-webkit-details-marker{display:none}
+.gcard summary::after{content:"";margin-left:auto;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg) translate(-2px,-2px);transition:transform .25s var(--out)}
+.gcard[open] summary::after{transform:rotate(-135deg) translate(-2px,-2px)}
+.gcard summary b{display:block;font:800 16px/1.2 var(--display)}
+.gcard summary small{display:block;color:var(--muted);font-size:12.5px}
+.gcard ol{padding:0 16px 14px 34px;display:flex;flex-direction:column;gap:7px;font-size:14px}
+.tips{padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:14.5px}
+
+/* ---- player detail ---- */
+.tip{position:fixed;z-index:70;width:min(300px,calc(100vw - 16px));padding:12px;border-radius:16px;background:color-mix(in srgb,var(--panel) 96%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:inset 0 0 0 1px var(--line),0 18px 40px -16px rgba(0,0,0,.6);font-size:13px;pointer-events:none;animation:tipin .16s var(--out)}
+.tip[hidden]{display:none}
+@keyframes tipin{from{opacity:0;transform:translateY(4px)}}
+.tip-h{display:flex;align-items:center;gap:8px}
+.tip-n{min-width:0;flex:1}
+.tip-n b{display:block;font:700 14px/1.2 var(--num);overflow-wrap:anywhere}
+.tip-n small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.tip-r{font:800 20px/1 var(--num);color:var(--rc);text-align:right}
+.tip-r small{display:block;font:600 10.5px/1.2 var(--body);color:var(--muted)}
+.tip-who{margin-top:8px;font-weight:600;font-size:12.5px}
+.tip-b{list-style:none;margin-top:8px;display:flex;flex-direction:column;gap:3px}
+.tip-b li{display:flex;justify-content:space-between;gap:10px}
+.tip-b b{color:var(--money);font-variant-numeric:tabular-nums}
+.tip-b .tot{border-top:1px solid var(--line);padding-top:3px;font-weight:700}
+.tip-b .none{color:var(--muted)}
+.tip-e{margin-top:6px;color:var(--muted)}
+.tip-e b{color:var(--ink)}
+.tip-x{margin-top:8px;padding-left:16px;color:var(--muted);font-size:12px;display:flex;flex-direction:column;gap:2px}
+[data-pid]{cursor:help}
+.rp[data-pid]:focus-visible,.rrow[data-pid]:focus-visible,.prow[data-pid]:focus-visible{outline:2px solid var(--ink);outline-offset:1px;border-radius:10px}
+
+/* ---- public rooms ---- */
+.seek{align-items:center;text-align:center;padding:28px 18px}
+.seek h2{font-size:19px}
+.spin{width:44px;height:44px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--t);animation:spinr 1s linear infinite}
+@keyframes spinr{to{transform:rotate(360deg)}}
+.pubtag{font:700 11px/1 var(--num);letter-spacing:.04em;padding:5px 9px;border-radius:99px;color:var(--money);background:color-mix(in srgb,var(--money) 14%,transparent)}
+
+/* ---- backgrounds: sky glow, faint stars, a far mirrored skyline and low fog for depth ---- */
+.mapbg .sky{position:absolute;inset:0;background:radial-gradient(120% 70% at 50% -10%,color-mix(in srgb,var(--mc) 16%,transparent),transparent 62%),linear-gradient(180deg,color-mix(in srgb,var(--mc) 5%,var(--bg)),var(--bg) 55%)}
+.mapbg .stars{position:absolute;left:0;right:0;top:0;height:62vh;opacity:.55;background-image:radial-gradient(1.4px 1.4px at 8% 18%,#fff,transparent),radial-gradient(1px 1px at 22% 42%,#fff,transparent),radial-gradient(1.2px 1.2px at 37% 12%,#fff,transparent),radial-gradient(1px 1px at 51% 33%,#fff,transparent),radial-gradient(1.6px 1.6px at 66% 9%,#fff,transparent),radial-gradient(1px 1px at 78% 38%,#fff,transparent),radial-gradient(1.3px 1.3px at 91% 21%,#fff,transparent),radial-gradient(1px 1px at 15% 60%,#fff,transparent),radial-gradient(1px 1px at 60% 55%,#fff,transparent),radial-gradient(1.2px 1.2px at 86% 64%,#fff,transparent);background-size:640px 420px;-webkit-mask-image:linear-gradient(#000,transparent);mask-image:linear-gradient(#000,transparent);animation:twinkle 6s ease-in-out infinite alternate}
+@keyframes twinkle{to{opacity:.25}}
+.mapbg .mid{fill:color-mix(in srgb,var(--mc) 10%,#141b2b);opacity:.55}
+.mapbg .far{fill:color-mix(in srgb,var(--mc) 7%,#182033)}
+.mapbg .fog{position:absolute;left:0;right:0;bottom:0;height:34vh;background:linear-gradient(0deg,color-mix(in srgb,var(--bg) 70%,transparent),transparent);pointer-events:none}
+.mapbg::after{content:"";position:absolute;inset:0;background:radial-gradient(130% 100% at 50% 40%,transparent 55%,rgba(0,0,0,.38));pointer-events:none}
+body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ---- light theme ---- */
+[data-theme="light"]{
+  --bg:#F2F4F8;--panel:#FFFFFF;--raise:#E7EBF2;--line:#D5DBE6;--ink:#151B27;--muted:#596479;
+  --t:#EBA034;--ct:#3F80EA;--money:#0F9A5C;--loss:#D9354A;
+  --r-ind:#2F6DB3;--r-mil:#3049D8;--r-res:#6A2FD8;--r-cla:#A31BB3;--r-cov:#C92F2F;--r-gold:#A87800;
+  color-scheme:light}
+[data-theme="light"] .ta{color:#A8620A}[data-theme="light"] .tb{color:#2560C8}
+[data-theme="light"] #s0{color:#C97A10}[data-theme="light"] #s1{color:#2F6FD6}
+[data-theme="light"] .r-gold.goat{--rc:#B98B10}
+[data-theme="light"] .lede{color:#4B5568}
+[data-theme="light"] .home .gname{color:color-mix(in srgb,var(--acc) 72%,#000)}
+[data-theme="light"] .mgr .who,[data-theme="light"] .sheet ol{color:var(--ink)}
+[data-theme="light"] .seats span{background:rgba(21,27,39,.1)}
+[data-theme="light"] .btn{box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 8px 18px -12px rgba(200,120,20,.9)}
+[data-theme="light"] .btn.blue{box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 8px 18px -12px rgba(40,90,200,.9)}
+[data-theme="light"] .btn.ghost,[data-theme="light"] .icon{background:#fff}
+[data-theme="light"] .btn.ghost:hover:not(:disabled),[data-theme="light"] .icon:hover{background:#F1F4F9}
+[data-theme="light"] .hint,[data-theme="light"] .rp,[data-theme="light"] .own,[data-theme="light"] .mapchip{background:rgba(21,27,39,.06)}
+[data-theme="light"] .ava{background:color-mix(in srgb,var(--rc,#8b97ad) 16%,#fff)}
+[data-theme="light"] .ava svg{fill:color-mix(in srgb,var(--rc,#8b97ad) 62%,#46506a)}
+[data-theme="light"] .mini{background:radial-gradient(120% 70% at 50% 0%,color-mix(in srgb,var(--rc) 26%,transparent),transparent 72%),linear-gradient(#fff,#EEF2F7)}
+[data-theme="light"] .pcard{background:radial-gradient(85% 70% at 50% 0%,color-mix(in srgb,var(--rc) 20%,transparent),transparent 72%),linear-gradient(180deg,#fff,#F0F3F8);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--rc) 45%,transparent),0 22px 44px -26px color-mix(in srgb,var(--rc) 60%,transparent)}
+[data-theme="light"] .board,[data-theme="light"] .codebox{background:linear-gradient(180deg,#fff,#EFF2F7)}
+[data-theme="light"] .ttag{background:#fff}
+[data-theme="light"] .stamp{background:rgba(255,255,255,.94)}
+[data-theme="light"] .flip{background:rgba(242,244,248,.92)}
+[data-theme="light"] .modal{background:rgba(21,27,39,.32)}
+[data-theme="light"] .chip.role-AWP,[data-theme="light"] .chip.role-AWPIGL{color:#8A5D00}
+[data-theme="light"] .chip.role-Entry{color:#C02B3C}
+[data-theme="light"] .stk,[data-theme="light"] .streakline{color:#A35A00}
+[data-theme="light"] .mgr .nm .stk{background:#FFF3E0}
+[data-theme="light"] .mode:hover{box-shadow:inset 0 0 0 1px #BFC8D7}
+[data-theme="light"] .goatov{--ink:#EDF1F8;--muted:#A9B3C6;color:#EDF1F8}
+[data-theme="light"] .tip{box-shadow:inset 0 0 0 1px var(--line),0 18px 40px -18px rgba(21,27,39,.35)}
+[data-theme="light"] .mapbg .stars{display:none}
+[data-theme="light"] .mapbg .mid{fill:color-mix(in srgb,var(--mc) 8%,#E6EAF1);opacity:1}
+[data-theme="light"] .mapbg .far{fill:color-mix(in srgb,var(--mc) 10%,#DCE2EB)}
+[data-theme="light"] .mapbg .near{fill:color-mix(in srgb,var(--mc) 12%,#C3CCDA)}
+[data-theme="light"] .mapbg .stk{stroke:color-mix(in srgb,var(--mc) 12%,#C3CCDA)}
+[data-theme="light"] .mapbg .hubcard{stroke:#B5BFCF}
+[data-theme="light"] .mapbg .glow{opacity:.55}
+[data-theme="light"] .mapbg::after{background:radial-gradient(130% 100% at 50% 40%,transparent 60%,rgba(21,27,39,.06))}
+[data-theme="light"] body::after{opacity:.035;mix-blend-mode:multiply}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.flip{display:none}.stage.reeling .pcard{visibility:visible}.stage.reeling .reel{display:none}.rrow,.dl{opacity:1}}
 </style>
 </head>
 <body>
 <div class="mapbg" id="mapbg" aria-hidden="true"></div>
 <div class="aura" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="n"></i></div>
+<header class="appbar" id="appbar" hidden></header>
 <div id="app"></div>
 <div id="modal"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="tip" id="tip" role="tooltip" hidden></div>
 <script>
 'use strict';
 /* ================= rules & data ================= */
-// Anti-dumping rules (tested with a bot that gifts every weak card): a gift costs the giver GIFT_FEE, paid to the
+// Anti-dumping rules (tested with a bot that gifts every weak card): gifts are free (GIFT_FEE 0) but limited to GIVES a game,
 // receiver; you can only gift while the receiver has 3+ empty seats and at least as many as you (so never in F1);
 // and once one team is full the other gets the remaining cards in deck order, so nobody can fill you up and then cherry-pick.
-const BUDGET=20,GIFT_FEE=2,GIVES=2,GIFT_MIN=3,SKIPS=3,canGiftGame=()=>!GM.types&&SLOTS>=GIFT_MIN,TURN_MS=15000,FLIP_MS=1600,SOLD_MS=1400,AUTO_MS=1500,REVEAL_MS=1100;
+const BUDGET=20,GIFT_FEE=0,GIVES=2,GIFT_MIN=3,SKIPS=3,canGiftGame=()=>!GM.types&&SLOTS>=GIFT_MIN,TURN_MS=15000,FLIP_MS=1600,SOLD_MS=1400,AUTO_MS=1500,REVEAL_MS=1100;
 // [nick, role, country, HLTV Rating 3.0 for the player's time on that team (hltv.org team pages, Nov 2026)]
 let SLOTS=5;
 const TEAMS_CS2=[
@@ -597,23 +723,22 @@ const TEAMS_CS2=[
  ['Chinggis Warriors',[['ROUX','Rifler','MN',1.06],['sk0R','Rifler','MN',1.14],['fury5k','Rifler','MN',0.98],['tikuak','Rifler','MN',1.17],['cool4st','Rifler','MN',1.03]]],
  ['5star',[['ariucle','Rifler','MN',0.95],['clouden','Rifler','MN',1.03],['hoolig4n','Rifler','MN',1.07],['NEUZ','Rifler','MN',1.04],['rate','Rifler','MN',1.08]]],
  ['The Huns',[['Bart4k','Rifler','MN',0.95],['controlez','Rifler','MN',1.00],['bexyz','Rifler','MN',0.97],['Cozen','Rifler','MN',0.99],['DarkMeister','Rifler','MN',1.00]]]];
-// Rare CS2 cards: [nick, role, country, rating, team, peak, reveal title]. Legends use their HLTV rating at a peak big event
-// in the year HLTV ranked them #1 (Rating 1.0 back then): coldzera 1.38 at ESL One Cologne 2016 (Major MVP),
-// olofmeister 1.35 at FACEIT Stage 3 Finals 2015 (MVP), GeT_RiGhT 1.33 at EMS One Katowice 2014.
+// Rare Counter-Strike cards: [nick, role, country, rating, team, peak, reveal title]. Legends use their prime-year rating
+// at big events, from HLTV's "No. 1 players through the years": coldzera 1.24 (2017), olofmeister 1.20 (2015), GeT_RiGhT 1.11 (2014).
 const CS2_PRIMES=[['s1mple','AWP','UA',1.41,'NAVI 2021','NAVI 2021','THE GOAT'],
- ['coldzera','Rifler','BR',1.38,'SK 2016','SK Gaming, ESL One Cologne 2016','LEGEND'],
- ['olofmeister','Rifler','SE',1.35,'fnatic 2015','fnatic, FACEIT Stage 3 Finals 2015','LEGEND'],
- ['GeT_RiGhT','Rifler','SE',1.33,'NiP 2014','NiP, EMS One Katowice 2014','LEGEND']];
+ ['coldzera','Rifler','BR',1.24,'SK 2017','SK Gaming 2017','LEGEND'],
+ ['olofmeister','Rifler','SE',1.20,'fnatic 2015','fnatic 2015','LEGEND'],
+ ['GeT_RiGhT','Rifler','SE',1.11,'NiP 2014','NiP 2014','LEGEND']];
 let P=[],TEAMS=[],PRIMES=[];   // set by useGame(); PRIMES = ids of the game's rare cards
 // Rare cards: players at their peak (CS2_PRIMES, FIFA_PRIMES, F1_LEGENDS).
 // Each one shows up in PRIME_CHANCE of drafts, rolled separately.
-const PRIME_CHANCE=.05,GOAT_MS=2600;
+const PRIME_CHANCE=.05,GOAT_MS=2600,primeChance=()=>GM.primeChance||PRIME_CHANCE;
 const pName=p=>(p.en&&DB.last.lang==='en'?p.en:p.nick)+(p.special?` (${p.sfx||'prime'})`:'');
 // rarity colour from rating (CS2 item grades)
 const rarOf=hc=>{const t=(GM||{rar:[125,115,110,105,100]}).rar;return hc>=t[0]?'gold':hc>=t[1]?'cov':hc>=t[2]?'cla':hc>=t[3]?'res':hc>=t[4]?'mil':'ind';};
 // neutral placeholder avatar (no real photos): silhouette tinted by rarity
 // short team tag shown on the avatar (text only, no real logos)
-const TAG={'Vitality':'VIT','MOUZ':'MZ','FURIA':'FUR','Spirit':'TS','Aurora':'AUR','Falcons':'FAL','NAVI':'NAVI','FUT':'FUT','The MongolZ':'MGZ','G2':'G2','PARIVISION':'PARI','Legacy':'LGC','Liquid':'TL','FaZe':'FAZE','9z':'9Z','BC.Game':'BCG','100 Thieves':'100T','TYLOO':'TYL','Chinggis Warriors':'CW','5star':'5S','The Huns':'HUNS','NAVI 2021':'NAVI','SK 2016':'SK','fnatic 2015':'FNC','NiP 2014':'NIP'};
+const TAG={'Vitality':'VIT','MOUZ':'MZ','FURIA':'FUR','Spirit':'TS','Aurora':'AUR','Falcons':'FAL','NAVI':'NAVI','FUT':'FUT','The MongolZ':'MGZ','G2':'G2','PARIVISION':'PARI','Legacy':'LGC','Liquid':'TL','FaZe':'FAZE','9z':'9Z','BC.Game':'BCG','100 Thieves':'100T','TYLOO':'TYL','Chinggis Warriors':'CW','5star':'5S','The Huns':'HUNS','NAVI 2021':'NAVI','SK 2017':'SK','fnatic 2015':'FNC','NiP 2014':'NIP'};
 // Draftly mark: the two players' cards (orange, blue) fanned behind a card with a $ (a card auction for $20).
 const LOGO='<svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><rect class="lf" x="9" y="12" width="28" height="40" rx="6"/><rect class="rt" x="27" y="12" width="28" height="40" rx="6"/>'+
   '<rect class="fr" x="18" y="8" width="28" height="42" rx="6"/><path class="dl" d="M38.5 21.5C37 19.3 34.8 18.2 32 18.2c-3.9 0-6.5 2-6.5 5 0 7.2 13.5 4 13.5 11.4 0 3.2-2.8 5.3-7 5.3-3.2 0-5.8-1.3-7.3-3.8M32 14v30"/></svg>';
@@ -646,11 +771,11 @@ const ord=n=>n+(n===1?'st':n===2?'nd':n===3?'rd':'th');
 const I18N={
 mn:{
   easy:'Хялбар',mid:'Дунд',hard:'Хэцүү',
-  lede:n=>`CS2-ын ${n} тамирчнаас $20-оор 5 хүнтэй баг цуглуулж, 13 раунд тоглуул.`,
+  lede:n=>`Counter-Strike-ийн ${n} тамирчнаас $20-оор 5 хүнтэй баг цуглуулж, 13 раунд тоглуул.`,
   yourName:'Таны нэр',namePh:'Нэрээ бичнэ үү',modesAria:'Тоглох горим',
   mCpu:'Компьютерын эсрэг',mCpuSub:'Хялбар, дунд, хэцүү түвшин',
   mLocal:'2 хүн нэг утсан дээр',mLocalSub:'Утсаа ээлжлэн дамжуулж үнэ хаялцана',
-  mOnline:'Онлайн',mOnlineSub:'4 тэмдэгттэй кодоор найзтайгаа',
+  mOnline:'Онлайн',mOnlineSub:'Нээлттэй өрөөнд эсвэл найзтайгаа кодоор',
   howTo:'Тоглох заавар',allPlayers:'Бүх карт',
   wins:'ялалт',losses:'ялагдал',streakShort:'дараалсан',
   needName:'Эхлээд нэрээ бичнэ үү',back:'Буцах',player:'Тоглогч',
@@ -668,17 +793,17 @@ mn:{
   seatsAria:n=>`${n}/5 суудал`,empty:'Хоосон',
   metaAvg:'Дундаж',metaGive:'өгөх',metaSkip:'алгасах',free:'Үнэгүй',
   openTurnOf:n=>'Нээх ээлж: '+n,yourOpen:'Таны нээх ээлж',
-  openSub:o=>`$1-ээр нээвэл нөгөө нь үнээ өсгөж болно. Эсвэл картыг $${GIFT_FEE}-ын хамт ${o}-д өг.`,openSubNoGift:o=>`$1-ээр нээвэл ${o} үнээ өсгөж болно.`,
+  openSub:o=>`$1-ээр нээвэл нөгөө нь үнээ өсгөж болно. Эсвэл картыг ${o}-д өг.`,openSubNoGift:o=>`$1-ээр нээвэл ${o} үнээ өсгөж болно.`,
   f1car:'Машин',constrN:n=>`Конструктор ${n}-р байр`,seat_drv:'Нисгэгч',seat_car:'Машин',fullTy_drv:': нисгэгчийн суудал дүүрсэн',fullTy_car:': машины суудал дүүрсэн',myFull_drv:'Таны нисгэгчийн суудал дүүрсэн',myFull_car:'Таны машины суудал дүүрсэн',
-  open1:'$1-ээр нээх',give:'Өгөх',giftCost:(f,n)=>`$${f} төлнө, ${n} эрх`,giftStamp:f=>`Бэлэг +$${f}`,left:n=>`${n} эрх үлдсэн`,
+  open1:'$1-ээр нээх',give:'Өгөх',giftCost:(f,n)=>`${n} эрх үлдсэн`,giftStamp:f=>'Бэлэг',left:n=>`${n} эрх үлдсэн`,
   brokeT:': мөнгө дууссан',brokeSub:(a,o)=>`${a} $1-ээр авах уу? Үгүй бол энэ тамирчин ${o}-д $0-оор очно.`,
   take1:'$1-ээр авах',giveHim:'Түүнд өгөх',at0:'$0-оор',
   fullT:': баг бүрэн',skip:'Алгасах',
   highest:'хамгийн өндөр',turnOf:n=>'Ээлж: '+n,raiseQ:'Үнээ өсгөх үү?',allIn:m=>`Бүгд $${m}`,
   passBtn:'Өнжих',passSub:(n,b)=>`${n} $${b}-оор авна`,
   custom:'Дүнгээ бичих',say:'Хэлэх',badBid:(a,b)=>`$${a}-$${b} хооронд бичнэ үү`,
-  gaveFree:f=>`, $${f}-ын хамт өгсөн`,bothBroke:'Хоёулаа мөнгөгүй',autoSub:(p,n)=>`${p} ${n}-д $0-оор очно.`,
-  logFree:f=>` (+$${f})`,quit:'Гарах',cardNo:n=>`${n}-р карт`,cardsLeft:n=>`${n} карт үлдсэн`,recent:'Сүүлийн картууд',
+  gaveFree:f=>', бэлэглэсэн',bothBroke:'Хоёулаа мөнгөгүй',autoSub:(p,n)=>`${p} ${n}-д $0-оор очно.`,
+  logFree:f=>' (бэлэг)',quit:'Гарах',cardNo:n=>`${n}-р карт`,cardsLeft:n=>`${n} карт үлдсэн`,recent:'Сүүлийн картууд',
   goatChance:p=>`Гарч ирэх магадлал ${p}%`,firstOpen:n=>`Эхний картыг ${n} нээнэ`,thenAlt:'Дараа нь ээлжлэн нээнэ',
   streakT:'Дараалсан ялалт',match:'Тоглолт',round:n=>`${n}-р раунд`,to13:'13 раунд хожсон нь ялна, 12:12 бол овертайм',otN:n=>`Овертайм ${n}`,otAfter:n=>n>1?`${n} овертайм`:'овертайм',otShort:'OT',roundDuels:n=>`${n}-р раундын тулаанууд`,
   final:'Эцсийн дүн',roundsN:n=>`${n} раунд`,winner:n=>'Ялагч: '+n,youWon:'Та яллаа!',xWon:n=>`${n} яллаа`,
@@ -698,6 +823,16 @@ mn:{
   codeHint:'Найз тань «Онлайн → Нэгдэх» хэсэгт энэ кодыг оруулна',copyLink:'Холбоос хуулах',
   srvOk:'Сервертэй холбогдсон',srvWait:'Сервертэй холбогдож байна…',gotIt:'Ойлголоо',close:'Хаах',
   search:'Нэр эсвэл баг хайх',searchA:'Хайх',sortA:'Эрэмбэ',byTeam:'Багаар',byRating:'Rating-аар',search_beer:'Нэр эсвэл үйлдвэр хайх',byTeam_beer:'Бүсээр',
+  logoA:'Хуудсыг шинэчлэх',tabsA:'Цэс',tabPlay:'Тоглоом',tabGuide:'Заавар',toLight:'Цайвар горим',toDark:'Бараан горим',
+  guideLede:'Draftly-д $20-оор баг цуглуулж, тоглолтоор нь шалгана. Энд бүх дүрэм нэг дор байна.',gDraft:'Draft хэрхэн явагддаг вэ',gGames:'Тоглоом бүрийн дүрэм',gTips:'Хэрэгтэй зүйлс',
+  guideSteps:['Нэрээ оруулаад тоглоомоо сонго. Компьютертэй, нэг төхөөрөмж дээр эсвэл онлайнаар тоглож болно.','Хоёулаа $20-оор эхэлнэ. Карт нэг нэгээр гарч, ээлжлэн нээнэ. Нээх ээлжтэй үедээ $1-ээр нээнэ, эсвэл картыг өрсөлдөгчдөө үнэгүй өгнө (тоглолтод 2 удаа).','Нээсний дараа нөгөө нь үнээ өсгөнө. Өнжвөл хамгийн сүүлд үнэ хэлсэн нь авна. Ээлж бүрт 15 секунд.','Мөнгө дуусвал өрсөлдөгч картаа танд $0-оор өгч болно. Нэг талын баг бүрдвэл үлдсэн карт нөгөөд нь $0-оор очих бөгөөд тэр хүн 3 хүртэл картыг алгасаж болно.','Хоёр баг бүрдмэгц тоглолт эхэлнэ. Үр дүн нь rating, бонусаас хамаарна, гэхдээ аз бас нөлөөлнө.'],
+  guideTips:['Тоглогч эсвэл дүр дээр хулганаа аваачвал (утсан дээр дарвал) түүний мэдээлэл, авч буй бонус бүрэн харагдана.','Ховор карт Counter-Strike-д тус бүр 20%, бусад тоглоомд 5%-ийн магадлалтай гарна.','Онлайн: Нээлттэй сонговол хүлээж буй өрөөнд шууд нэгдэнэ, байхгүй бол шинэ өрөө нээгээд өрсөлдөгч хүлээнэ. Хаалттай сонговол 4 үсгийн кодоор найзтайгаа тоглоно.','Counter-Strike тоглолтын дараа раундын дөрвөлжин дээр дарж тухайн раундын тулаануудыг харна.','Зүүн дээд буланд байгаа Draftly лого дээр дарвал хуудас шинэчлэгдэнэ.'],
+  tipTeam:(t,n)=>`Багийн бонус: ${t} ×${n}`,tipIgl:'IGL-ийн удирдлага',tipComp:'Бүрэлдэхүүн: IGL, AWP, Entry, 2 Rifler',tipTotal:'Нийт',tipNone:'Одоогоор бонус алга',
+  tipEff:'Бонустай rating',tipOwner:n=>`${n}-ийн багт`,tipIf:'Танай багт орвол',tipLead:p=>`Багийн бусдад +${p}% өгнө`,
+  roomType:'Өрөөний төрөл',pubTab:'Нээлттэй',privTab:'Хаалттай',pubAbout:'Хүлээж буй нээлттэй өрөө байвал шууд нэгдэнэ. Байхгүй бол шинэ өрөө нээгээд өрсөлдөгч хүлээнэ. Хүн нэгдмэгц тоглолт өөрөө эхэлнэ.',
+  pubFind:'Нээлттэй өрөө хайх',pubSeek:'Нээлттэй өрөө хайж байна…',pubSeekSub:g=>`${g}: хүлээж буй өрөө байвал нэгдэнэ, үгүй бол шинээр нээнэ.`,pubWait:'Нээлттэй өрөө. Хэн нэгэн нэгдэхийг хүлээж байна…',
+  autoStart:'Өрсөлдөгч олдлоо. Тоглолт удахгүй эхэлнэ…',cancel:'Болих',
+  compFit:r=>`${r}: IGL, AWP, Entry, 2 Rifler бүрэлдэхүүнд таарна`,compDone:p=>`Бүрэлдэхүүн бүрдэнэ: бүх багт +${p}%`,
   takeFree:'Авах',skipsLeft:k=>`${k} эрх үлдсэн`,lastSub:(n,k)=>`${n} энэ картыг $0-оор авна эсвэл алгасна. Алгасах эрх ${k} үлдсэн.`,
   skippedBy:n=>`${n} алгаслаа`,logSkip:n=>`${n} алгасав`,
   roundHist:'Раундын түүх',rhint:'Раунд дээр дарж тулаануудыг нь харна уу',rWon:(n,k)=>`${n} хожив, ${k} тоглогч амьд үлдсэн`,
@@ -706,10 +841,10 @@ mn:{
   quitQ:'Тоглоомоос гарах уу?',quitSub:'Энэ draft дуусахгүй, ялалт ялагдал бүртгэгдэхгүй.',keep:'Үргэлжлүүлэх',
   code4:'4 тэмдэгттэй код оруулна уу',copied:'Холбоос хуулагдлаа',lang:'Хэл',
   hubLede:'Тоглоомоо сонгоод $20-оор багаа цуглуул.',chooseGame:'Тоглоом сонгох',gameL:'Тоглоом',format:'Формат',
-  g_cs2:'CS2',g_f1:'F1',g_nba:'NBA',g_fifa:'FIFA',g_food:'Монгол хоол',g_beer:'Шар айраг',g_anime:'Аниме',g_marvel:'Marvel',
+  g_cs2:'Counter-Strike',g_f1:'F1',g_nba:'NBA',g_fifa:'FIFA',g_food:'Монгол хоол',g_beer:'Шар айраг',g_anime:'Аниме',g_marvel:'Marvel',
   gsub_cs2:n=>`${n} тамирчин, 5v5, HLTV rating`,gsub_f1:()=>`${F1_DATA.length*2} нисгэгч, ${F1_DATA.length} машин, хүн бүр 2+2`,gsub_nba:n=>`${n} тоглогч, 3x3 ба 5x5, NBA 2K27`,
   gsub_fifa:n=>`${n} тоглогч, 5v5, EA FC 27`,gsub_food:n=>`${n} хоол, 5v5, шүүгчид шийднэ`,gsub_beer:n=>`${n} шар айраг, 5v5, сохор амталгаа`,gsub_anime:n=>`${n} дүр, 5v5 тулаан`,gsub_marvel:n=>`${n} баатар, 5v5 тулаан`,
-  lede_cs2:n=>`CS2-ын ${n} тамирчнаас $20-оор 5 хүнтэй баг цуглуулж, 13 раунд тоглуул.`,
+  lede_cs2:n=>`Counter-Strike-ийн ${n} тамирчнаас $20-оор 5 хүнтэй баг цуглуулж, 13 раунд тоглуул.`,
   lede_f1:()=>`$20-оор 2 нисгэгч, 2 машин авч, 15 тойргийн уралдаанд оруул.`,
   lede_nba:n=>`${n} NBA тоглогчоос $20-оор 3x3 эсвэл 5x5 баг цуглуулж, тоглолт хийлгэ.`,
   lede_fifa:n=>`${n} хөлбөмбөгчнөөс $20-оор 5 хүнтэй баг цуглуулж, 90 минут тоглуул.`,
@@ -729,7 +864,7 @@ mn:{
   courseN:n=>`${n}-р хоол`,judgeN:n=>`Шүүгч ${n}`,winsCourse:'хожив',fightN:n=>`${n}-р тулаан`,winsFight:'ялав',roundN:n=>`${n}-р тойрог`,winsRound:'хожив',cr_foam:'Хөөс',cr_aroma:'Үнэр',cr_taste:'Амт',
   nbaNeed:r=>`Танд ${r} байхгүй`,nbaPG:'PG: алдаа багасна, шидэлт +2%',nbaC:'C: самбар, хамгаалалт сайжирна',
   gkHave:'Танд хаалгач аль хэдийн байгаа',gkNeed:'Хаалгачгүй бол хаалга тань сул',foodNew:'Шинэ төрөл: цэс олон янз болно',beerNew:'Шинэ төрөл: 3-4 төрөл цуглуулбал бонус',beerLocal:'Монгол шар айраг: шүүгчдээс нутгийн бонус',
-  rulesCommon:(f,gift)=>['Хоёулаа $20 мөнгөтэй эхэлнэ. Карт нэг нэгээр гарч, ээлжлэн нээнэ. Сайн картууд эрт гарах магадлал ихтэй.',gift?`Нээх ээлжтэй үедээ $1-ээр нээнэ эсвэл картыг өрсөлдөгчдөө өгнө (2 удаа). Өгөхдөө түүнд $${f} төлнө. Өрсөлдөгчийн хоосон суудал 3-аас эсвэл таныхаас цөөн бол өгч болохгүй. Нээсний дараа нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.`:'Нээх ээлжтэй үедээ $1-ээр нээнэ. Баг жижиг тул картыг өрсөлдөгчдөө өгөх боломжгүй. Нээсний дараа нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.','Мөнгө дуусвал өрсөлдөгч $0-оор өгнө. Нэг талын баг бүрдвэл үлдсэн карт нөгөөд нь дарааллаараа $0-оор очно. Тэр тоглогч хүсээгүй 3 хүртэл картаа алгасаж болно. Ээлж бүрт 15 секунд.'],
+  rulesCommon:(f,gift)=>['Хоёулаа $20 мөнгөтэй эхэлнэ. Карт нэг нэгээр гарч, ээлжлэн нээнэ. Сайн картууд эрт гарах магадлал ихтэй.',gift?`Нээх ээлжтэй үедээ $1-ээр нээнэ эсвэл картыг өрсөлдөгчдөө өгнө (2 удаа). Өгөх нь үнэгүй. Өрсөлдөгчийн хоосон суудал 3-аас эсвэл таныхаас цөөн бол өгч болохгүй. Нээсний дараа нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.`:'Нээх ээлжтэй үедээ $1-ээр нээнэ. Баг жижиг тул картыг өрсөлдөгчдөө өгөх боломжгүй. Нээсний дараа нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.','Мөнгө дуусвал өрсөлдөгч $0-оор өгнө. Нэг талын баг бүрдвэл үлдсэн карт нөгөөд нь дарааллаараа $0-оор очно. Тэр тоглогч хүсээгүй 3 хүртэл картаа алгасаж болно. Ээлж бүрт 15 секунд.'],
   rules_f1:['Хүн бүр 2 нисгэгч, 2 машин авна. Нисгэгчийн rating нь 2026 оны улирлын оноо, машиных нь тухайн багийн 2 нисгэгчийн онооны нийлбэрээр тооцсон.','Хамгийн сайн нисгэгч хамгийн сайн машинаа унана. Хурд нь нисгэгч, машин хоёрын rating-ийн дундаж. Дөрвөн машин 15 тойрог уралдана: гараа, пит-стоп, гүйцэж түрүүлэлт, ховор DNF бий.','Байр: P1 25, P2 18, P3 15, P4 12 оноо. Нийт оноо их баг ялна. Нэг багийн нисгэгч, машин хоёр хамт байвал +3%, гурав бол +6%.'],
   rules_nba:['3x3 бол 3 тоглогч, 5x5 бол 5 тоглогч. Rating нь NBA 2K27.','5x5: 4 үе, тэнцвэл нэмэлт цаг. 3x3: 21 оноо түрүүлж авсан нь ялна, дотроос 1, гаднаас 2 оноо.','Үүрэг чухал: PG алдааг багасгаж шидэлтийг сайжруулна, C самбар болон хамгаалалтыг сайжруулна. Шидэгчийг rating болон үүргээр сонгоно.'],
   rules_fifa:['5 хүнтэй баг (futsal шиг). Rating нь EA FC 27.','90 минутад довтолгоо бүрийн боломжийг довтлогч, хагас хамгаалагчийн хүч хамгаалалтынхтай харьцуулж тооцно. Хаалгачгүй бол хамгийн сул тоглогч хаалга хамгаална.','Тэнцвэл пенальти цохино. Нэг клубын тоглогчид +3% ба түүнээс дээш.'],
@@ -740,7 +875,7 @@ mn:{
   rules:x=>[
     'Хоёулаа $20 мөнгөтэй, 5 хоосон суудалтай эхэлнэ. Мөнгө нь виртуал.',
     'Тамирчдын карт санамсаргүй дарааллаар нэг нэгээр гарна, гэхдээ өндөр rating-тэй тамирчид эрт гарах магадлал ихтэй. Карт бүрийг та хоёр ээлжлэн нээнэ.',
-    `Нээх ээлжтэй үедээ картыг $1-ээр нээнэ, эсвэл өрсөлдөгчдөө өгнө (2 удаа). Өгөхдөө түүнд $${GIFT_FEE} төлнө. Өрсөлдөгчийн хоосон суудал 3-аас эсвэл таныхаас цөөн бол өгч болохгүй.`,
+    `Нээх ээлжтэй үедээ картыг $1-ээр нээнэ, эсвэл өрсөлдөгчдөө өгнө (2 удаа). Өгөх нь үнэгүй. Өрсөлдөгчийн хоосон суудал 3-аас эсвэл таныхаас цөөн бол өгч болохгүй.`,
     'Нээсний дараа нөгөө нь үнээ +$1, +$2, +$5, бүх мөнгөөрөө эсвэл өөрийн бичсэн дүнгээр өсгөнө. Өнжвөл хамгийн сүүлд үнэ хэлсэн нь авна.',
     'Мөнгө дуусаад суудал үлдсэн бол өрсөлдөгч тань хүсээгүй картаа танд $0-оор өгнө. Нэг талын баг бүрдсэн бол үлдсэн тамирчид нөгөөд нь дарааллаараа $0-оор очно. Тэр тоглогч хүсээгүй 3 хүртэл картаа алгасаж болно.',
     'Ээлж бүрт 15 секунд. Цаг дуусвал нээх үед $1-ээр авна, хаялцах үед өнжинө.',
@@ -748,16 +883,16 @@ mn:{
     `Раунд бүр 1v1 тулаанаас бүрдэнэ. Тулаан бүрт хожих магадлалыг хоёр тамирчны HLTV rating-ээр тооцно. Жишээ нь 1.30 ба 1.00 бол ${x.a}% ба ${100-x.a}%, 1.10 ба 1.00 бол ${x.b}% ба ${100-x.b}%.`,
     'Нэг багийн тамирчдыг цуглуулбал бонус авна: 2 хүн бол rating нь +3%, 3 бол +6%, 4 бол +8%, 5 бол +10%.',
     `IGL нь багийнхаа бусад тамирчдад +${x.lead}% өгнө (нэг IGL-ийнх л тооцогдоно). Rating нь 1.00-аас доош тамирчин багтаа ганцаараа үлдэхдээ +${x.clutch}% хүчтэй тулалдана. Тиймээс rating муутай тамирчин ч хэрэгтэй.`,
-    'AWP, IGL заавал байх албагүй.',
+    `IGL, AWP, Entry, 2 Rifler-ээс бүрдсэн баг бүхэлдээ +${Math.round(COMP*100)}% авна. AWP/IGL тоглогч аль нэгийг нь орлоно. Энэ бүрэлдэхүүн заавал биш.`,
     'Дараалсан ялалт 🔥 таны нэрийн хажууд гарах бөгөөд өрсөлдөгч тань ч харна.'],
 },
 en:{
   easy:'Easy',mid:'Medium',hard:'Hard',
-  lede:n=>`Build a 5-player team from ${n} CS2 pros with $20, then play it out to 13 rounds.`,
+  lede:n=>`Build a 5-player team from ${n} Counter-Strike pros with $20, then play it out to 13 rounds.`,
   yourName:'Your name',namePh:'Type your name',modesAria:'Game mode',
   mCpu:'Vs computer',mCpuSub:'Easy, medium or hard',
   mLocal:'2 players, 1 phone',mLocalSub:'Pass the phone and bid in turns',
-  mOnline:'Online',mOnlineSub:'Play a friend with a 4-letter code',
+  mOnline:'Online',mOnlineSub:'Public match, or a friend with a code',
   howTo:'How to play',allPlayers:'All cards',
   wins:'wins',losses:'losses',streakShort:'streak',
   needName:'Type your name first',back:'Back',player:'Player',
@@ -775,17 +910,17 @@ en:{
   seatsAria:n=>`${n}/5 seats`,empty:'Empty',
   metaAvg:'Avg',metaGive:'gifts',metaSkip:'skips',free:'Free',
   openTurnOf:n=>n+' opens',yourOpen:'Your turn to open',
-  openSub:o=>`Open at $1 and the other player can raise. Or give the card to ${o} along with $${GIFT_FEE}.`,openSubNoGift:o=>`Open at $1 and ${o} can raise.`,
+  openSub:o=>`Open at $1 and the other player can raise. Or give the card to ${o}.`,openSubNoGift:o=>`Open at $1 and ${o} can raise.`,
   f1car:'Car',constrN:n=>`Constructors P${n}`,seat_drv:'Driver',seat_car:'Car',fullTy_drv:' has no driver seat left',fullTy_car:' has no car seat left',myFull_drv:'Your driver seats are full',myFull_car:'Your car seats are full',
-  open1:'Open at $1',give:'Give',giftCost:(f,n)=>`pay $${f}, ${n} left`,giftStamp:f=>`Gift +$${f}`,left:n=>`${n} left`,
+  open1:'Open at $1',give:'Give',giftCost:(f,n)=>`${n} left`,giftStamp:f=>'Gift',left:n=>`${n} left`,
   brokeT:' is out of money',brokeSub:(a,o)=>`${a}, take him for $1? Otherwise he goes to ${o} for $0.`,
   take1:'Take for $1',giveHim:'Let them have him',at0:'for $0',
   fullT:' has a full team',skip:'Skip',
   highest:'highest bid',turnOf:n=>n+'’s turn',raiseQ:'Raise?',allIn:m=>`All in $${m}`,
   passBtn:'Pass',passSub:(n,b)=>`${n} gets him for $${b}`,
   custom:'Your amount',say:'Bid',badBid:(a,b)=>`Enter $${a} to $${b}`,
-  gaveFree:f=>`, given with $${f}`,bothBroke:'Both are out of money',autoSub:(p,n)=>`${p} goes to ${n} for $0.`,
-  logFree:f=>` (+$${f})`,quit:'Quit',cardNo:n=>`Card ${n}`,cardsLeft:n=>`${n} cards left`,recent:'Recent cards',
+  gaveFree:f=>', as a gift',bothBroke:'Both are out of money',autoSub:(p,n)=>`${p} goes to ${n} for $0.`,
+  logFree:f=>' (gift)',quit:'Quit',cardNo:n=>`Card ${n}`,cardsLeft:n=>`${n} cards left`,recent:'Recent cards',
   goatChance:p=>`Drop chance ${p}%`,firstOpen:n=>`${n} opens the first card`,thenAlt:'Then you take turns',
   streakT:'Win streak',match:'Match',round:n=>`Round ${n}`,to13:'First to 13, overtime at 12:12',otN:n=>`Overtime ${n}`,otAfter:n=>n>1?`${n} overtimes`:'overtime',otShort:'OT',roundDuels:n=>`Round ${n} duels`,
   final:'Final',roundsN:n=>`${n} rounds`,winner:n=>'Winner: '+n,youWon:'You won!',xWon:n=>`${n} won`,
@@ -805,6 +940,16 @@ en:{
   codeHint:'Your friend enters this code under Online → Join',copyLink:'Copy link',
   srvOk:'Connected',srvWait:'Connecting…',gotIt:'Got it',close:'Close',
   search:'Search name or team',searchA:'Search',sortA:'Sort',byTeam:'By team',byRating:'By rating',search_beer:'Search name or brewery',byTeam_beer:'By region',
+  logoA:'Refresh the page',tabsA:'Menu',tabPlay:'Play',tabGuide:'Guide',toLight:'Light mode',toDark:'Dark mode',
+  guideLede:'In Draftly you build a team with $20 and the match tests it. Every rule is here in one place.',gDraft:'How the draft works',gGames:'Rules for each game',gTips:'Good to know',
+  guideSteps:['Enter your name and pick a game. Play the computer, a friend on one device, or online.','You both start with $20. Cards come up one at a time and you take turns opening them. On your turn, open at $1 or give the card to your opponent for free (twice a game).','After a card is opened the other player can raise. Pass and the last bidder gets it. 15 seconds per turn.','Out of money? Your opponent can hand you cards for $0. Once one team is full, the rest go to the other player for $0, and they can skip up to 3 cards.','When both teams are full the match starts. Ratings and buffs decide it, with some luck.'],
+  guideTips:['Hover a player or character (tap on a phone) to see their stats and every buff they get.','Rare cards show up 20% of the time each in Counter-Strike and 5% in the other games.','Online: Public drops you into a waiting room, or opens one and waits for an opponent. Private lets you play a friend with a 4-letter code.','After a Counter-Strike match, tap a round square to see that round’s duels.','Tap the Draftly logo in the top-left corner to refresh the page.'],
+  tipTeam:(t,n)=>`Team bonus: ${t} ×${n}`,tipIgl:'IGL leadership',tipComp:'Line-up: IGL, AWP, Entry, 2 Riflers',tipTotal:'Total',tipNone:'No buffs yet',
+  tipEff:'Rating with buffs',tipOwner:n=>`On ${n}’s team`,tipIf:'If you take this card',tipLead:p=>`Gives teammates +${p}%`,
+  roomType:'Room type',pubTab:'Public',privTab:'Private',pubAbout:'Join a room that is already waiting, or open one and wait for an opponent. The match starts on its own once someone joins.',
+  pubFind:'Find a public room',pubSeek:'Looking for a public room…',pubSeekSub:g=>`${g}: joining a waiting room, or opening a new one.`,pubWait:'Public room. Waiting for someone to join…',
+  autoStart:'Opponent found. The match starts in a moment…',cancel:'Cancel',
+  compFit:r=>`${r} fits the IGL, AWP, Entry, 2 Rifler line-up`,compDone:p=>`Completes the line-up: +${p}% for everyone`,
   takeFree:'Take',skipsLeft:k=>`${k} left`,lastSub:(n,k)=>`${n} takes this card for $0 or skips it. ${k} skips left.`,
   skippedBy:n=>`${n} skipped it`,logSkip:n=>`skipped by ${n}`,
   roundHist:'Round history',rhint:'Tap a round to see its duels',rWon:(n,k)=>`${n} won with ${k} alive`,
@@ -813,10 +958,10 @@ en:{
   quitQ:'Quit the game?',quitSub:'This draft will not finish and will not count as a win or loss.',keep:'Keep playing',
   code4:'Enter a 4-character code',copied:'Link copied',lang:'Language',
   hubLede:'Pick a game and build your team with $20.',chooseGame:'Choose a game',gameL:'Game',format:'Format',
-  g_cs2:'CS2',g_f1:'F1',g_nba:'NBA',g_fifa:'FIFA',g_food:'Mongolian food',g_beer:'Beer',g_anime:'Anime',g_marvel:'Marvel',
+  g_cs2:'Counter-Strike',g_f1:'F1',g_nba:'NBA',g_fifa:'FIFA',g_food:'Mongolian food',g_beer:'Beer',g_anime:'Anime',g_marvel:'Marvel',
   gsub_cs2:n=>`${n} pros, 5v5, HLTV rating`,gsub_f1:()=>`${F1_DATA.length*2} drivers, ${F1_DATA.length} cars, 2 + 2 each`,gsub_nba:n=>`${n} players, 3x3 and 5x5, NBA 2K27`,
   gsub_fifa:n=>`${n} players, 5v5, EA FC 27`,gsub_food:n=>`${n} dishes, 5v5, judged`,gsub_beer:n=>`${n} beers, 5v5, blind tasting`,gsub_anime:n=>`${n} characters, 5v5 battles`,gsub_marvel:n=>`${n} heroes, 5v5 battles`,
-  lede_cs2:n=>`Build a 5-player team from ${n} CS2 pros with $20, then play it out to 13 rounds.`,
+  lede_cs2:n=>`Build a 5-player team from ${n} Counter-Strike pros with $20, then play it out to 13 rounds.`,
   lede_f1:()=>`Sign 2 drivers and 2 cars with $20 and send them into a 15-lap race.`,
   lede_nba:n=>`Build a 3x3 or 5x5 team from ${n} NBA players with $20 and play the game.`,
   lede_fifa:n=>`Build a 5-a-side team from ${n} footballers with $20 and play 90 minutes.`,
@@ -836,7 +981,7 @@ en:{
   courseN:n=>`Dish ${n}`,judgeN:n=>`Judge ${n}`,winsCourse:'wins',fightN:n=>`Fight ${n}`,winsFight:'wins',roundN:n=>`Round ${n}`,winsRound:'wins',cr_foam:'Head',cr_aroma:'Aroma',cr_taste:'Taste',
   nbaNeed:r=>`You have no ${r}`,nbaPG:'PG: fewer turnovers, +2% shooting',nbaC:'C: rebounds and defense',
   gkHave:'You already have a goalkeeper',gkNeed:'Without a goalkeeper your goal is weak',foodNew:'New type: a more varied menu',beerNew:'New style: 3 or 4 styles earn a bonus',beerLocal:'Mongolian beer: home bonus from the judges',
-  rulesCommon:(f,gift)=>['You both start with $20. Cards come up one at a time and you take turns opening them. Better cards are more likely to come up early.',gift?`On your turn, open at $1 or give the card to your opponent (twice per game). Giving costs you $${f}, paid to them. You can't give if they have fewer than 3 empty seats, or fewer than you. The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.`:'On your turn, open at $1. Teams are small, so you can\'t give cards to your opponent. The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.','If you run out of money your opponent can hand you cards for $0. Once one team is full, the remaining cards go to the other player for $0, in order, and that player can skip up to 3 cards they don’t want. 15 seconds per turn.'],
+  rulesCommon:(f,gift)=>['You both start with $20. Cards come up one at a time and you take turns opening them. Better cards are more likely to come up early.',gift?`On your turn, open at $1 or give the card to your opponent (twice per game). Giving is free. You can't give if they have fewer than 3 empty seats, or fewer than you. The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.`:'On your turn, open at $1. Teams are small, so you can\'t give cards to your opponent. The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.','If you run out of money your opponent can hand you cards for $0. Once one team is full, the remaining cards go to the other player for $0, in order, and that player can skip up to 3 cards they don’t want. 15 seconds per turn.'],
   rules_f1:['Each of you signs 2 drivers and 2 cars. Driver ratings come from 2026 season points; a car is rated on its two drivers’ combined points.','Your best driver gets your best car, and pace is the average of driver and car. The four cars race 15 laps with a start, pit stops, overtakes and the odd DNF.','P1 25, P2 18, P3 15, P4 12 points. Most team points wins. A driver and car from the same team get +3%, three from one team +6%.'],
   rules_nba:['3x3 uses 3 players, 5x5 uses 5. Ratings are NBA 2K27.','5x5: four quarters, overtime if tied. 3x3: first to 21, 1 point inside and 2 outside.','Roles matter: a PG cuts turnovers and helps shooting, a C helps rebounds and defense. Shooters are picked by rating and role.'],
   rules_fifa:['5-a-side teams. Ratings are EA FC 27.','Over 90 minutes, each attack’s chance comes from your forwards and midfield against their defense. Without a goalkeeper your weakest player goes in goal.','Penalties if level. Players from the same club get +3% and up.'],
@@ -847,7 +992,7 @@ en:{
   rules:x=>[
     'You both start with $20 and 5 empty seats. The money is virtual.',
     'Player cards come up one at a time in random order, but higher-rated players are more likely to come up early. You take turns opening them.',
-    `On your turn, open the card at $1 or give the player to your opponent (twice per game). Giving costs you $${GIFT_FEE}, paid to them. You can't give if they have fewer than 3 empty seats, or fewer than you.`,
+    `On your turn, open the card at $1 or give the player to your opponent (twice per game). Giving is free. You can't give if they have fewer than 3 empty seats, or fewer than you.`,
     'After a card is opened, the other player can raise by +$1, +$2, +$5, all in, or any amount you type. Pass and the last bidder gets him.',
     'If you run out of money with seats left, your opponent can hand you players for $0. Once one team is full, the remaining players go to the other side for $0, in order, and that player can skip up to 3 cards they don’t want.',
     'You get 15 seconds per turn. If time runs out you take the card at $1 when opening, or pass when bidding.',
@@ -855,7 +1000,7 @@ en:{
     `Each round is a series of 1v1 duels. Each duel’s win chance comes from the two players’ HLTV ratings. For example 1.30 vs 1.00 is ${x.a}% vs ${100-x.a}%, and 1.10 vs 1.00 is ${x.b}% vs ${100-x.b}%.`,
     'Players from the same team boost each other: 2 players +3% rating, 3 +6%, 4 +8%, 5 +10%.',
     `An IGL gives every teammate +${x.lead}% (only one IGL counts). A player rated below 1.00 duels +${x.clutch}% stronger when he is the last one alive. So low-rated players are worth taking too.`,
-    'You do not need an AWPer or an IGL.',
+    `A line-up of IGL, AWP, Entry and 2 Riflers gives the whole team +${Math.round(COMP*100)}%. An AWP/IGL player can fill either role. You don’t have to build it.`,
     'Your win streak 🔥 appears next to your name, and your opponent sees it too.'],
 }};
 /* ================= map backgrounds (original skyline art in each map's setting) ================= */
@@ -926,8 +1071,8 @@ const MAPART={
   }};
 function mapLayer(key){
   const a=MAPART[key]();
-  return `<div class="ml" style="--mc:${MAPCOL[key]}"><div class="glow"></div>
-    <svg viewBox="0 0 1440 360" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><path class="far" d="${a.far}"/><path class="near" d="${a.near}"/>${a.extra}${a.lit}</svg></div>`;
+  return `<div class="ml" style="--mc:${MAPCOL[key]}"><div class="sky"></div><div class="stars"></div><div class="glow"></div>
+    <svg viewBox="0 0 1440 360" preserveAspectRatio="xMidYMax meet" aria-hidden="true">${a.far?`<g transform="translate(1440 -26) scale(-1 1)"><path class="mid" d="${a.far}"/></g>`:''}<path class="far" d="${a.far}"/><path class="near" d="${a.near}"/>${a.extra}${a.lit}</svg><div class="fog"></div></div>`;
 }
 function setMap(key){
   const box=$('#mapbg');if(!box||!MAPART[key]||UI.bgMap===key)return;UI.bgMap=key;
@@ -1075,7 +1220,7 @@ function newGame(mode,names,diff){
   const deck=drawOrder(P.filter(p=>!p.special).map(p=>p.id));
   // rare cards go into the first 10 cards, which are always drawn, so each one's chance is exactly PRIME_CHANCE per draft
   const force=typeof FORCE_PRIME!=='undefined'&&FORCE_PRIME;
-  const rolled=PRIMES.filter(()=>force||Math.random()<PRIME_CHANCE).sort(()=>Math.random()-.5);
+  const rolled=PRIMES.filter(()=>force||Math.random()<primeChance()).sort(()=>Math.random()-.5);
   const span=Math.min(9,(GM.types?2*Math.min(...Object.values(GM.types)):SLOTS*2)-1),spots=[];
   while(spots.length<Math.min(rolled.length,span)){const k=1+Math.floor(Math.random()*span);if(!spots.includes(k))spots.push(k);}
   spots.sort((a,b)=>a-b).forEach((k,i)=>deck.splice(k,0,rolled[i]));
@@ -1156,10 +1301,24 @@ function stepClock(g){
 const BUFF=[0,0,.03,.06,.08,.10],WIN_ROUNDS=13,OT_ROUNDS=3,DUEL_K=3;
 function teamCounts(ids){const c={};ids.forEach(i=>{const t=P[i].team;c[t]=(c[t]||0)+1;});return c;}
 // Reasons to take weaker players: an IGL lifts every teammate, and a sub-1.00 player is stronger in a clutch.
-const LEAD=.03,CLUTCH=.20,UNDERDOG=100;
+const LEAD=.03,CLUTCH=.20,UNDERDOG=100,COMP=.03;
+function compNeed(ids){   // seats of the classic line-up still open, or null if the roles can't make it
+  const need={IGL:1,AWP:1,Entry:1,Rifler:2};let flex=0;
+  for(const i of ids){const r=P[i].role;if(r==='AWP/IGL')flex++;else if(need[r]>0)need[r]--;else return null;}
+  const open=need.IGL+need.AWP;if(flex>open)return null;need.flex=open-flex;return need;
+}
+const compOK=ids=>ids.length===5&&(n=>!!n&&n.flex===0&&!n.Entry&&!n.Rifler)(compNeed(ids));
+const fitsComp=(ids,id)=>ids.length<5&&!!compNeed(ids.concat(id));
 const isIGL=p=>/IGL/.test(p.role);
 const leaderOf=ids=>ids.find(i=>isIGL(P[i]));
-const buffOf=(ids,i)=>{if(GK!=='cs2')return GM.syn==='group'?BUFF[Math.min(5,teamCounts(ids)[P[i].team]||0)]:0;const l=leaderOf(ids);return BUFF[Math.min(5,teamCounts(ids)[P[i].team]||0)]+(l!=null&&l!==i?LEAD:0);};
+// Every buff a player gets in this line-up, as [kind, value]; buffOf is their sum.
+function buffParts(ids,i){
+  const out=[],team=GM.syn==='group'?BUFF[Math.min(5,teamCounts(ids)[P[i].team]||0)]:0;
+  if(team)out.push(['team',team]);
+  if(GK==='cs2'){const l=leaderOf(ids);if(l!=null&&l!==i)out.push(['igl',LEAD]);if(compOK(ids))out.push(['comp',COMP]);}
+  return out;
+}
+const buffOf=(ids,i)=>buffParts(ids,i).reduce((a,x)=>a+x[1],0);
 const effOf=ids=>ids.map(i=>P[i].hl*(1+buffOf(ids,i)));
 // chance that a player with effective rating a wins a 1v1 against b
 const duelP=(a,b)=>{const x=Math.pow(a,DUEL_K),y=Math.pow(b,DUEL_K);return x/(x+y);};
@@ -1296,7 +1455,7 @@ const LINE=r=>r==='GK'?'G':/^(CB|LB|RB)$/.test(r)?'D':/^(ST|LW|RW)$/.test(r)?'F'
 
 /* ================= game registry ================= */
 const GAMES={
- cs2:{tile:'cs2',acc:'#F0A93E',slots:{d:5},dec:2,rar:[125,115,110,105,100],val:[95,.32],rl:'Rating',reveal:'reel',syn:'group',stepMs:0,fan:['ZywOo','donk','m0NESY'],
+ cs2:{tile:'cs2',acc:'#F0A93E',primeChance:.2,slots:{d:5},dec:2,rar:[125,115,110,105,100],val:[95,.32],rl:'Rating',reveal:'reel',syn:'group',stepMs:0,fan:['ZywOo','donk','m0NESY'],
    groups:()=>TEAMS_CS2,mk:()=>{const p=buildP(TEAMS_CS2.map(([t,ps])=>[t,ps]),a=>({nick:a[0],role:a[1],cc:a[2],hl:a[3],hc:Math.round(a[3]*100)}));
      CS2_PRIMES.forEach(([nick,role,cc,r,team,peak,gk])=>p.push({id:p.length,nick,role,cc,hl:r,hc:Math.round(r*100),team,peak,gk,special:true}));return p;},
    tag:p=>TAG[p.team]||''},
@@ -1545,7 +1704,7 @@ function renderMatch2(){
   if(ANIM){clearTimeout(ANIM.to);ANIM=null;}UI.showRound=null;
   const g=G,res=g.res,st=g.streak||[0,0],D=SIMS[g.game](g.rost,g.sub,res.seed);
   const col=t=>`<section class="rcol ${t?'b':''}">${g.rost[t].map((id,i)=>{const p=P[id],bf=GM.syn==='group'?grpBuff(g.rost[t],id):0;
-      return `<div class="rrow ${rcls(p)}" id="p${t}-${i}" style="--i:${i}">${avatar(p,'sm')}<span class="n">${esc(pName(p))}<small>${bf?`<em class="bf">+${Math.round(bf*100)}%</em> `:''}${fmtR(p.hl)}, ${esc(roleName(p))}</small></span><b class="kd num">–</b></div>`;}).join('')}</section>`;
+      return `<div class="rrow ${rcls(p)}" id="p${t}-${i}" data-pid="${id}" data-t="${t}" tabindex="0" style="--i:${i}">${avatar(p,'sm')}<span class="n">${esc(pName(p))}<small>${bf?`<em class="bf">+${Math.round(bf*100)}%</em> `:''}${fmtR(p.hl)}, ${esc(roleName(p))}</small></span><b class="kd num">–</b></div>`;}).join('')}</section>`;
   const hpbar=GK==='anime'||GK==='marvel'?`<div class="hp" id="hp"><i id="hp0"></i><i id="hp1"></i></div>`:'';
   $('#app').innerHTML=`<main class="wrap wide">
     <div class="top"><button class="icon" data-act="${g.mode==='online'?'leave':'home'}" aria-label="${T('quit')}">×</button><h2>${T('match_'+GK)}</h2><button class="linkbtn" data-act="skip" id="skipbtn">${T('skip')}</button></div>
@@ -1621,6 +1780,7 @@ function botValue(g,t,id){
   if(GK==='cs2'){
     if(isIGL(p)&&leaderOf(g.rost[t])==null)v+=2.5;   // first IGL lifts the whole team
     if(p.hc<UNDERDOG)v+=.8;                         // clutch underdog
+    if(fitsComp(g.rost[t],id))v+=g.rost[t].length===4?2:.6;   // keeps the IGL/AWP/Entry/2 Rifler line-up possible
   }else if(GK==='nba'&&!g.rost[t].some(i=>P[i].role===p.role))v+=1.2;
   else if(GK==='fifa'&&p.role==='GK'&&!g.rost[t].some(i=>P[i].role==='GK'))v+=4;
   else if(GK==='food'&&!g.rost[t].some(i=>P[i].cat===p.cat))v+=1;
@@ -1670,8 +1830,10 @@ function render(){
   if(ANIM&&SCREEN!=='match'){cancelAnimationFrame(ANIM.raf);clearTimeout(ANIM.to);ANIM=null;}
   if(SCREEN!=='draft')document.body.dataset.side=SCREEN==='match'?'n':'';
   if(!UI.homeMap)UI.homeMap=MAPKEYS[Math.floor(Math.random()*MAPKEYS.length)];
-  setMap(SCREEN==='hub'?'hub':(SCREEN==='draft'||SCREEN==='match')&&G&&MAPART[G.map]?G.map:GK==='cs2'?UI.homeMap:GK);
-  ({hub:renderHub,home:renderHome,cpu:renderCpuSetup,local:renderLocalSetup,online:renderOnlineSetup,lobby:renderLobby,draft:renderDraft,match:renderMatch})[SCREEN]();
+  setMap(SCREEN==='hub'||SCREEN==='guide'?'hub':(SCREEN==='draft'||SCREEN==='match')&&G&&MAPART[G.map]?G.map:GK==='cs2'?UI.homeMap:GK);
+  hideTip();if(SCREEN==='hub'||SCREEN==='home')UI.playScreen=SCREEN;
+  ({hub:renderHub,home:renderHome,cpu:renderCpuSetup,local:renderLocalSetup,online:renderOnlineSetup,pubseek:renderPubSeek,lobby:renderLobby,draft:renderDraft,match:renderMatch,guide:renderGuide})[SCREEN]();
+  renderBar();
   if(UI.lastScreen!==SCREEN){UI.lastScreen=SCREEN;const w=$('#app .wrap');if(w&&!reduceMotion())w.classList.add('enter');}
 }
 function tickNum(el,from,to,ms,fmt){
@@ -1702,7 +1864,6 @@ const ICON={
 function renderHub(){
   const n=myName();
   $('#app').innerHTML=`<main class="wrap wide hub">
-    <div class="langsw" role="group" aria-label="${T('lang')} / Language"><button data-act="lang" data-l="mn" aria-pressed="${LANG()==='mn'}">MN</button><button data-act="lang" data-l="en" aria-pressed="${LANG()==='en'}">EN</button></div>
     <header class="hero hubhero"><h1 class="brand">${LOGO}Draftly</h1><p class="lede">${T('hubLede')}</p></header>
     <section class="me"><label for="pname" class="lbl">${T('yourName')}</label>
       <input id="pname" maxlength="16" value="${esc(n)}" placeholder="${T('namePh')}" autocomplete="off"></section>
@@ -1784,6 +1945,7 @@ function hintsFor(g,id){
   if(GK==='cs2'){
     if(isIGL(p))out.push(leaderOf(r)==null?['good',T('iglHint',Math.round(LEAD*100))]:['',T('iglHave')]);
     if(p.hc<UNDERDOG)out.push(['good',T('clutchHint',Math.round(CLUTCH*100))]);
+    if(r.length>=2&&fitsComp(r,id))out.push(['good',r.length===4?T('compDone',Math.round(COMP*100)):T('compFit',p.role)]);
   }else if(GK==='nba'){
     if(!r.some(i=>P[i].role===p.role))out.push(['good',T('nbaNeed',p.role)]);
     if(p.role==='PG'&&!r.some(i=>P[i].role==='PG'))out.push(['good',T('nbaPG')]);
@@ -1820,14 +1982,14 @@ function renderDraft(){
     return `<section class="mgr ${t?'b':''} ${g.actor===t?'on':''} ${ns>=0?'hit':''}">
       <div class="hd"><span class="nm"><span class="nmt">${esc(g.names[t])}</span>${stk((g.streak||[])[t])}</span><span class="cash num ${g.money[t]?'':'zero'}" data-t="${t}">$${prev?prev.m[t]:g.money[t]}</span></div>
       <div class="seats" aria-label="${T('seatsAria',n)}">${seatsHtml(g,t,ns)}</div>
-      <div class="who">${n?g.rost[t].map(id=>{const q=P[id],bf=buffOf(g.rost[t],id);return `<span class="rp ${rcls(q)}">${avatar(q,'xs')}<i>${esc(pName(q))}</i>${bf?`<em class="bf">+${Math.round(bf*100)}%</em>`:''}<b class="num">${fmtR(q.hl)}</b></span>`;}).join(''):`<span class="muted">${T('empty')}</span>`}</div>
+      <div class="who">${n?g.rost[t].map(id=>{const q=P[id],bf=buffOf(g.rost[t],id);return `<span class="rp ${rcls(q)}" data-pid="${id}" data-t="${t}" tabindex="0">${avatar(q,'xs')}<i>${esc(pName(q))}</i>${bf?`<em class="bf">+${Math.round(bf*100)}%</em>`:''}<b class="num">${fmtR(q.hl)}</b></span>`;}).join(''):`<span class="muted">${T('empty')}</span>`}</div>
       <div class="meta">${T('metaAvg')} <b class="num">${n?rosterAvg(g.rost[t]).toFixed(3):'—'}</b>${canGiftGame()?`, ${T('metaGive')} ${g.gives[t]}`:''}${g.skips&&(slotsLeft(g,1-t)===0||g.skips[t]<SKIPS)?`, ${T('metaSkip')} ${g.skips[t]}`:''}</div></section>`;};
   const goat=fresh&&showId!=null&&showId===g.cur&&!!P[showId].special;
   let card='';
   if(showId!=null){const p=P[showId],s=g.phase==='sold'?g.sold:null;
     const fx=s?(s.how==='skip'?'drop':'fly'+s.t):(fresh&&!reel&&motion?'land':'');
     card=`<div class="stage ${reel?'reeling rs-'+GM.reveal:''}" id="stage">
-      <article class="pcard ${rcls(p)} ${fx}" aria-label="${esc(pName(p))}, rating ${fmtR(p.hl)}">
+      <article class="pcard ${rcls(p)} ${fx}" data-pid="${p.id}" tabindex="0" aria-label="${esc(pName(p))}, rating ${fmtR(p.hl)}">
         <div class="pc-rating"><b class="num">${fmtR(p.hl)}</b><small>${T('rl_'+GK)}</small></div>
         <span class="chip pc-role role-${String(p.role).replace('/','')}">${esc(roleName(p))}</span>
         ${avatar(p,'lg')}
@@ -1877,7 +2039,7 @@ function renderDraft(){
   const bk=g.gid+'|'+g.cardNo,bump=g.phase==='bid'&&UI.bid&&UI.bid.k===bk&&UI.bid.v!==g.bid;
   UI.bid={k:bk,v:g.phase==='bid'?g.bid:0};
   const head=g.log[0]?g.gid+'|'+g.log.length+'|'+g.log[0].id+'|'+g.log[0].how:'',newHead=head&&head!==UI.logHead;UI.logHead=head;
-  const log=g.log.map((l,i)=>`<li class="${l.how==='skip'?'skip':l.t?'b':''} ${i===0&&newHead?'new':''} ${rcls(P[l.id])}"><span class="rt">${fmtR(P[l.id].hl)}</span><span>${esc(pName(P[l.id]))}${l.how==='skip'?': '+T('logSkip',esc(g.names[l.t])):' → '+esc(g.names[l.t])+(l.how==='give'?T('logFree',GIFT_FEE):'')}</span><span class="pr">${l.how==='skip'?'':'$'+l.price}</span></li>`).join('');
+  const log=g.log.map((l,i)=>`<li class="${l.how==='skip'?'skip':l.t?'b':''} ${i===0&&newHead?'new':''} ${rcls(P[l.id])}" data-pid="${l.id}"><span class="rt">${fmtR(P[l.id].hl)}</span><span>${esc(pName(P[l.id]))}${l.how==='skip'?': '+T('logSkip',esc(g.names[l.t])):' → '+esc(g.names[l.t])+(l.how==='give'?T('logFree',GIFT_FEE):'')}</span><span class="pr">${l.how==='skip'?'':'$'+l.price}</span></li>`).join('');
   const late=fresh&&motion&&g.cur!=null;
   const goatAt=reelDelay+(reel?REVEAL_MS:0);
   $('#app').innerHTML=`<main class="wrap wide">
@@ -1891,7 +2053,7 @@ function renderDraft(){
       ${log?`<div class="logwrap"><div class="lbl" style="margin-bottom:8px">${T('recent')}</div><ul class="log">${log}</ul></div>`:''}
     </div>
   </main>
-  ${goat?`<div class="goatov" id="goat" data-act="goat-x" style="--gd:${goatAt}ms"><div class="goat-in"><span class="goat-k">${esc(P[showId].gk||'THE GOAT')}</span>${miniCard(P[showId])}<b>${esc(pName(P[showId]))}</b><span class="muted">${esc(P[showId].peak)}${P[showId].max?`, ${P[showId].pts}/${P[showId].max} ${T('ptsShort')}`:''}, ${T('rl_'+GK)} ${fmtR(P[showId].hl)}</span><span class="goat-c">${T('goatChance',Math.round(PRIME_CHANCE*100))}</span></div></div>`:''}
+  ${goat?`<div class="goatov" id="goat" data-act="goat-x" style="--gd:${goatAt}ms"><div class="goat-in"><span class="goat-k">${esc(P[showId].gk||'THE GOAT')}</span>${miniCard(P[showId])}<b>${esc(pName(P[showId]))}</b><span class="muted">${esc(P[showId].peak)}${P[showId].max?`, ${P[showId].pts}/${P[showId].max} ${T('ptsShort')}`:''}, ${T('rl_'+GK)} ${fmtR(P[showId].hl)}</span><span class="goat-c">${T('goatChance',Math.round(primeChance()*100))}</span></div></div>`:''}
   ${g.cardNo===1&&flipLeft>0&&g.phase==='offer'?`<div class="flip" id="flip"><div><div class="coin"></div><h2>${T('firstOpen',nameC(g.first))}</h2><p class="muted">${T('thenAlt')}</p></div></div>`:''}`;
   if(g.cardNo===1&&flipLeft>0)setTimeout(()=>{const f=$('#flip');if(f)f.remove();},flipLeft+250);
   if(bump){const el=$('.price .amt');if(el)el.classList.add('bump');}
@@ -1947,7 +2109,7 @@ function renderMatch(){
   if(ANIM){clearTimeout(ANIM.to);ANIM=null;}
   const g=G,res=g.res,st=g.streak||[0,0],RR=res.rounds.map(decR);
   const col=t=>`<section class="rcol ${t?'b':''}">${g.rost[t].map((id,i)=>{const p=P[id],bf=buffOf(g.rost[t],id);
-      return `<div class="rrow ${rcls(p)}" id="p${t}-${i}" style="--i:${i}">${avatar(p,'sm')}<span class="n">${esc(pName(p))}<small>${bf?`<em class="bf">+${Math.round(bf*100)}%</em> `:''}${fmtR(p.hl)}, ${esc(p.team)}</small></span><b class="kd num">0-0</b></div>`;}).join('')}</section>`;
+      return `<div class="rrow ${rcls(p)}" id="p${t}-${i}" data-pid="${id}" data-t="${t}" tabindex="0" style="--i:${i}">${avatar(p,'sm')}<span class="n">${esc(pName(p))}<small>${bf?`<em class="bf">+${Math.round(bf*100)}%</em> `:''}${fmtR(p.hl)}, ${esc(p.team)}</small></span><b class="kd num">0-0</b></div>`;}).join('')}</section>`;
   $('#app').innerHTML=`<main class="wrap wide">
     <div class="top"><button class="icon" data-act="${g.mode==='online'?'leave':'home'}" aria-label="${T('quit')}">×</button><h2>${T('match')}</h2><button class="linkbtn" data-act="skip" id="skipbtn">${T('skip')}</button></div>
     <div class="board">
@@ -2091,23 +2253,28 @@ function renderOnlineSetup(){
   const n=DB.last.p1||'',k=NET.kind;let body;
   if(k===undefined){body=`<div class="notice">${T('checking')}</div>`;detectTransport().then(()=>{if(SCREEN==='online')render();});}
   else if(k===null)body=`<div class="notice">${T('noOnline')}</div>`;
-  else body=`<section class="card"><p class="who-line">${T('gameL')}: <b>${T('g_'+GK)}${gsub()}</b></p><p class="who-line">${T('player')}: <b>${esc(n)}</b></p></section>
+  else{const pub=(UI.netMode||DB.last.netMode||'public')==='public';
+    body=`<section class="card"><p class="who-line">${T('gameL')}: <b>${T('g_'+GK)}${gsub()}</b></p><p class="who-line">${T('player')}: <b>${esc(n)}</b></p></section>
+    <div class="seg two" role="group" aria-label="${T('roomType')}"><button data-act="netmode" data-m="public" aria-pressed="${pub}">${T('pubTab')}</button><button data-act="netmode" data-m="private" aria-pressed="${!pub}">${T('privTab')}</button></div>`+
+    (pub?`<section class="card"><p class="muted">${T('pubAbout')}</p><button class="btn" data-act="pub-go">${T('pubFind')}</button></section>`:`
     <button class="btn" data-act="create-room">${T('createRoom')}</button>
     <div class="or">${T('orJoin')}</div>
     <section class="card"><div class="field"><label for="code">${T('roomCode')}</label><input id="code" class="code-in" maxlength="4" value="${esc(UI.joinCode)}" placeholder="ABCD" autocomplete="off" autocapitalize="characters"></div>
-      <button class="btn ghost" data-act="join-room">${T('join')}</button></section>`;
+      <button class="btn ghost" data-act="join-room">${T('join')}</button></section>`);}
   $('#app').innerHTML=`<main class="wrap">${topBar(T('online'))}${body}</main>`;
 }
 async function netOpen(role,code){
-  const name=myName()||T('player');
+  const name=myName()||T('player');NET.autoAt=0;
+  if(!NET.public)pubStop();
   Object.assign(NET,{role,code,name,team:role==='host'?0:1,opp:null,oppSeen:0,gr:false,ready:false,conn:false,lastSt:0,lastHi:0,pending:null,full:false,gotSt:0,openedAt:Date.now(),noHostShown:false,oppOn:false});
   G=null;
   try{NET.tr=NET.kind==='room'?await roomTransport(code,netMsg,netStatus):wsTransport(code,netMsg,netStatus);}
   catch(e){NET.tr=null;toast(T('connFail'));return;}
+  if(NET.public&&role==='guest')NET.ready=true;   // public rooms: the guest is ready on arrival
   go('lobby');
 }
 function netStatus(c){const was=NET.conn;NET.conn=c;if(c&&!was){NET.lastHi=0;NET.lastSt=0;}refreshNet();}
-function netLeave(){if(NET.tr)NET.tr.close();NET.tr=null;NET.role=null;G=null;go('home');}
+function netLeave(){pubStop();NET.public=false;NET.autoAt=0;if(NET.tr)NET.tr.close();NET.tr=null;NET.role=null;G=null;go('home');}
 function oppStatus(){
   if(!NET.tr)return '';if(!NET.conn)return `<span style="color:var(--loss)">${T('connLost')}</span>`;if(!NET.opp)return '';
   return Date.now()-NET.oppSeen<8000?`<span style="color:var(--money)">${T('oppOnline')}</span>`:`<span style="color:var(--loss)">${T('oppLag')}</span>`;
@@ -2173,6 +2340,7 @@ function netTick(){
     if(NET.ready!==NET.gr&&now-NET.lastReady>1500)sendReady();
   }
   const on=!!(NET.oppSeen&&now-NET.oppSeen<8000);if(on!==NET.oppOn){NET.oppOn=on;refreshNet();}
+  pubTick(now);
 }
 function refreshNet(){
   if(SCREEN==='lobby'){render();return;}
@@ -2190,14 +2358,14 @@ function renderLobby(){
   else{
     const gReady=host?NET.gr:NET.ready;
     const seatB=guestName?`<b>${esc(guestName)}</b>${gReady?`<span class="ok">${T('ready')}</span>`:`<span class="wait">${T('notReady')}</span>`}`:`<b class="muted">${T('waiting')}</b><span class="wait">${T('sendCode')}</span>`;
-    const btn=host?`<button class="btn" data-act="host-start" ${opp&&NET.gr?'':'disabled'}>${T('startBtn')}</button><p class="stat">${!opp?T('waitFriend'):NET.gr?T('allReady'):T('waitGuest')}</p>`
+    const btn=host?`<button class="btn" data-act="host-start" ${opp&&NET.gr?'':'disabled'}>${T('startBtn')}</button><p class="stat">${NET.autoAt?T('autoStart'):!opp?(NET.public?T('pubWait'):T('waitFriend')):NET.gr?T('allReady'):T('waitGuest')}</p>`
       :`<button class="btn ${NET.ready?'ghost':''}" data-act="ready">${NET.ready?T('unready'):T('ready')}</button><p class="stat">${NET.ready?T('waitHost'):T('readySub')}</p>`;
     main=`<div class="lseats"><div class="lseat"><span class="lbl">${T('hostSide')}</span><b>${esc(hostName)}</b><span class="wait">${host?T('you'):(oppOn?T('onlineDot'):'')}</span></div>
       <div class="lseat b"><span class="lbl">${T('guestSide')}</span>${seatB}</div></div>${btn}`;
   }
   $('#app').innerHTML=`<main class="wrap">${topBar(T('onlineRoom')+': '+T('g_'+GK)+gsub(),'leave')}
-    <div class="codebox"><span class="lbl">${T('roomCode')}</span><span class="led num">${esc(NET.code)}</span>
-      ${host?`<span class="muted" style="font-size:13px;text-align:center">${T('codeHint')}</span>`:''}
+    <div class="codebox">${NET.public?`<span class="pubtag">${T('pubTab')}</span>`:''}<span class="lbl">${T('roomCode')}</span><span class="led num">${esc(NET.code)}</span>
+      ${host?`<span class="muted" style="font-size:13px;text-align:center">${NET.public&&!opp?T('pubWait'):T('codeHint')}</span>`:''}
       ${host&&link?`<button class="btn ghost" data-act="copy" style="min-height:40px;padding:8px 14px">${T('copyLink')}</button>`:''}</div>
     ${main}<p class="net ${NET.conn?'':'bad'}">${NET.conn?T('srvOk'):T('srvWait')}</p></main>`;
 }
@@ -2207,14 +2375,143 @@ function hostStart(){
   hostBroadcast();go('draft');
 }
 
+
+/* ================= theme + top bar ================= */
+function applyTheme(){const t=DB.last.theme==='light'?'light':'dark';document.documentElement.dataset.theme=t;
+  const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=t==='light'?'#F2F4F8':'#0E121B';}
+const ICON_SUN='<svg viewBox="0 0 24 24" class="ic"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>';
+const ICON_MOON='<svg viewBox="0 0 24 24" class="ic"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>';
+function renderBar(){
+  const el=$('#appbar');if(!el)return;
+  const show=SCREEN!=='draft'&&SCREEN!=='match';el.hidden=!show;if(!show)return;
+  const light=document.documentElement.dataset.theme==='light',g=SCREEN==='guide';
+  el.innerHTML=`<div class="bar-in"><button class="brandbtn" data-act="logo" aria-label="${T('logoA')}" title="${T('logoA')}">${LOGO}<span>Draftly</span></button>
+    <nav class="tabs" aria-label="${T('tabsA')}"><button data-act="tab" data-tab="play" ${g?'':'aria-current="page"'}>${T('tabPlay')}</button><button data-act="tab" data-tab="guide" ${g?'aria-current="page"':''}>${T('tabGuide')}</button></nav>
+    <div class="bar-r"><button class="icon sm" data-act="theme" aria-label="${light?T('toDark'):T('toLight')}" title="${light?T('toDark'):T('toLight')}">${light?ICON_MOON:ICON_SUN}</button>
+      <div class="langsw" role="group" aria-label="${T('lang')} / Language"><button data-act="lang" data-l="mn" aria-pressed="${LANG()==='mn'}">MN</button><button data-act="lang" data-l="en" aria-pressed="${LANG()==='en'}">EN</button></div></div></div>`;
+}
+/* ================= guide ================= */
+function renderGuide(){
+  const back=[GK,GM.sub];
+  const games=GAME_KEYS.map(k=>{useGame(k,DB.last['sub_'+k]);const list=rulesList(false);
+    return `<details class="gcard" style="--acc:${GM.acc}"><summary><span class="ticon">${ICON[k]}</span><span class="tt"><b>${T('g_'+k)}</b><small>${T('gsub_'+k,P.filter(p=>!p.special).length)}</small></span></summary>
+      <ol>${list.map(li=>`<li>${li}</li>`).join('')}</ol></details>`;}).join('');
+  useGame(back[0],back[1]);
+  $('#app').innerHTML=`<main class="wrap guide">
+    <header class="ghead"><h1>${T('tabGuide')}</h1><p class="lede">${T('guideLede')}</p></header>
+    <section class="gsec"><h2>${T('gDraft')}</h2><ol class="steps">${T('guideSteps').map(li=>`<li>${li}</li>`).join('')}</ol></section>
+    <section class="gsec"><h2>${T('gGames')}</h2><div class="gcards">${games}</div></section>
+    <section class="gsec"><h2>${T('gTips')}</h2><ul class="tips">${T('guideTips').map(li=>`<li>${li}</li>`).join('')}</ul></section>
+  </main>`;
+}
+/* ================= player detail (hover, focus or tap) ================= */
+function tipHtml(el){
+  const id=+el.dataset.pid,p=P[id];if(!p)return '';
+  let t=el.dataset.t!=null?+el.dataset.t:-1,ids=null,maybe=false;
+  if(G&&G.rost){if(t<0)t=G.rost[0].includes(id)?0:G.rost[1].includes(id)?1:-1;
+    if(t>=0)ids=G.rost[t];
+    else if(SCREEN==='draft'&&G.phase!=='match'){const me=myTeam();if(canHold(G,me,id)){ids=G.rost[me].concat(id);maybe=true;}}}
+  const parts=ids?buffParts(ids,id):[],tot=parts.reduce((a,x)=>a+x[1],0),pct=v=>'+'+Math.round(v*100)+'%';
+  const lab=([k])=>k==='team'?T('tipTeam',esc(teamName(p)),teamCounts(ids)[p.team]):k==='igl'?T('tipIgl'):T('tipComp');
+  const meta=[teamName(p),roleName(p),p.cc].filter(Boolean).map(esc).join(', ');
+  const notes=[];
+  if(p.special)notes.push(esc(p.peak)+(p.max?`, ${p.pts}/${p.max} ${T('ptsShort')}`:'')+`. ${T('dropChance',Math.round(primeChance()*100))}`);
+  if(GK==='cs2'){if(isIGL(p))notes.push(T('tipLead',Math.round(LEAD*100)));if(p.hc<UNDERDOG)notes.push(T('clutchHint',Math.round(CLUTCH*100)));}
+  if(GK==='beer'&&p.cc==='MN')notes.push(T('beerLocal'));
+  if(GK==='f1'&&p.pts!=null&&!p.max)notes.push(`${p.pts} ${T('ptsShort')}`);
+  const who=t>=0&&G?`<p class="tip-who ${t?'tb':'ta'}">${T('tipOwner',esc(G.names[t]))}</p>`:maybe?`<p class="tip-who">${T('tipIf')}</p>`:'';
+  const rows=ids?(parts.length?parts.map(x=>`<li><span>${lab(x)}</span><b>${pct(x[1])}</b></li>`).join('')+(parts.length>1?`<li class="tot"><span>${T('tipTotal')}</span><b>${pct(tot)}</b></li>`:'')
+    :`<li class="none"><span>${T('tipNone')}</span></li>`):'';
+  return `<div class="tip-h ${rcls(p)}">${avatar(p,'sm')}<span class="tip-n"><b>${esc(pName(p))}</b><small>${meta}</small></span><span class="tip-r num">${fmtR(p.hl)}<small>${T('rl_'+GK)}</small></span></div>
+    ${who}${ids?`<ul class="tip-b">${rows}</ul><p class="tip-e">${T('tipEff')}: <b class="num">${fmtR(p.hl*(1+tot))}</b></p>`:''}
+    ${notes.length?`<ul class="tip-x">${notes.map(n=>`<li>${n}</li>`).join('')}</ul>`:''}`;
+}
+const TIP={a:null};
+function showTip(a){
+  const tip=$('#tip');if(!tip||!a.isConnected)return;
+  const h=tipHtml(a);if(!h)return;TIP.a=a;tip.innerHTML=h;tip.hidden=false;
+  const r=a.getBoundingClientRect(),w=tip.offsetWidth,ht=tip.offsetHeight,vw=innerWidth,vh=innerHeight;
+  let x=Math.min(vw-w-8,Math.max(8,r.left+r.width/2-w/2)),y=r.top-ht-10;
+  if(y<8)y=Math.min(vh-ht-8,r.bottom+10);
+  tip.style.left=x+'px';tip.style.top=y+'px';
+}
+function hideTip(){const tip=$('#tip');if(tip)tip.hidden=true;TIP.a=null;}
+function tipClick(e){   // touch: tap a player to open their card, tap anywhere else to close it
+  if(e.target.closest('#tip'))return;
+  const a=e.target.closest('[data-pid]'),touch=e.pointerType==='touch'||e.pointerType==='pen';
+  if(a&&!e.target.closest('[data-act]')){if(touch){if(TIP.a===a)hideTip();else showTip(a);}return;}
+  if(TIP.a)hideTip();
+}
+document.addEventListener('pointerover',e=>{if(e.pointerType==='touch')return;const a=e.target.closest('[data-pid]');if(a&&a!==TIP.a)showTip(a);});
+document.addEventListener('pointerout',e=>{if(e.pointerType==='touch')return;const a=e.target.closest('[data-pid]');if(a&&a===TIP.a&&!a.contains(e.relatedTarget))hideTip();});
+document.addEventListener('pointerdown',e=>{TIP.pd={type:e.pointerType,at:Date.now()};},true);
+document.addEventListener('focusin',e=>{   // keyboard focus opens it; a touch tap is handled by the click that follows
+  if(TIP.pd&&TIP.pd.type!=='mouse'&&Date.now()-TIP.pd.at<800)return;
+  const a=e.target.closest&&e.target.closest('[data-pid]');if(a)showTip(a);});
+document.addEventListener('focusout',e=>{if(e.target.closest&&e.target.closest('[data-pid]')===TIP.a)hideTip();});
+addEventListener('scroll',()=>{if(TIP.a)hideTip();},{passive:true,capture:true});
+
+/* ================= public rooms =================
+   Every game has a lobby channel. A host waiting in a public room announces it there every 2 s; someone who taps
+   "find a public room" listens for a moment and joins the oldest announced room, or opens one and waits. If two
+   people open rooms at the same time, the newer room joins the older one. */
+const PUB={tr:null,ads:new Map(),lastAd:0,since:0};
+const lobbyCode=()=>'LB'+String.fromCharCode(65+GAME_KEYS.indexOf(GK))+(GM.sub==='3x3'?'B':'A');
+const newRoomCode=()=>{let c;do c=rid(4,'ABCDEFGHJKLMNPQRSTUVWXYZ23456789');while(c.startsWith('LB'));return c;};
+const pubAds=()=>{const now=Date.now();return [...PUB.ads.values()].filter(a=>now-a.seen<7000&&a.game===GK&&a.sub===GM.sub&&a.pid!==PID).sort((a,b)=>a.since-b.since||(a.code<b.code?-1:1));};
+async function pubOpen(){
+  if(PUB.tr)return;PUB.ads.clear();
+  const onMsg=d=>{if(!d||typeof d!=='object')return;
+    if(d.t==='ad'&&/^[A-Z0-9]{4}$/.test(d.code||''))PUB.ads.set(d.code,{code:d.code,pid:d.pid,name:cleanName(d.name||''),game:d.game,sub:d.sub,since:+d.since||0,seen:Date.now()});
+    else if(d.t==='gone')PUB.ads.delete(d.code);
+    else if(d.t==='who')PUB.lastAd=0;};
+  try{PUB.tr=NET.kind==='room'?await roomTransport(lobbyCode(),onMsg,()=>{}):wsTransport(lobbyCode(),onMsg,()=>{});}catch(e){PUB.tr=null;}
+}
+function pubStop(){if(PUB.tr){if(NET.role==='host'&&NET.code)PUB.tr.send({t:'gone',code:NET.code});PUB.tr.close();}PUB.tr=null;PUB.ads.clear();UI.pubState=null;}
+async function goPublic(){
+  if(!needName())return;
+  if(await detectTransport()===null){toast(T('noOnline'));return;}
+  pubStop();NET.public=true;UI.pubState='seek';go('pubseek');
+  await pubOpen();if(!PUB.tr){toast(T('connFail'));UI.pubState=null;go('online');return;}
+  setTimeout(()=>{if(PUB.tr)PUB.tr.send({t:'who',pid:PID});},350);
+  setTimeout(()=>{if(UI.pubState!=='seek')return;const ads=pubAds();
+    if(ads.length){UI.pubState='join';const c=ads[0].code;pubStop();NET.public=true;netOpen('guest',c);}
+    else{UI.pubState='host';PUB.since=Date.now();netOpen('host',newRoomCode());}},2300);
+}
+function pubTick(now){
+  if(!NET.public)return;
+  if(NET.role==='guest'&&NET.full&&!UI.pubRetry){UI.pubRetry=true;setTimeout(()=>{UI.pubRetry=false;if(NET.public&&NET.full){if(NET.tr)NET.tr.close();NET.tr=null;goPublic();}},900);return;}
+  if(NET.role!=='host'||!PUB.tr)return;
+  const open=!NET.opp||(SCREEN==='lobby'&&!NET.oppOn);
+  if(open){
+    // someone else opened a room first: join theirs instead of both waiting
+    const older=pubAds().find(a=>a.since<PUB.since||(a.since===PUB.since&&a.code<NET.code));
+    if(older&&!NET.opp){const c=older.code;PUB.tr.send({t:'gone',code:NET.code});pubStop();if(NET.tr)NET.tr.close();NET.tr=null;NET.public=true;netOpen('guest',c);return;}
+    if(now-PUB.lastAd>2000){PUB.tr.send({t:'ad',code:NET.code,pid:PID,name:NET.name,game:GK,sub:GM.sub,since:PUB.since});PUB.lastAd=now;}
+  }else if(PUB.lastAd){PUB.tr.send({t:'gone',code:NET.code});PUB.lastAd=0;}
+  // public rooms start on their own once the guest is in and ready
+  if(SCREEN==='lobby'&&NET.opp&&NET.gr&&!G){if(!NET.autoAt){NET.autoAt=now+2500;render();}else if(now>=NET.autoAt){NET.autoAt=0;hostStart();}}
+  else if(NET.autoAt&&!(NET.opp&&NET.gr)){NET.autoAt=0;if(SCREEN==='lobby')render();}
+}
+function renderPubSeek(){
+  $('#app').innerHTML=`<main class="wrap">${topBar(T('online'),'pub-cancel')}
+    <section class="card seek"><span class="spin" aria-hidden="true"></span><h2>${T('pubSeek')}</h2><p class="muted">${T('pubSeekSub',T('g_'+GK)+gsub())}</p>
+      <button class="btn ghost" data-act="pub-cancel">${T('cancel')}</button></section></main>`;
+}
+
 /* ================= modals ================= */
 function modal(html){$('#modal').innerHTML=`<div class="modal" data-act="close-bg"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`;const b=$('#modal .sheet button');if(b)b.focus();}
 function closeModal(){$('#modal').innerHTML='';}
-function rulesModal(){
-  const x={a:Math.round(duelP(1.3,1)*100),b:Math.round(duelP(1.1,1)*100),lead:Math.round(LEAD*100),clutch:Math.round(CLUTCH*100),prime:Math.round(PRIME_CHANCE*100),pr:PRIMES.length?fmtR(P[PRIMES[0]].hl):''};
-  const list=GK==='cs2'?T('rules',x):T('rulesCommon',GIFT_FEE,canGiftGame()).concat(T('rules_'+GK));
+// full: include the draft basics that every game shares (the guide shows those once, at the top)
+function rulesList(full=true){
+  const x={a:Math.round(duelP(1.3,1)*100),b:Math.round(duelP(1.1,1)*100),lead:Math.round(LEAD*100),clutch:Math.round(CLUTCH*100),prime:Math.round(primeChance()*100),pr:PRIMES.length?fmtR(P[PRIMES[0]].hl):''};
+  const list=GK==='cs2'?T('rules',x).slice(full?0:6):(full?T('rulesCommon',GIFT_FEE,canGiftGame()):[]).concat(T('rules_'+GK));
   if(GK==='f1')list.push(T('legendF1'));
   if(PRIMES.length)list.push(T('rareRule',PRIMES.map(id=>`${pName(P[id])} ${fmtR(P[id].hl)}`).join(', '),x.prime));
+  return list;
+}
+function rulesModal(){
+  const list=rulesList();
   modal(`<h2>${T('howTo')}: ${T('g_'+GK)}</h2><ol>${list.map(li=>`<li>${li}</li>`).join('')}</ol>
   <button class="btn" data-act="close">${T('gotIt')}</button>`);
 }
@@ -2231,13 +2528,13 @@ function fillPlayers(){
   const q=(($('#psearch')||{}).value||'').trim().toLowerCase();
   const mine=G&&G.rost?G.rost:[[],[]];
   const own=id=>mine[0].includes(id)?0:mine[1].includes(id)?1:-1;
-  const row=p=>{const o=own(p.id);return `<li class="prow ${rcls(p)}">${avatar(p,'sm')}<span class="n">${esc(pName(p))}<small>${[teamName(p),roleName(p),p.cc].filter(Boolean).map(esc).join(', ')}</small></span>${o>=0&&G?`<span class="own ${o?'tb':'ta'}">${esc(G.names[o])}</span>`:'<span></span>'}<b class="num">${fmtR(p.hl)}</b></li>`;};
+  const row=p=>{const o=own(p.id);return `<li class="prow ${rcls(p)}" data-pid="${p.id}" tabindex="0">${avatar(p,'sm')}<span class="n">${esc(pName(p))}<small>${[teamName(p),roleName(p),p.cc].filter(Boolean).map(esc).join(', ')}</small></span>${o>=0&&G?`<span class="own ${o?'tb':'ta'}">${esc(G.names[o])}</span>`:'<span></span>'}<b class="num">${fmtR(p.hl)}</b></li>`;};
   const list=P.filter(p=>!p.special&&(!q||p.nick.toLowerCase().includes(q)||(p.en||'').toLowerCase().includes(q)||teamName(p).toLowerCase().includes(q)));
   let html='';
   if(UI.psort==='rating')html=`<ul>${list.slice().sort((a,b)=>b.hc-a.hc).map(row).join('')}</ul>`;
   else TEAMS.forEach(([team])=>{const ps=list.filter(p=>p.team===team);if(ps.length)html+=`<h3>${esc(grpName(team))}</h3><ul>${ps.map(row).join('')}</ul>`;});
   const rare=PRIMES.map(id=>P[id]).sort((a,b)=>b.hc-a.hc).filter(p=>!q||'prime goat legend'.includes(q)||p.nick.toLowerCase().includes(q)||teamName(p).toLowerCase().includes(q));
-  if(rare.length)html+=`<h3>${T('rare')}</h3><ul>${rare.map(p=>row(p).replace('</small>',`, ${T('dropChance',Math.round(PRIME_CHANCE*100))}</small>`)).join('')}</ul>`;
+  if(rare.length)html+=`<h3>${T('rare')}</h3><ul>${rare.map(p=>row(p).replace('</small>',`, ${T('dropChance',Math.round(primeChance()*100))}</small>`)).join('')}</ul>`;
   el.innerHTML=html||`<p class="muted" style="padding:12px 4px">${T('noneFound')}</p>`;
 }
 function quitModal(){modal(`<h2>${T('quitQ')}</h2><p class="muted">${T('quitSub')}</p>
@@ -2245,12 +2542,20 @@ function quitModal(){modal(`<h2>${T('quitQ')}</h2><p class="muted">${T('quitSub'
 
 /* ================= events ================= */
 document.addEventListener('click',e=>{
+  tipClick(e);
   const b=e.target.closest('[data-act]');if(!b)return;
   const a=b.dataset.act;
   if(a==='close-bg'){if(e.target===b)closeModal();return;}
   switch(a){
     case 'nav':if(needName())go(b.dataset.to);break;
     case 'hub':G=null;go('hub');break;
+    case 'logo':location.reload();break;
+    case 'tab':if(NET.tr&&(SCREEN==='lobby'||SCREEN==='pubseek'))netLeave();
+      if(b.dataset.tab==='guide')go('guide');else{G=null;go(UI.playScreen||'hub');}break;
+    case 'theme':DB.last.theme=document.documentElement.dataset.theme==='light'?'dark':'light';saveDB();applyTheme();renderBar();break;
+    case 'netmode':UI.netMode=b.dataset.m;DB.last.netMode=UI.netMode;saveDB();render();break;
+    case 'pub-go':goPublic();break;
+    case 'pub-cancel':pubStop();go('online');break;
     case 'game':useGame(b.dataset.g,DB.last['sub_'+b.dataset.g]);DB.last.game=GK;saveDB();UI.lastScreen=null;go('home');break;
     case 'nbasub':useGame('nba',b.dataset.s);DB.last.sub_nba=GM.sub;saveDB();document.querySelectorAll('[data-act="nbasub"]').forEach(x=>x.setAttribute('aria-pressed',x===b));{const r=$('#recn');if(r)r.innerHTML=recHtml(recOf(myName()));}break;
     case 'home':G=null;go('home');break;
@@ -2270,9 +2575,9 @@ document.addEventListener('click',e=>{
     case 'skip':if(ANIM&&ANIM.skip)ANIM.skip();break;
     case 'round':if(UI.showRound)UI.showRound(+b.dataset.r);break;
     case 'again':again();break;
-    case 'create-room':netOpen('host',rid(4,'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'));break;
+    case 'create-room':pubStop();NET.public=false;netOpen('host',newRoomCode());break;
     case 'join-room':{const c=(($('#code')||{}).value||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
-      if(c.length!==4){toast(T('code4'));return;}UI.joinCode=c;netOpen('guest',c);break;}
+      if(c.length!==4){toast(T('code4'));return;}UI.joinCode=c;pubStop();NET.public=false;netOpen('guest',c);break;}
     case 'ready':NET.ready=!NET.ready;sendReady();if(SCREEN==='lobby')render();else refreshAfter();break;
     case 'host-start':hostStart();break;
     case 'leave':if(G&&G.phase!=='match')quitModal();else netLeave();break;
@@ -2303,9 +2608,10 @@ setInterval(()=>{
   if(SCREEN==='lobby'&&NET.role==='guest'&&!NET.gotSt&&Date.now()-NET.openedAt>6000&&!NET.noHostShown){NET.noHostShown=true;render();}
 },200);
 (function boot(){
-  document.documentElement.lang=LANG();
+  document.documentElement.lang=LANG();applyTheme();
   const m=location.hash.match(/^#room-([A-Za-z0-9]{4})$/);
   useGame(DB.last.game||'cs2',DB.last['sub_'+(DB.last.game||'cs2')]);
+  if(m)UI.netMode='private';   // an invite link carries a room code
   if(m&&myName()){UI.joinCode=m[1].toUpperCase();go('online');}else{if(m)UI.joinCode=m[1].toUpperCase();go('hub');}
   setTimeout(()=>{detectTransport();},0);
 })();
