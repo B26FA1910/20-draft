@@ -466,8 +466,19 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 .pcard.goat{box-shadow:inset 0 0 0 2px var(--rc),0 0 40px -6px color-mix(in srgb,var(--rc) 70%,transparent)}
 /* match */
 .strip{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;min-height:12px}
-.strip i{width:10px;height:12px;border-radius:3px;background:var(--t);animation:pop .4s var(--out)}
-.strip i.b{background:var(--ct)}
+.strip .rh{width:10px;height:12px;border-radius:3px;background:var(--t);padding:0;position:relative;animation:pop .4s var(--out)}
+.strip .rh.b{background:var(--ct)}
+.strip .rh::after{content:'';position:absolute;inset:-6px -2px}
+.strip .rh.sel{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)}
+.strip .rh:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.strip .hsep{width:2px;align-self:stretch;background:var(--line);margin:0 4px;border-radius:1px}
+.rhint{text-align:center;font-size:12.5px;color:var(--muted)}
+.duels .rwin{font-size:13px;font-weight:600;padding-top:4px;border-top:1px solid var(--line)}
+.feed2.all{max-height:360px;overflow-y:auto;overscroll-behavior:contain}
+.feed2.all .dl2{animation:none}
+.pcard.drop{animation:drop .6s ease-in .15s both}
+@keyframes drop{to{transform:translateY(24px) scale(.94);opacity:0}}
+.log li.skip{box-shadow:inset 3px 0 0 var(--line);color:var(--muted)}
 .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .mgrid .feed{grid-column:1/-1;grid-row:1}
 .feed{background:var(--panel);border-radius:16px;padding:10px 12px;box-shadow:inset 0 0 0 1px var(--line);display:flex;flex-direction:column;gap:8px;min-height:120px}
@@ -543,7 +554,7 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
   .mgrid .feed{grid-column:2;grid-row:1;min-height:320px}
   .led{font-size:64px}
   .board{padding:24px}
-  .strip i{width:14px;height:16px}
+  .strip .rh{width:14px;height:16px}
   .dl{font-size:14.5px}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.flip{display:none}.stage.reeling .pcard{visibility:visible}.stage.reeling .reel{display:none}.rrow,.dl{opacity:1}}
@@ -561,7 +572,7 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 // Anti-dumping rules (tested with a bot that gifts every weak card): a gift costs the giver GIFT_FEE, paid to the
 // receiver; you can only gift while the receiver has 3+ empty seats and at least as many as you (so never in F1);
 // and once one team is full the other gets the remaining cards in deck order, so nobody can fill you up and then cherry-pick.
-const BUDGET=20,GIFT_FEE=2,GIVES=2,GIFT_MIN=3,canGiftGame=()=>!GM.types&&SLOTS>=GIFT_MIN,TURN_MS=15000,FLIP_MS=1600,SOLD_MS=1400,AUTO_MS=1500,REVEAL_MS=1100;
+const BUDGET=20,GIFT_FEE=2,GIVES=2,GIFT_MIN=3,SKIPS=3,canGiftGame=()=>!GM.types&&SLOTS>=GIFT_MIN,TURN_MS=15000,FLIP_MS=1600,SOLD_MS=1400,AUTO_MS=1500,REVEAL_MS=1100;
 // [nick, role, country, HLTV Rating 3.0 for the player's time on that team (hltv.org team pages, Nov 2026)]
 let SLOTS=5;
 const TEAMS_CS2=[
@@ -586,16 +597,23 @@ const TEAMS_CS2=[
  ['Chinggis Warriors',[['ROUX','Rifler','MN',1.06],['sk0R','Rifler','MN',1.14],['fury5k','Rifler','MN',0.98],['tikuak','Rifler','MN',1.17],['cool4st','Rifler','MN',1.03]]],
  ['5star',[['ariucle','Rifler','MN',0.95],['clouden','Rifler','MN',1.03],['hoolig4n','Rifler','MN',1.07],['NEUZ','Rifler','MN',1.04],['rate','Rifler','MN',1.08]]],
  ['The Huns',[['Bart4k','Rifler','MN',0.95],['controlez','Rifler','MN',1.00],['bexyz','Rifler','MN',0.97],['Cozen','Rifler','MN',0.99],['DarkMeister','Rifler','MN',1.00]]]];
+// Rare CS2 cards: [nick, role, country, rating, team, peak, reveal title]. Legends use their HLTV rating at a peak big event
+// in the year HLTV ranked them #1 (Rating 1.0 back then): coldzera 1.38 at ESL One Cologne 2016 (Major MVP),
+// olofmeister 1.35 at FACEIT Stage 3 Finals 2015 (MVP), GeT_RiGhT 1.33 at EMS One Katowice 2014.
+const CS2_PRIMES=[['s1mple','AWP','UA',1.41,'NAVI 2021','NAVI 2021','THE GOAT'],
+ ['coldzera','Rifler','BR',1.38,'SK 2016','SK Gaming, ESL One Cologne 2016','LEGEND'],
+ ['olofmeister','Rifler','SE',1.35,'fnatic 2015','fnatic, FACEIT Stage 3 Finals 2015','LEGEND'],
+ ['GeT_RiGhT','Rifler','SE',1.33,'NiP 2014','NiP, EMS One Katowice 2014','LEGEND']];
 let P=[],TEAMS=[],PRIMES=[];   // set by useGame(); PRIMES = ids of the game's rare cards
-// Rare cards: players at their peak (CS2: s1mple, HLTV 2021 rating 1.41; FIFA: Messi and Ronaldo at their best FIFA rating, 94).
+// Rare cards: players at their peak (CS2_PRIMES, FIFA_PRIMES, F1_LEGENDS).
 // Each one shows up in PRIME_CHANCE of drafts, rolled separately.
 const PRIME_CHANCE=.05,GOAT_MS=2600;
-const pName=p=>(p.en&&DB.last.lang==='en'?p.en:p.nick)+(p.special?' (prime)':'');
+const pName=p=>(p.en&&DB.last.lang==='en'?p.en:p.nick)+(p.special?` (${p.sfx||'prime'})`:'');
 // rarity colour from rating (CS2 item grades)
 const rarOf=hc=>{const t=(GM||{rar:[125,115,110,105,100]}).rar;return hc>=t[0]?'gold':hc>=t[1]?'cov':hc>=t[2]?'cla':hc>=t[3]?'res':hc>=t[4]?'mil':'ind';};
 // neutral placeholder avatar (no real photos): silhouette tinted by rarity
 // short team tag shown on the avatar (text only, no real logos)
-const TAG={'Vitality':'VIT','MOUZ':'MZ','FURIA':'FUR','Spirit':'TS','Aurora':'AUR','Falcons':'FAL','NAVI':'NAVI','FUT':'FUT','The MongolZ':'MGZ','G2':'G2','PARIVISION':'PARI','Legacy':'LGC','Liquid':'TL','FaZe':'FAZE','9z':'9Z','BC.Game':'BCG','100 Thieves':'100T','TYLOO':'TYL','Chinggis Warriors':'CW','5star':'5S','The Huns':'HUNS','NAVI 2021':'NAVI'};
+const TAG={'Vitality':'VIT','MOUZ':'MZ','FURIA':'FUR','Spirit':'TS','Aurora':'AUR','Falcons':'FAL','NAVI':'NAVI','FUT':'FUT','The MongolZ':'MGZ','G2':'G2','PARIVISION':'PARI','Legacy':'LGC','Liquid':'TL','FaZe':'FAZE','9z':'9Z','BC.Game':'BCG','100 Thieves':'100T','TYLOO':'TYL','Chinggis Warriors':'CW','5star':'5S','The Huns':'HUNS','NAVI 2021':'NAVI','SK 2016':'SK','fnatic 2015':'FNC','NiP 2014':'NIP'};
 // Draftly mark: the two players' cards (orange, blue) fanned behind a card with a $ (a card auction for $20).
 const LOGO='<svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><rect class="lf" x="9" y="12" width="28" height="40" rx="6"/><rect class="rt" x="27" y="12" width="28" height="40" rx="6"/>'+
   '<rect class="fr" x="18" y="8" width="28" height="42" rx="6"/><path class="dl" d="M38.5 21.5C37 19.3 34.8 18.2 32 18.2c-3.9 0-6.5 2-6.5 5 0 7.2 13.5 4 13.5 11.4 0 3.2-2.8 5.3-7 5.3-3.2 0-5.8-1.3-7.3-3.8M32 14v30"/></svg>';
@@ -680,6 +698,10 @@ mn:{
   codeHint:'Найз тань «Онлайн → Нэгдэх» хэсэгт энэ кодыг оруулна',copyLink:'Холбоос хуулах',
   srvOk:'Сервертэй холбогдсон',srvWait:'Сервертэй холбогдож байна…',gotIt:'Ойлголоо',close:'Хаах',
   search:'Нэр эсвэл баг хайх',searchA:'Хайх',sortA:'Эрэмбэ',byTeam:'Багаар',byRating:'Rating-аар',search_beer:'Нэр эсвэл үйлдвэр хайх',byTeam_beer:'Бүсээр',
+  takeFree:'Авах',skipsLeft:k=>`${k} эрх үлдсэн`,lastSub:(n,k)=>`${n} энэ картыг $0-оор авна эсвэл алгасна. Алгасах эрх ${k} үлдсэн.`,
+  skippedBy:n=>`${n} алгаслаа`,logSkip:n=>`${n} алгасав`,
+  roundHist:'Раундын түүх',rhint:'Раунд дээр дарж тулаануудыг нь харна уу',rWon:(n,k)=>`${n} хожив, ${k} тоглогч амьд үлдсэн`,
+  legendF1:'Домогт нисгэгчдийн rating: оргил улиралдаа авч болох онооны хэдэн хувийг авсныг 2026 оны тэргүүлэгч Антонеллигийнхтай (548-аас 390) харьцуулсан.',
   rare:'Ховор карт',dropChance:p=>`гарах магадлал ${p}%`,rareRule:(names,p)=>`Ховор карт: ${names}. Тус бүр нь ${p}% магадлалтайгаар draft-д гарч ирнэ.`,noneFound:'Ийм тамирчин олдсонгүй',
   quitQ:'Тоглоомоос гарах уу?',quitSub:'Энэ draft дуусахгүй, ялалт ялагдал бүртгэгдэхгүй.',keep:'Үргэлжлүүлэх',
   code4:'4 тэмдэгттэй код оруулна уу',copied:'Холбоос хуулагдлаа',lang:'Хэл',
@@ -707,7 +729,7 @@ mn:{
   courseN:n=>`${n}-р хоол`,judgeN:n=>`Шүүгч ${n}`,winsCourse:'хожив',fightN:n=>`${n}-р тулаан`,winsFight:'ялав',roundN:n=>`${n}-р тойрог`,winsRound:'хожив',cr_foam:'Хөөс',cr_aroma:'Үнэр',cr_taste:'Амт',
   nbaNeed:r=>`Танд ${r} байхгүй`,nbaPG:'PG: алдаа багасна, шидэлт +2%',nbaC:'C: самбар, хамгаалалт сайжирна',
   gkHave:'Танд хаалгач аль хэдийн байгаа',gkNeed:'Хаалгачгүй бол хаалга тань сул',foodNew:'Шинэ төрөл: цэс олон янз болно',beerNew:'Шинэ төрөл: 3-4 төрөл цуглуулбал бонус',beerLocal:'Монгол шар айраг: шүүгчдээс нутгийн бонус',
-  rulesCommon:(f,gift)=>['Хоёулаа $20 мөнгөтэй эхэлнэ. Карт нэг нэгээр гарч, ээлжлэн нээнэ. Сайн картууд эрт гарах магадлал ихтэй.',gift?`Нээх ээлжтэй үедээ $1-ээр нээнэ эсвэл картыг өрсөлдөгчдөө өгнө (2 удаа). Өгөхдөө түүнд $${f} төлнө. Өрсөлдөгчийн хоосон суудал 3-аас эсвэл таныхаас цөөн бол өгч болохгүй. Нээсний дараа нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.`:'Нээх ээлжтэй үедээ $1-ээр нээнэ. Баг жижиг тул картыг өрсөлдөгчдөө өгөх боломжгүй. Нээсний дараа нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.','Мөнгө дуусвал өрсөлдөгч $0-оор өгнө. Нэг талын баг бүрдвэл үлдсэн карт нөгөөд нь дарааллаараа автоматаар очно. Ээлж бүрт 15 секунд.'],
+  rulesCommon:(f,gift)=>['Хоёулаа $20 мөнгөтэй эхэлнэ. Карт нэг нэгээр гарч, ээлжлэн нээнэ. Сайн картууд эрт гарах магадлал ихтэй.',gift?`Нээх ээлжтэй үедээ $1-ээр нээнэ эсвэл картыг өрсөлдөгчдөө өгнө (2 удаа). Өгөхдөө түүнд $${f} төлнө. Өрсөлдөгчийн хоосон суудал 3-аас эсвэл таныхаас цөөн бол өгч болохгүй. Нээсний дараа нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.`:'Нээх ээлжтэй үедээ $1-ээр нээнэ. Баг жижиг тул картыг өрсөлдөгчдөө өгөх боломжгүй. Нээсний дараа нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.','Мөнгө дуусвал өрсөлдөгч $0-оор өгнө. Нэг талын баг бүрдвэл үлдсэн карт нөгөөд нь дарааллаараа $0-оор очно. Тэр тоглогч хүсээгүй 3 хүртэл картаа алгасаж болно. Ээлж бүрт 15 секунд.'],
   rules_f1:['Хүн бүр 2 нисгэгч, 2 машин авна. Нисгэгчийн rating нь 2026 оны улирлын оноо, машиных нь тухайн багийн 2 нисгэгчийн онооны нийлбэрээр тооцсон.','Хамгийн сайн нисгэгч хамгийн сайн машинаа унана. Хурд нь нисгэгч, машин хоёрын rating-ийн дундаж. Дөрвөн машин 15 тойрог уралдана: гараа, пит-стоп, гүйцэж түрүүлэлт, ховор DNF бий.','Байр: P1 25, P2 18, P3 15, P4 12 оноо. Нийт оноо их баг ялна. Нэг багийн нисгэгч, машин хоёр хамт байвал +3%, гурав бол +6%.'],
   rules_nba:['3x3 бол 3 тоглогч, 5x5 бол 5 тоглогч. Rating нь NBA 2K27.','5x5: 4 үе, тэнцвэл нэмэлт цаг. 3x3: 21 оноо түрүүлж авсан нь ялна, дотроос 1, гаднаас 2 оноо.','Үүрэг чухал: PG алдааг багасгаж шидэлтийг сайжруулна, C самбар болон хамгаалалтыг сайжруулна. Шидэгчийг rating болон үүргээр сонгоно.'],
   rules_fifa:['5 хүнтэй баг (futsal шиг). Rating нь EA FC 27.','90 минутад довтолгоо бүрийн боломжийг довтлогч, хагас хамгаалагчийн хүч хамгаалалтынхтай харьцуулж тооцно. Хаалгачгүй бол хамгийн сул тоглогч хаалга хамгаална.','Тэнцвэл пенальти цохино. Нэг клубын тоглогчид +3% ба түүнээс дээш.'],
@@ -720,14 +742,13 @@ mn:{
     'Тамирчдын карт санамсаргүй дарааллаар нэг нэгээр гарна, гэхдээ өндөр rating-тэй тамирчид эрт гарах магадлал ихтэй. Карт бүрийг та хоёр ээлжлэн нээнэ.',
     `Нээх ээлжтэй үедээ картыг $1-ээр нээнэ, эсвэл өрсөлдөгчдөө өгнө (2 удаа). Өгөхдөө түүнд $${GIFT_FEE} төлнө. Өрсөлдөгчийн хоосон суудал 3-аас эсвэл таныхаас цөөн бол өгч болохгүй.`,
     'Нээсний дараа нөгөө нь үнээ +$1, +$2, +$5, бүх мөнгөөрөө эсвэл өөрийн бичсэн дүнгээр өсгөнө. Өнжвөл хамгийн сүүлд үнэ хэлсэн нь авна.',
-    'Мөнгө дуусаад суудал үлдсэн бол өрсөлдөгч тань хүсээгүй картаа танд $0-оор өгнө. Нэг талын баг бүрдсэн бол үлдсэн тамирчид нөгөөд нь дарааллаараа автоматаар очно.',
+    'Мөнгө дуусаад суудал үлдсэн бол өрсөлдөгч тань хүсээгүй картаа танд $0-оор өгнө. Нэг талын баг бүрдсэн бол үлдсэн тамирчид нөгөөд нь дарааллаараа $0-оор очно. Тэр тоглогч хүсээгүй 3 хүртэл картаа алгасаж болно.',
     'Ээлж бүрт 15 секунд. Цаг дуусвал нээх үед $1-ээр авна, хаялцах үед өнжинө.',
     'Хоёр баг бүрдмэгц тоглолт эхэлнэ. 13 раунд түрүүлж хожсон баг ялна. 12:12 болбол овертайм: 6 раундаас 4-ийг түрүүлж авсан нь ялна, 3:3 болбол дахин овертайм.',
     `Раунд бүр 1v1 тулаанаас бүрдэнэ. Тулаан бүрт хожих магадлалыг хоёр тамирчны HLTV rating-ээр тооцно. Жишээ нь 1.30 ба 1.00 бол ${x.a}% ба ${100-x.a}%, 1.10 ба 1.00 бол ${x.b}% ба ${100-x.b}%.`,
     'Нэг багийн тамирчдыг цуглуулбал бонус авна: 2 хүн бол rating нь +3%, 3 бол +6%, 4 бол +8%, 5 бол +10%.',
     `IGL нь багийнхаа бусад тамирчдад +${x.lead}% өгнө (нэг IGL-ийнх л тооцогдоно). Rating нь 1.00-аас доош тамирчин багтаа ганцаараа үлдэхдээ +${x.clutch}% хүчтэй тулалдана. Тиймээс rating муутай тамирчин ч хэрэгтэй.`,
     'AWP, IGL заавал байх албагүй.',
-    `Ховор карт: ${x.prime}% магадлалтайгаар s1mple (prime) гарч ирнэ. Түүний rating ${x.pr}.`,
     'Дараалсан ялалт 🔥 таны нэрийн хажууд гарах бөгөөд өрсөлдөгч тань ч харна.'],
 },
 en:{
@@ -784,7 +805,11 @@ en:{
   codeHint:'Your friend enters this code under Online → Join',copyLink:'Copy link',
   srvOk:'Connected',srvWait:'Connecting…',gotIt:'Got it',close:'Close',
   search:'Search name or team',searchA:'Search',sortA:'Sort',byTeam:'By team',byRating:'By rating',search_beer:'Search name or brewery',byTeam_beer:'By region',
-  rare:'Rare card',dropChance:p=>`drop chance ${p}%`,rareRule:(names,p)=>`Rare cards: ${names}. Each one shows up in ${p}% of drafts.`,noneFound:'No players found',
+  takeFree:'Take',skipsLeft:k=>`${k} left`,lastSub:(n,k)=>`${n} takes this card for $0 or skips it. ${k} skips left.`,
+  skippedBy:n=>`${n} skipped it`,logSkip:n=>`skipped by ${n}`,
+  roundHist:'Round history',rhint:'Tap a round to see its duels',rWon:(n,k)=>`${n} won with ${k} alive`,
+  legendF1:'Legend ratings compare the share of available points each scored in their best season with the 2026 leader Antonelli’s (390 of 548).',
+  rare:'Rare cards',dropChance:p=>`drop chance ${p}%`,rareRule:(names,p)=>`Rare cards: ${names}. Each one shows up in ${p}% of drafts.`,noneFound:'No players found',
   quitQ:'Quit the game?',quitSub:'This draft will not finish and will not count as a win or loss.',keep:'Keep playing',
   code4:'Enter a 4-character code',copied:'Link copied',lang:'Language',
   hubLede:'Pick a game and build your team with $20.',chooseGame:'Choose a game',gameL:'Game',format:'Format',
@@ -811,7 +836,7 @@ en:{
   courseN:n=>`Dish ${n}`,judgeN:n=>`Judge ${n}`,winsCourse:'wins',fightN:n=>`Fight ${n}`,winsFight:'wins',roundN:n=>`Round ${n}`,winsRound:'wins',cr_foam:'Head',cr_aroma:'Aroma',cr_taste:'Taste',
   nbaNeed:r=>`You have no ${r}`,nbaPG:'PG: fewer turnovers, +2% shooting',nbaC:'C: rebounds and defense',
   gkHave:'You already have a goalkeeper',gkNeed:'Without a goalkeeper your goal is weak',foodNew:'New type: a more varied menu',beerNew:'New style: 3 or 4 styles earn a bonus',beerLocal:'Mongolian beer: home bonus from the judges',
-  rulesCommon:(f,gift)=>['You both start with $20. Cards come up one at a time and you take turns opening them. Better cards are more likely to come up early.',gift?`On your turn, open at $1 or give the card to your opponent (twice per game). Giving costs you $${f}, paid to them. You can't give if they have fewer than 3 empty seats, or fewer than you. The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.`:'On your turn, open at $1. Teams are small, so you can\'t give cards to your opponent. The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.','If you run out of money your opponent can hand you cards for $0. Once one team is full, the remaining cards go to the other player automatically, in order. 15 seconds per turn.'],
+  rulesCommon:(f,gift)=>['You both start with $20. Cards come up one at a time and you take turns opening them. Better cards are more likely to come up early.',gift?`On your turn, open at $1 or give the card to your opponent (twice per game). Giving costs you $${f}, paid to them. You can't give if they have fewer than 3 empty seats, or fewer than you. The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.`:'On your turn, open at $1. Teams are small, so you can\'t give cards to your opponent. The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.','If you run out of money your opponent can hand you cards for $0. Once one team is full, the remaining cards go to the other player for $0, in order, and that player can skip up to 3 cards they don’t want. 15 seconds per turn.'],
   rules_f1:['Each of you signs 2 drivers and 2 cars. Driver ratings come from 2026 season points; a car is rated on its two drivers’ combined points.','Your best driver gets your best car, and pace is the average of driver and car. The four cars race 15 laps with a start, pit stops, overtakes and the odd DNF.','P1 25, P2 18, P3 15, P4 12 points. Most team points wins. A driver and car from the same team get +3%, three from one team +6%.'],
   rules_nba:['3x3 uses 3 players, 5x5 uses 5. Ratings are NBA 2K27.','5x5: four quarters, overtime if tied. 3x3: first to 21, 1 point inside and 2 outside.','Roles matter: a PG cuts turnovers and helps shooting, a C helps rebounds and defense. Shooters are picked by rating and role.'],
   rules_fifa:['5-a-side teams. Ratings are EA FC 27.','Over 90 minutes, each attack’s chance comes from your forwards and midfield against their defense. Without a goalkeeper your weakest player goes in goal.','Penalties if level. Players from the same club get +3% and up.'],
@@ -824,14 +849,13 @@ en:{
     'Player cards come up one at a time in random order, but higher-rated players are more likely to come up early. You take turns opening them.',
     `On your turn, open the card at $1 or give the player to your opponent (twice per game). Giving costs you $${GIFT_FEE}, paid to them. You can't give if they have fewer than 3 empty seats, or fewer than you.`,
     'After a card is opened, the other player can raise by +$1, +$2, +$5, all in, or any amount you type. Pass and the last bidder gets him.',
-    'If you run out of money with seats left, your opponent can hand you players for $0. Once one team is full, the remaining players go to the other side automatically, in order.',
+    'If you run out of money with seats left, your opponent can hand you players for $0. Once one team is full, the remaining players go to the other side for $0, in order, and that player can skip up to 3 cards they don’t want.',
     'You get 15 seconds per turn. If time runs out you take the card at $1 when opening, or pass when bidding.',
     'When both teams are full, the match starts. First team to 13 rounds wins. At 12:12 it goes to overtime: first to 4 of 6 rounds, and at 3:3 another overtime starts.',
     `Each round is a series of 1v1 duels. Each duel’s win chance comes from the two players’ HLTV ratings. For example 1.30 vs 1.00 is ${x.a}% vs ${100-x.a}%, and 1.10 vs 1.00 is ${x.b}% vs ${100-x.b}%.`,
     'Players from the same team boost each other: 2 players +3% rating, 3 +6%, 4 +8%, 5 +10%.',
     `An IGL gives every teammate +${x.lead}% (only one IGL counts). A player rated below 1.00 duels +${x.clutch}% stronger when he is the last one alive. So low-rated players are worth taking too.`,
     'You do not need an AWPer or an IGL.',
-    `Rare card: s1mple (prime) shows up in ${x.prime}% of drafts. His rating is ${x.pr}.`,
     'Your win streak 🔥 appears next to your name, and your opponent sees it too.'],
 }};
 /* ================= map backgrounds (original skyline art in each map's setting) ================= */
@@ -1039,17 +1063,24 @@ const slotsLeft=(g,t)=>SLOTS-g.rost[t].length;
 // Typed seats (F1: 2 drivers + 2 cars). Untyped games only check the seat count.
 const typeLeft=(g,t,ty)=>GM.types[ty]-g.rost[t].filter(i=>P[i].ty===ty).length;
 const canHold=(g,t,id)=>slotsLeft(g,t)>0&&(!GM.types||typeLeft(g,t,P[id].ty)>0);
+// End-game skips: once the other side can't take a card, it goes to you for $0, but you may skip up to SKIPS of them.
+// A skip is allowed only while the rest of the deck can still fill every empty seat (per seat type in F1).
+function deckCovers(g){
+  const rest=g.deck.slice(g.ptr);
+  if(!GM.types)return rest.length>=slotsLeft(g,0)+slotsLeft(g,1);
+  return Object.keys(GM.types).every(ty=>rest.filter(id=>P[id].ty===ty).length>=typeLeft(g,0,ty)+typeLeft(g,1,ty));
+}
 const openerOf=g=>((g.cardNo-1)%2)^g.first;
 function newGame(mode,names,diff){
   const deck=drawOrder(P.filter(p=>!p.special).map(p=>p.id));
   // rare cards go into the first 10 cards, which are always drawn, so each one's chance is exactly PRIME_CHANCE per draft
   const force=typeof FORCE_PRIME!=='undefined'&&FORCE_PRIME;
   const rolled=PRIMES.filter(()=>force||Math.random()<PRIME_CHANCE).sort(()=>Math.random()-.5);
-  const span=Math.min(9,SLOTS*2-1),spots=[];
+  const span=Math.min(9,(GM.types?2*Math.min(...Object.values(GM.types)):SLOTS*2)-1),spots=[];
   while(spots.length<Math.min(rolled.length,span)){const k=1+Math.floor(Math.random()*span);if(!spots.includes(k))spots.push(k);}
   spots.sort((a,b)=>a-b).forEach((k,i)=>deck.splice(k,0,rolled[i]));
   const g={mode,gid:rid(8),names,diff:diff||'mid',game:GK,sub:GM.sub,map:GK==='cs2'?MAPKEYS[Math.floor(Math.random()*MAPKEYS.length)]:GK,first:Math.random()<.5?0:1,deck,ptr:0,cur:null,cardNo:0,streak:[0,0],
-    money:[BUDGET,BUDGET],rost:[[],[]],gives:[GIVES,GIVES],phase:'offer',kind:'normal',actor:0,bid:0,hi:-1,
+    money:[BUDGET,BUDGET],rost:[[],[]],gives:[GIVES,GIVES],skips:[SKIPS,SKIPS],phase:'offer',kind:'normal',actor:0,bid:0,hi:-1,
     deadline:0,log:[],seq:0,res:null,sold:null,autoTo:-1,startedAt:Date.now()};
   nextCard(g,FLIP_MS);
   return g;
@@ -1065,7 +1096,9 @@ function nextCard(g,extra=0){
   g.deadline=now+TURN_MS+extra+REVEAL_MS;g.cardAt=now+extra;
   if(bo&&bx){g.phase='offer';g.kind='normal';g.actor=o;}
   else if((bo||bx)&&canHold(g,bo?x:o,c)){g.phase='offer';g.actor=bo?o:x;g.kind='broke';}
-  else{g.phase='auto';g.autoTo=canHold(g,o,c)?o:x;g.actor=-1;g.deadline=now+AUTO_MS+extra+REVEAL_MS;}
+  else{const to=canHold(g,o,c)?o:x;
+    if(!canHold(g,1-to,c)&&(g.skips||[0,0])[to]>0&&deckCovers(g)){g.phase='offer';g.kind='last';g.actor=to;}
+    else{g.phase='auto';g.autoTo=to;g.actor=-1;g.deadline=now+AUTO_MS+extra+REVEAL_MS;}}
 }
 function award(g,t,price,how){
   g.money[t]-=price;g.rost[t].push(g.cur);
@@ -1077,6 +1110,7 @@ function legalActs(g,t){
   if(g.phase==='offer'){
     if(g.kind==='normal'){const a=['take'],r=slotsLeft(g,1-t);if(g.gives[t]>0&&r>=GIFT_MIN&&r>=slotsLeft(g,t)&&g.money[t]>=GIFT_FEE&&canHold(g,1-t,g.cur))a.push('give');return a;}
     if(g.kind==='broke')return ['take','pass'];
+    if(g.kind==='last')return ['take','skip'];
   }
   if(g.phase==='bid')return ['raise','pass'];
   return [];
@@ -1086,10 +1120,13 @@ function act(g,t,a,v){
   const now=Date.now();
   if(g.phase==='offer'){
     if(a==='take'){
-      if(g.kind==='normal'&&g.money[1-t]>=2){g.phase='bid';g.bid=1;g.hi=t;g.actor=1-t;g.deadline=now+TURN_MS;g.seq++;}
+      if(g.kind==='last')award(g,t,0,'zero');
+      else if(g.kind==='normal'&&g.money[1-t]>=2){g.phase='bid';g.bid=1;g.hi=t;g.actor=1-t;g.deadline=now+TURN_MS;g.seq++;}
       else award(g,t,1,'bid');
     }else if(a==='give'){g.gives[t]--;g.money[t]-=GIFT_FEE;g.money[1-t]+=GIFT_FEE;award(g,1-t,0,'give');}
     else if(a==='pass')award(g,1-t,0,'zero');
+    else if(a==='skip'){g.skips[t]--;g.log.unshift({id:g.cur,t,price:0,how:'skip'});g.log=g.log.slice(0,10);
+      g.sold={id:g.cur,t,price:0,how:'skip'};g.phase='sold';g.actor=-1;g.deadline=now+900;g.seq++;}
     return true;
   }
   if(g.phase==='bid'){
@@ -1239,10 +1276,19 @@ const buildP=(groups,map)=>{const out=[];groups.forEach(g=>g[g.length-1].forEach
 const f1r=pts=>Math.round(75+24*Math.sqrt(pts/390));
 // F1 cars, one per constructor: points = the team's two drivers' points, rated on the same scale against the best team.
 const F1_CAR_PTS=F1_DATA.map(([,,ds])=>ds.reduce((a,d)=>a+d[2],0)),f1cr=pts=>Math.round(75+24*Math.sqrt(pts/Math.max(...F1_CAR_PTS)));
+// F1 legends, each in their best title season. Share = points counted ÷ the most a driver could have counted that year
+// (dropped-score rules included), put on the 2026 scale against Antonelli: 390 of 548 (20 GPs × 25 + 6 sprints × 8).
+// [name, country, points counted, most countable, team, tag, year]
+const F1_LEGENDS=[['Juan Manuel Fangio','AR',42,45,'Mercedes','MER',1954],['Niki Lauda','AT',64.5,108,'Ferrari','FER',1975],
+ ['James Hunt','GB',69,126,'McLaren','MCL',1976],['Ayrton Senna','BR',90,99,'McLaren','MCL',1988],['Alain Prost','FR',99,160,'Williams','WIL',1993],
+ ['Michael Schumacher','DE',144,170,'Ferrari','FER',2002],['Fernando Alonso','ES',134,180,'Renault','REN',2006],['Sebastian Vettel','DE',397,475,'Red Bull','RBR',2013]];
+const F1_REF=390/548,f1lr=share=>Math.round(75+24*Math.sqrt(share/F1_REF));
 function mkF1(){
   const out=buildP(F1_DATA,(a,g)=>({nick:a[0],cc:a[1],pts:a[2],role:'P'+a[3],ty:'drv',tg:g[1],hl:f1r(a[2]),hc:f1r(a[2])}));
   const rank=F1_CAR_PTS.map((_,i)=>i).sort((a,b)=>F1_CAR_PTS[b]-F1_CAR_PTS[a]);
   F1_DATA.forEach(([team,tg],i)=>{const pts=F1_CAR_PTS[i];out.push({id:out.length,team,nick:team,cc:'',pts,role:'car',ty:'car',crank:rank.indexOf(i)+1,tg,hl:f1cr(pts),hc:f1cr(pts)});});
+  F1_LEGENDS.forEach(([nick,cc,pts,max,team,tg,yr])=>{const r=f1lr(pts/max);
+    out.push({id:out.length,team:team+' '+yr,nick,cc,pts,max,role:'P1',ty:'drv',tg,hl:r,hc:r,special:true,sfx:String(yr),peak:team+' '+yr,gk:'LEGEND'});});
   return out;
 }
 const NBA_POS=['PG','SG','SF','PF','C'];
@@ -1252,7 +1298,7 @@ const LINE=r=>r==='GK'?'G':/^(CB|LB|RB)$/.test(r)?'D':/^(ST|LW|RW)$/.test(r)?'F'
 const GAMES={
  cs2:{tile:'cs2',acc:'#F0A93E',slots:{d:5},dec:2,rar:[125,115,110,105,100],val:[95,.32],rl:'Rating',reveal:'reel',syn:'group',stepMs:0,fan:['ZywOo','donk','m0NESY'],
    groups:()=>TEAMS_CS2,mk:()=>{const p=buildP(TEAMS_CS2.map(([t,ps])=>[t,ps]),a=>({nick:a[0],role:a[1],cc:a[2],hl:a[3],hc:Math.round(a[3]*100)}));
-     p.push({id:p.length,nick:'s1mple',tag:'prime',team:'NAVI 2021',role:'AWP',cc:'UA',hl:1.41,hc:141,special:true,peak:'NAVI 2021'});return p;},
+     CS2_PRIMES.forEach(([nick,role,cc,r,team,peak,gk])=>p.push({id:p.length,nick,role,cc,hl:r,hc:Math.round(r*100),team,peak,gk,special:true}));return p;},
    tag:p=>TAG[p.team]||''},
  f1:{tile:'f1',acc:'#E8443A',slots:{d:4},types:{drv:2,car:2},dec:0,rar:[97,93,89,85,80],val:[78,.9],rl:'OVR',reveal:'lights',syn:'group',stepMs:320,fan:['Max Verstappen','Kimi Antonelli','Lewis Hamilton'],
    groups:()=>F1_DATA.map(([t,,ps])=>[t,ps]),mk:mkF1,tag:p=>p.tg},
@@ -1496,7 +1542,7 @@ function evHtml(ev,g){
   return '';
 }
 function renderMatch2(){
-  if(ANIM){clearTimeout(ANIM.to);ANIM=null;}
+  if(ANIM){clearTimeout(ANIM.to);ANIM=null;}UI.showRound=null;
   const g=G,res=g.res,st=g.streak||[0,0],D=SIMS[g.game](g.rost,g.sub,res.seed);
   const col=t=>`<section class="rcol ${t?'b':''}">${g.rost[t].map((id,i)=>{const p=P[id],bf=GM.syn==='group'?grpBuff(g.rost[t],id):0;
       return `<div class="rrow ${rcls(p)}" id="p${t}-${i}" style="--i:${i}">${avatar(p,'sm')}<span class="n">${esc(pName(p))}<small>${bf?`<em class="bf">+${Math.round(bf*100)}%</em> `:''}${fmtR(p.hl)}, ${esc(roleName(p))}</small></span><b class="kd num">–</b></div>`;}).join('')}</section>`;
@@ -1535,6 +1581,8 @@ function finishMatch2(D){
   const h=$('#half');h.textContent=T('final');h.dataset.done='1';
   $('#s'+(1-res.win)).classList.add('dimmed');$('#bt'+res.win).classList.add('won');
   const mv=$(`#p${res.mvp[0]}-${res.mvp[1]}`);if(mv)mv.classList.add('mvp');
+  const ol=$('#duels');if(ol){const all=[];D.steps.forEach(st=>(st.ev||[]).forEach(ev=>{const h=evHtml(ev,g);if(h)all.push(`<li class="dl2">${h}</li>`);}));
+    ol.innerHTML=all.reverse().join('');ol.classList.add('all');}
   const sb=$('#skipbtn');if(sb)sb.remove();
   const me=g.mode==='cpu'?0:g.mode==='online'?NET.team:res.win;
   if(res.win===me&&UI.confGid!==g.gid){UI.confGid=g.gid;confetti();}
@@ -1593,6 +1641,10 @@ function botMove(g,t){
       return (W<1||(GK==='cs2'&&p.hc<105))?['give']:['take'];
     }
     if(g.kind==='broke')return W>=1?['take']:['pass'];
+    if(g.kind==='last'){   // skip cards below the average of what's still to come
+      const rest=g.deck.slice(g.ptr).filter(id=>canHold(g,t,id));
+      return rest.length&&p.hc<rest.reduce((a,id)=>a+P[id].hc,0)/rest.length?['skip']:['take'];
+    }
   }
   if(g.phase==='bid'){
     if(W<=g.bid)return ['pass'];
@@ -1769,20 +1821,20 @@ function renderDraft(){
       <div class="hd"><span class="nm"><span class="nmt">${esc(g.names[t])}</span>${stk((g.streak||[])[t])}</span><span class="cash num ${g.money[t]?'':'zero'}" data-t="${t}">$${prev?prev.m[t]:g.money[t]}</span></div>
       <div class="seats" aria-label="${T('seatsAria',n)}">${seatsHtml(g,t,ns)}</div>
       <div class="who">${n?g.rost[t].map(id=>{const q=P[id],bf=buffOf(g.rost[t],id);return `<span class="rp ${rcls(q)}">${avatar(q,'xs')}<i>${esc(pName(q))}</i>${bf?`<em class="bf">+${Math.round(bf*100)}%</em>`:''}<b class="num">${fmtR(q.hl)}</b></span>`;}).join(''):`<span class="muted">${T('empty')}</span>`}</div>
-      <div class="meta">${T('metaAvg')} <b class="num">${n?rosterAvg(g.rost[t]).toFixed(3):'—'}</b>${canGiftGame()?`, ${T('metaGive')} ${g.gives[t]}`:''}</div></section>`;};
+      <div class="meta">${T('metaAvg')} <b class="num">${n?rosterAvg(g.rost[t]).toFixed(3):'—'}</b>${canGiftGame()?`, ${T('metaGive')} ${g.gives[t]}`:''}${g.skips&&(slotsLeft(g,1-t)===0||g.skips[t]<SKIPS)?`, ${T('metaSkip')} ${g.skips[t]}`:''}</div></section>`;};
   const goat=fresh&&showId!=null&&showId===g.cur&&!!P[showId].special;
   let card='';
   if(showId!=null){const p=P[showId],s=g.phase==='sold'?g.sold:null;
-    const fx=s?'fly'+s.t:(fresh&&!reel&&motion?'land':'');
+    const fx=s?(s.how==='skip'?'drop':'fly'+s.t):(fresh&&!reel&&motion?'land':'');
     card=`<div class="stage ${reel?'reeling rs-'+GM.reveal:''}" id="stage">
       <article class="pcard ${rcls(p)} ${fx}" aria-label="${esc(pName(p))}, rating ${fmtR(p.hl)}">
         <div class="pc-rating"><b class="num">${fmtR(p.hl)}</b><small>${T('rl_'+GK)}</small></div>
         <span class="chip pc-role role-${String(p.role).replace('/','')}">${esc(roleName(p))}</span>
         ${avatar(p,'lg')}
-        <div class="pc-nick">${esc(p.nick)}${p.special?'<small class="prime">prime</small>':''}</div>
+        <div class="pc-nick">${esc(p.nick)}${p.special?`<small class="prime">${esc(p.sfx||'prime')}</small>`:''}</div>
         <div class="pc-meta"><span>${esc(teamName(p))}</span>${p.cc?`<span class="chip ${p.cc==='MN'?'mn':''}">${p.cc}</span>`:''}${GK==='f1'?`<span class="chip">${p.pts} ${T('ptsShort')}</span>`:''}</div>
         ${g.cur!=null?hintsFor(g,showId):''}
-        ${s?`<div class="stamp ${s.t?'tb':'ta'}">${s.how==='give'?T('giftStamp',GIFT_FEE):'$'+s.price}</div>`:''}
+        ${s&&s.how!=='skip'?`<div class="stamp ${s.t?'tb':'ta'}">${s.how==='give'?T('giftStamp',GIFT_FEE):'$'+s.price}</div>`:''}
       </article>
       ${reel?(GM.reveal==='reel'?'<div class="reel" aria-hidden="true"><div class="track"></div><i class="marker"></i></div>':revealHtml(GM.reveal,p)):''}
     </div>`;}
@@ -1798,6 +1850,9 @@ function renderDraft(){
     }else if(g.kind==='broke'){
       mid=`<p class="status">${nameC(o)}${T('brokeT')}</p><p class="status sub">${T('brokeSub',esc(g.names[a]),esc(g.names[o]))}</p>`;
       if(mine)acts=`<div class="acts g2"><button class="btn ${a?'blue':''}" data-act="do" data-a="take">${T('take1')}</button><button class="btn ghost" data-act="do" data-a="pass">${T('giveHim')}<small>${T('at0')}</small></button></div>`;
+    }else if(g.kind==='last'){
+      mid=`<p class="status">${nameC(o)}${GM.types?T('fullTy_'+P[g.cur].ty):T('fullT')}</p><p class="status sub">${T('lastSub',esc(g.names[a]),g.skips[a])}</p>`;
+      if(mine)acts=`<div class="acts g2"><button class="btn ${a?'blue':''}" data-act="do" data-a="take">${T('takeFree')}<small>${T('at0')}</small></button><button class="btn ghost" data-act="do" data-a="skip">${T('skip')}<small>${T('skipsLeft',g.skips[a])}</small></button></div>`;
     }
     if(!mine)acts=`<p class="status sub">${waitText(a)}</p>`;
   }else if(g.phase==='bid'){
@@ -1813,7 +1868,8 @@ function renderDraft(){
     }else acts=`<p class="status sub">${waitText(a)}</p>`;
   }else if(g.phase==='sold'&&g.sold){
     const s=g.sold,p=P[s.id];
-    mid=`<p class="sold">${esc(pName(p))} → ${nameC(s.t)}${s.how==='give'?T('gaveFree',GIFT_FEE):`, $${s.price}`}</p>`;
+    mid=s.how==='skip'?`<p class="sold muted">${esc(pName(p))}: ${T('skippedBy',nameC(s.t))}</p>`
+      :`<p class="sold">${esc(pName(p))} → ${nameC(s.t)}${s.how==='give'?T('gaveFree',GIFT_FEE):`, $${s.price}`}</p>`;
   }else if(g.phase==='auto'){
     const fullT=!canHold(g,1-g.autoTo,g.cur);
     mid=`<p class="status">${fullT?nameC(1-g.autoTo)+(GM.types?T('fullTy_'+P[g.cur].ty):T('fullT')):T('bothBroke')}</p><p class="status sub">${T('autoSub',esc(pName(P[g.cur])),esc(g.names[g.autoTo]))}</p>`;
@@ -1821,7 +1877,7 @@ function renderDraft(){
   const bk=g.gid+'|'+g.cardNo,bump=g.phase==='bid'&&UI.bid&&UI.bid.k===bk&&UI.bid.v!==g.bid;
   UI.bid={k:bk,v:g.phase==='bid'?g.bid:0};
   const head=g.log[0]?g.gid+'|'+g.log.length+'|'+g.log[0].id+'|'+g.log[0].how:'',newHead=head&&head!==UI.logHead;UI.logHead=head;
-  const log=g.log.map((l,i)=>`<li class="${l.t?'b':''} ${i===0&&newHead?'new':''} ${rcls(P[l.id])}"><span class="rt">${fmtR(P[l.id].hl)}</span><span>${esc(pName(P[l.id]))} → ${esc(g.names[l.t])}${l.how==='give'?T('logFree',GIFT_FEE):''}</span><span class="pr">${l.how==='skip'?'':'$'+l.price}</span></li>`).join('');
+  const log=g.log.map((l,i)=>`<li class="${l.how==='skip'?'skip':l.t?'b':''} ${i===0&&newHead?'new':''} ${rcls(P[l.id])}"><span class="rt">${fmtR(P[l.id].hl)}</span><span>${esc(pName(P[l.id]))}${l.how==='skip'?': '+T('logSkip',esc(g.names[l.t])):' → '+esc(g.names[l.t])+(l.how==='give'?T('logFree',GIFT_FEE):'')}</span><span class="pr">${l.how==='skip'?'':'$'+l.price}</span></li>`).join('');
   const late=fresh&&motion&&g.cur!=null;
   const goatAt=reelDelay+(reel?REVEAL_MS:0);
   $('#app').innerHTML=`<main class="wrap wide">
@@ -1835,7 +1891,7 @@ function renderDraft(){
       ${log?`<div class="logwrap"><div class="lbl" style="margin-bottom:8px">${T('recent')}</div><ul class="log">${log}</ul></div>`:''}
     </div>
   </main>
-  ${goat?`<div class="goatov" id="goat" data-act="goat-x" style="--gd:${goatAt}ms"><div class="goat-in"><span class="goat-k">THE GOAT</span>${miniCard(P[showId])}<b>${esc(pName(P[showId]))}</b><span class="muted">${esc(P[showId].peak)}, ${T('rl_'+GK)} ${fmtR(P[showId].hl)}</span><span class="goat-c">${T('goatChance',Math.round(PRIME_CHANCE*100))}</span></div></div>`:''}
+  ${goat?`<div class="goatov" id="goat" data-act="goat-x" style="--gd:${goatAt}ms"><div class="goat-in"><span class="goat-k">${esc(P[showId].gk||'THE GOAT')}</span>${miniCard(P[showId])}<b>${esc(pName(P[showId]))}</b><span class="muted">${esc(P[showId].peak)}${P[showId].max?`, ${P[showId].pts}/${P[showId].max} ${T('ptsShort')}`:''}, ${T('rl_'+GK)} ${fmtR(P[showId].hl)}</span><span class="goat-c">${T('goatChance',Math.round(PRIME_CHANCE*100))}</span></div></div>`:''}
   ${g.cardNo===1&&flipLeft>0&&g.phase==='offer'?`<div class="flip" id="flip"><div><div class="coin"></div><h2>${T('firstOpen',nameC(g.first))}</h2><p class="muted">${T('thenAlt')}</p></div></div>`:''}`;
   if(g.cardNo===1&&flipLeft>0)setTimeout(()=>{const f=$('#flip');if(f)f.remove();},flipLeft+250);
   if(bump){const el=$('.price .amt');if(el)el.classList.add('bump');}
@@ -1899,7 +1955,7 @@ function renderMatch(){
       <div class="bmid">${MAPS[g.map]?`<span class="mapchip" style="--mc:${MAPCOL[g.map]}">${MAPS[g.map]}</span>`:''}<span class="vs" id="rno">${T('round',1)}</span><span class="mapn" id="half">${T('to13')}</span></div>
       <div class="bteam" id="bt1"><span class="bname tb">${esc(g.names[1])} ${stk(st[1])}</span><span class="led num" id="s1">0</span></div>
     </div>
-    <div class="strip" id="strip" aria-hidden="true"></div>
+    <div class="strip" id="strip" role="group" aria-label="${T('roundHist')}"></div>
     <div class="mgrid">${col(0)}<section class="feed" aria-live="off"><div class="lbl" id="ftitle">${T('roundDuels',1)}</div><ol class="duels" id="duels"></ol></section>${col(1)}</div>
     <div id="after" class="after"></div>
   </main>`;
@@ -1918,7 +1974,8 @@ function renderMatch(){
   function endRound(show){const rw=RR[r][0];score[rw]++;
     if(isOT(r)&&(r-24)%6===0){const sp=$('#strip');if(sp)sp.insertAdjacentHTML('beforeend',`<b class="otsep" title="${T('otN',otNo(r))}">OT</b>`);}
     const el=$('#s'+rw);if(el){el.textContent=score[rw];if(show){el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump');}}
-    const sp=$('#strip');if(sp)sp.insertAdjacentHTML('beforeend',`<i class="${rw?'b':'a'}"></i>`);}
+    const sp=$('#strip');if(sp){sp.insertAdjacentHTML('beforeend',`<button class="rh ${rw?'b':'a'}" data-act="round" data-r="${r}" aria-label="${T('round',r+1)}: ${esc(g.names[rw])}"></button>`);
+      if(r===11)sp.insertAdjacentHTML('beforeend','<i class="hsep"></i>');}}
   function title(){const t=$('#ftitle'),n=$('#rno'),h=$('#half');if(t)t.textContent=T('roundDuels',r+1);if(n)n.textContent=T('round',r+1);
     if(h&&!h.dataset.done&&isOT(r)){h.textContent=T('otN',otNo(r));h.classList.add('ot');}}
   function step(){
@@ -1935,6 +1992,15 @@ function renderMatch(){
       while(d<ds.length)apply(ds[d++],last);endRound(false);r++;d=0;}
     finishMatch();
   }
+  UI.showRound=k=>{
+    const ol=$('#duels'),h=$('#half');if(!ol||!h||k<0||k>=RR.length)return;
+    if(!h.dataset.done&&ANIM&&ANIM.skip)ANIM.skip();
+    UI.selRound={gid:g.gid,k};
+    const [rw,ds]=RR[k],alive=g.rost[rw].length-ds.filter(x=>x[3]!==rw).length;
+    ol.innerHTML=ds.map(duelLi).join('')+`<li class="rwin ${rw?'tb':'ta'}">${T('rWon',esc(g.names[rw]),alive)}</li>`;
+    const t=$('#ftitle');if(t)t.textContent=T('roundDuels',k+1);
+    document.querySelectorAll('#strip .rh').forEach(b=>b.classList.toggle('sel',+b.dataset.r===k));
+  };
   ANIM={raf:0,to:setTimeout(step,instant?0:600),skip:()=>{clearTimeout(ANIM.to);rest();}};
   if(instant){clearTimeout(ANIM.to);rest();}
 }
@@ -1948,6 +2014,8 @@ function finishMatch(){
   $('#s'+(1-res.win)).classList.add('dimmed');$('#bt'+res.win).classList.add('won');
   const mv=$(`#p${res.win}-${res.mvp}`);if(mv)mv.classList.add('mvp');
   const sb=$('#skipbtn');if(sb)sb.remove();
+  const sp=$('#strip');if(sp&&!$('#rhint'))sp.insertAdjacentHTML('afterend',`<p class="rhint" id="rhint">${T('rhint')}</p>`);
+  if(UI.showRound)UI.showRound(UI.selRound&&UI.selRound.gid===g.gid?UI.selRound.k:res.rounds.length-1);
   const me=g.mode==='cpu'?0:g.mode==='online'?NET.team:res.win;
   if(res.win===me&&UI.confGid!==g.gid){UI.confGid=g.gid;confetti();}
   refreshAfter();
@@ -2044,7 +2112,7 @@ function oppStatus(){
   if(!NET.tr)return '';if(!NET.conn)return `<span style="color:var(--loss)">${T('connLost')}</span>`;if(!NET.opp)return '';
   return Date.now()-NET.oppSeen<8000?`<span style="color:var(--money)">${T('oppOnline')}</span>`:`<span style="color:var(--loss)">${T('oppLag')}</span>`;
 }
-const SYNC=['gid','first','deck','ptr','cur','cardNo','money','rost','gives','phase','kind','actor','bid','hi','log','seq','res','sold','autoTo','streak','map','game','sub'];
+const SYNC=['gid','first','deck','ptr','cur','cardNo','money','rost','gives','skips','phase','kind','actor','bid','hi','log','seq','res','sold','autoTo','streak','map','game','sub'];
 function hostSnapshot(){
   let g=null;if(G){g={};SYNC.forEach(k=>g[k]=G[k]);g.rem=Math.max(0,G.deadline-Date.now());g.sa=Math.max(0,Date.now()-G.startedAt);}
   return {t:'st',v:1,pid:PID,code:NET.code,gk:GK,gs:GM.sub,hn:NET.name,gn:NET.opp?NET.opp.name:'',gp:NET.opp?NET.opp.pid:'',gr:NET.gr,g};
@@ -2145,7 +2213,8 @@ function closeModal(){$('#modal').innerHTML='';}
 function rulesModal(){
   const x={a:Math.round(duelP(1.3,1)*100),b:Math.round(duelP(1.1,1)*100),lead:Math.round(LEAD*100),clutch:Math.round(CLUTCH*100),prime:Math.round(PRIME_CHANCE*100),pr:PRIMES.length?fmtR(P[PRIMES[0]].hl):''};
   const list=GK==='cs2'?T('rules',x):T('rulesCommon',GIFT_FEE,canGiftGame()).concat(T('rules_'+GK));
-  if(GK!=='cs2'&&PRIMES.length)list.push(T('rareRule',PRIMES.map(id=>`${pName(P[id])} ${fmtR(P[id].hl)}`).join(', '),x.prime));
+  if(GK==='f1')list.push(T('legendF1'));
+  if(PRIMES.length)list.push(T('rareRule',PRIMES.map(id=>`${pName(P[id])} ${fmtR(P[id].hl)}`).join(', '),x.prime));
   modal(`<h2>${T('howTo')}: ${T('g_'+GK)}</h2><ol>${list.map(li=>`<li>${li}</li>`).join('')}</ol>
   <button class="btn" data-act="close">${T('gotIt')}</button>`);
 }
@@ -2167,7 +2236,7 @@ function fillPlayers(){
   let html='';
   if(UI.psort==='rating')html=`<ul>${list.slice().sort((a,b)=>b.hc-a.hc).map(row).join('')}</ul>`;
   else TEAMS.forEach(([team])=>{const ps=list.filter(p=>p.team===team);if(ps.length)html+=`<h3>${esc(grpName(team))}</h3><ul>${ps.map(row).join('')}</ul>`;});
-  const rare=PRIMES.map(id=>P[id]).filter(p=>!q||'prime goat'.includes(q)||p.nick.toLowerCase().includes(q)||teamName(p).toLowerCase().includes(q));
+  const rare=PRIMES.map(id=>P[id]).sort((a,b)=>b.hc-a.hc).filter(p=>!q||'prime goat legend'.includes(q)||p.nick.toLowerCase().includes(q)||teamName(p).toLowerCase().includes(q));
   if(rare.length)html+=`<h3>${T('rare')}</h3><ul>${rare.map(p=>row(p).replace('</small>',`, ${T('dropChance',Math.round(PRIME_CHANCE*100))}</small>`)).join('')}</ul>`;
   el.innerHTML=html||`<p class="muted" style="padding:12px 4px">${T('noneFound')}</p>`;
 }
@@ -2199,6 +2268,7 @@ document.addEventListener('click',e=>{
     case 'quit':quitModal();break;
     case 'quit-yes':closeModal();if(G&&G.mode==='online')netLeave();else{G=null;go('home');}break;
     case 'skip':if(ANIM&&ANIM.skip)ANIM.skip();break;
+    case 'round':if(UI.showRound)UI.showRound(+b.dataset.r);break;
     case 'again':again();break;
     case 'create-room':netOpen('host',rid(4,'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'));break;
     case 'join-room':{const c=(($('#code')||{}).value||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
