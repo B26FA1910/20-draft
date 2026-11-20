@@ -1,6 +1,15 @@
 // CS2 $20 Draft: serves the game page and the online rooms (Cloudflare Workers + Durable Objects).
 import { DurableObject } from "cloudflare:workers";
 import html from "./index.html";
+import favicon from "./favicon.ico";
+import touchIcon from "./apple-touch-icon.png";
+
+// Tab and home-screen icons (Safari ignores the SVG icon in the page and asks for these).
+const ICONS = {
+  "/favicon.ico": [favicon, "image/x-icon"],
+  "/apple-touch-icon.png": [touchIcon, "image/png"],
+  "/apple-touch-icon-precomposed.png": [touchIcon, "image/png"],
+};
 
 const MAX_PEERS = 4;
 const MAX_MSG_BYTES = 32768;
@@ -18,6 +27,10 @@ export default {
     }
     if (url.pathname === "/" || url.pathname === "/index.html") {
       return new Response(html, { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    }
+    const icon = ICONS[url.pathname];
+    if (icon) {
+      return new Response(icon[0], { headers: { "content-type": icon[1], "cache-control": "public, max-age=86400" } });
     }
     return new Response("Not found", { status: 404 });
   },
