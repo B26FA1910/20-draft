@@ -74,6 +74,14 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 .ava svg{width:84%;height:84%;fill:color-mix(in srgb,var(--rc,#8b97ad) 45%,#d9e0ec)}
 .ava.lg{width:72px;height:72px;box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--rc) 80%,transparent),0 0 0 6px color-mix(in srgb,var(--rc) 14%,transparent)}
 .ava.sm{width:30px;height:30px}
+.seats .gap{margin-left:7px}
+.skipv{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 12px;margin-top:12px}
+.skipb{font:600 13px/1 var(--body);color:var(--muted);background:transparent;border:1px dashed var(--line);border-radius:99px;padding:9px 14px;cursor:pointer;transition:.2s var(--out)}
+.skipb:hover{color:var(--ink);border-color:var(--muted)}
+.skipb.ask{color:var(--ink);border-style:solid;border-color:var(--ink)}
+.skipb.on{color:var(--ink);border-style:solid;border-color:var(--money);background:color-mix(in srgb,var(--money) 14%,transparent)}
+.skipb:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.vnote{font-size:13px;color:var(--muted)}.vnote.ask{color:var(--ink)}
 .ava.bev{place-items:center}.ava.bev svg{width:104%;height:104%}
 
 /* mini item tile (home fan + reel) */
@@ -350,10 +358,14 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 @keyframes redon{to{background:#ff2b2b;box-shadow:0 0 22px #ff2b2b,inset 0 0 0 3px #400}}
 @keyframes redoff{to{background:#2a0d0d;box-shadow:inset 0 0 0 3px #111}}
 .rv-crate{background:#0a0d14}
-.crate{position:relative;width:150px;height:120px;animation:shake .5s ease-in-out var(--rd,0ms) 2}
-.crate .box{position:absolute;left:0;right:0;bottom:0;height:96px;border-radius:8px;background:repeating-linear-gradient(90deg,#7a4a22 0 28px,#6a3f1c 28px 30px);box-shadow:inset 0 0 0 4px #4a2a10}
-.crate .lid{position:absolute;left:-8px;right:-8px;top:0;height:26px;border-radius:6px;background:#8a5628;box-shadow:inset 0 0 0 4px #4a2a10;transform-origin:10% 100%;animation:lid .45s cubic-bezier(.5,0,.6,1) calc(var(--rd,0ms) + 640ms) both}
-@keyframes lid{to{transform:translate(-60px,-120px) rotate(-70deg);opacity:0}}
+.crate{position:relative;width:min(66%,260px);aspect-ratio:5/4;animation:shake .5s ease-in-out var(--rd,0ms) 2}
+.crate .box{position:absolute;left:0;right:0;bottom:0;height:78%;border-radius:12px;background:repeating-linear-gradient(90deg,#7a4a22 0 44px,#6a3f1c 44px 47px);box-shadow:inset 0 0 0 6px #4a2a10,0 22px 40px -14px rgba(0,0,0,.75)}
+.crate .box::before,.crate .box::after{content:"";position:absolute;left:6px;right:6px;height:6px;background:#4a2a10}
+.crate .box::before{top:30%}.crate .box::after{top:64%}
+.crate .burst{position:absolute;left:-10%;right:-10%;top:0;height:46%;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--rc,#ffd25e) 70%,#fff),transparent);opacity:0;animation:burst .55s ease-out calc(var(--rd,0ms) + 700ms) both}
+.crate .lid{position:absolute;left:-14px;right:-14px;top:0;height:23%;border-radius:10px;background:#8a5628;box-shadow:inset 0 0 0 6px #4a2a10;transform-origin:10% 100%;animation:lid .5s cubic-bezier(.5,0,.6,1) calc(var(--rd,0ms) + 640ms) both}
+@keyframes burst{35%{opacity:1;transform:scale(1.4)}100%{opacity:0;transform:scale(2.3)}}
+@keyframes lid{to{transform:translate(-90px,-180px) rotate(-70deg);opacity:0}}
 .rv-asm{background:transparent}
 .rv-asm i{position:absolute;width:33.4%;height:33.4%;background:linear-gradient(135deg,color-mix(in srgb,var(--rc) 40%,#1a2131),#121722);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--rc) 60%,transparent);
   animation:piece .5s var(--out) calc(var(--rd,0ms) + var(--k) * 55ms) both,fadeout .2s ease calc(var(--rd,0ms) + 980ms) forwards}
@@ -559,7 +571,7 @@ body[data-side="0"] .aura .a,body[data-side="1"] .aura .b,body[data-side="n"] .a
 // Anti-dumping rules (tested with a bot that gifts every weak card): a gift costs the giver GIFT_FEE, paid to the
 // receiver; you can only gift while the receiver has 3+ empty seats and at least as many as you (so never in F1);
 // and once one team is full the other gets the remaining cards in deck order, so nobody can fill you up and then cherry-pick.
-const BUDGET=20,GIFT_FEE=2,GIVES=2,GIFT_MIN=3,canGiftGame=()=>SLOTS>=GIFT_MIN,TURN_MS=15000,FLIP_MS=1600,SOLD_MS=1400,AUTO_MS=1500,REVEAL_MS=1100;
+const BUDGET=20,GIFT_FEE=2,GIVES=2,GIFT_MIN=3,canGiftGame=()=>!GM.types&&SLOTS>=GIFT_MIN,TURN_MS=15000,FLIP_MS=1600,SOLD_MS=1400,AUTO_MS=1500,REVEAL_MS=1100;
 // [nick, role, country, HLTV Rating 3.0 for the player's time on that team (hltv.org team pages, Nov 2026)]
 let SLOTS=5;
 const TEAMS_CS2=[
@@ -613,7 +625,8 @@ function beerSvg(p){
   const fill=glass==='clear'?`<path d="${body}" fill="${lq}"/><path d="${body}" fill="${BEER_GL.clear}" opacity=".3"/><rect x="${kind==='long'?13:12}" y="${kind==='long'?19:21}" width="${kind==='long'?14:16}" height="1.4" fill="#fff6df" opacity=".9"/>`:`<path d="${body}" fill="${BEER_GL[glass]}"/>`;
   return `<svg viewBox="0 0 40 40">${fill}${label}${cap}${hi}</svg>`;
 }
-const avatar=(p,size='')=>`<span class="avw ${size}" aria-hidden="true"><span class="ava ${size}${GK==='beer'?' bev':''}">${GK==='beer'?beerSvg(p):AV_PERSON}</span>${size==='xs'?'':`<i class="ttag">${esc(GM?GM.tag(p):'')}</i>`}</span>`;
+const AV_CAR='<svg viewBox="0 0 40 40"><g transform="translate(0 -6)"><path d="M3 29.5h34v-2.6l-5.2-.9v-4.6h3.6v-2.2h-8.6v6.1l-5.7-.8-2.7-3.4h-3.8l-1.9 3.6-7.4 1.4L3 27z"/><circle cx="10.5" cy="29.5" r="4.3" fill="#0b0f17"/><circle cx="30" cy="29.5" r="4.6" fill="#0b0f17"/><circle cx="10.5" cy="29.5" r="1.6"/><circle cx="30" cy="29.5" r="1.7"/></g></svg>';
+const avatar=(p,size='')=>`<span class="avw ${size}" aria-hidden="true"><span class="ava ${size}${GK==='beer'||p.ty==='car'?' bev':''}">${GK==='beer'?beerSvg(p):p.ty==='car'?AV_CAR:AV_PERSON}</span>${size==='xs'?'':`<i class="ttag">${esc(GM?GM.tag(p):'')}</i>`}</span>`;
 const rcls=p=>'r-'+rarOf(p.hc)+(p.special?' goat':'');
 const miniCard=p=>`<div class="mini ${rcls(p)}">${avatar(p)}<b>${esc(pName(p))}</b><span class="r num">${fmtR(p.hl)}</span></div>`;
 const fmtR=x=>(+x).toFixed(GM?GM.dec:2);
@@ -647,6 +660,8 @@ mn:{
   metaAvg:'Дундаж',metaGive:'өгөх',metaSkip:'алгасах',free:'Үнэгүй',
   openTurnOf:n=>'Нээх ээлж: '+n,yourOpen:'Таны нээх ээлж',
   openSub:o=>`$1-ээр нээвэл нөгөө нь үнээ өсгөж болно. Эсвэл картыг $${GIFT_FEE}-ын хамт ${o}-д өг.`,openSubNoGift:o=>`$1-ээр нээвэл ${o} үнээ өсгөж болно.`,
+  voteSkip:'Алгасах санал',voteAgree:'Алгасахыг зөвшөөрөх',voteOn:'Алгасах ✓',voteLocal:n=>`${n}: алгасах`,voteAsk:n=>`${n} энэ картыг алгасахыг хүсэж байна`,voteNo:n=>`${n} зөвшөөрсөнгүй`,voteWait:n=>`${n}-ийн хариуг хүлээж байна`,
+  f1car:'Машин',constrN:n=>`Конструктор ${n}-р байр`,seat_drv:'Нисгэгч',seat_car:'Машин',fullTy_drv:': нисгэгчийн суудал дүүрсэн',fullTy_car:': машины суудал дүүрсэн',myFull_drv:'Таны нисгэгчийн суудал дүүрсэн',myFull_car:'Таны машины суудал дүүрсэн',
   open1:'$1-ээр нээх',give:'Өгөх',giftCost:(f,n)=>`$${f} төлнө, ${n} эрх`,giftStamp:f=>`Бэлэг +$${f}`,left:n=>`${n} эрх үлдсэн`,
   brokeT:': мөнгө дууссан',brokeSub:(a,o)=>`${a} $1-ээр авах уу? Үгүй бол энэ тамирчин ${o}-д $0-оор очно.`,
   take1:'$1-ээр авах',giveHim:'Түүнд өгөх',at0:'$0-оор',
@@ -654,7 +669,7 @@ mn:{
   highest:'хамгийн өндөр',turnOf:n=>'Ээлж: '+n,raiseQ:'Үнээ өсгөх үү?',allIn:m=>`Бүгд $${m}`,
   passBtn:'Өнжих',passSub:(n,b)=>`${n} $${b}-оор авна`,
   custom:'Дүнгээ бичих',say:'Хэлэх',badBid:(a,b)=>`$${a}-$${b} хооронд бичнэ үү`,
-  skipped:': алгаслаа',gaveFree:f=>`, $${f}-ын хамт өгсөн`,bothBroke:'Хоёулаа мөнгөгүй',autoSub:(p,n)=>`${p} ${n}-д $0-оор очно.`,
+  skipped:': хоёулаа алгаслаа',gaveFree:f=>`, $${f}-ын хамт өгсөн`,bothBroke:'Хоёулаа мөнгөгүй',autoSub:(p,n)=>`${p} ${n}-д $0-оор очно.`,
   logSkip:'алгасав',logFree:f=>` (+$${f})`,quit:'Гарах',cardNo:n=>`${n}-р карт`,cardsLeft:n=>`${n} карт үлдсэн`,recent:'Сүүлийн картууд',
   goatChance:p=>`Гарч ирэх магадлал ${p}%`,firstOpen:n=>`Эхний картыг ${n} нээнэ`,thenAlt:'Дараа нь ээлжлэн нээнэ',
   streakT:'Дараалсан ялалт',match:'Тоглолт',round:n=>`${n}-р раунд`,to13:'13 раунд хожсон нь ялна, 12:12 бол овертайм',otN:n=>`Овертайм ${n}`,otAfter:n=>n>1?`${n} овертайм`:'овертайм',otShort:'OT',roundDuels:n=>`${n}-р раундын тулаанууд`,
@@ -680,10 +695,10 @@ mn:{
   code4:'4 тэмдэгттэй код оруулна уу',copied:'Холбоос хуулагдлаа',lang:'Хэл',
   hubLede:'Тоглоомоо сонгоод $20-оор багаа цуглуул.',chooseGame:'Тоглоом сонгох',gameL:'Тоглоом',format:'Формат',
   g_cs2:'CS2',g_f1:'F1',g_nba:'NBA',g_fifa:'FIFA',g_food:'Монгол хоол',g_beer:'Шар айраг',g_anime:'Аниме',g_marvel:'Marvel',
-  gsub_cs2:n=>`${n} тамирчин, 5v5, HLTV rating`,gsub_f1:n=>`${n} нисгэгч, хүн бүр 2 нисгэгчтэй`,gsub_nba:n=>`${n} тоглогч, 3x3 ба 5x5, NBA 2K27`,
+  gsub_cs2:n=>`${n} тамирчин, 5v5, HLTV rating`,gsub_f1:()=>`${F1_DATA.length*2} нисгэгч, ${F1_DATA.length} машин, хүн бүр 2+2`,gsub_nba:n=>`${n} тоглогч, 3x3 ба 5x5, NBA 2K27`,
   gsub_fifa:n=>`${n} тоглогч, 5v5, EA FC 27`,gsub_food:n=>`${n} хоол, 5v5, шүүгчид шийднэ`,gsub_beer:n=>`${n} шар айраг, 5v5, сохор амталгаа`,gsub_anime:n=>`${n} дүр, 5v5 тулаан`,gsub_marvel:n=>`${n} баатар, 5v5 тулаан`,
   lede_cs2:n=>`CS2-ын ${n} тамирчнаас $20-оор 5 хүнтэй баг цуглуулж, 13 раунд тоглуул.`,
-  lede_f1:n=>`${n} нисгэгчээс $20-оор 2 нисгэгчтэй баг бүрдүүлж, 15 тойргийн уралдаанд оруул.`,
+  lede_f1:()=>`$20-оор 2 нисгэгч, 2 машин авч, 15 тойргийн уралдаанд оруул.`,
   lede_nba:n=>`${n} NBA тоглогчоос $20-оор 3x3 эсвэл 5x5 баг цуглуулж, тоглолт хийлгэ.`,
   lede_fifa:n=>`${n} хөлбөмбөгчнөөс $20-оор 5 хүнтэй баг цуглуулж, 90 минут тоглуул.`,
   lede_food:n=>`${n} монгол хоолноос $20-оор 5 хоолтой цэс бүрдүүлж, шүүгчдэд үнэлүүл.`,
@@ -702,8 +717,8 @@ mn:{
   courseN:n=>`${n}-р хоол`,judgeN:n=>`Шүүгч ${n}`,winsCourse:'хожив',fightN:n=>`${n}-р тулаан`,winsFight:'ялав',roundN:n=>`${n}-р тойрог`,winsRound:'хожив',cr_foam:'Хөөс',cr_aroma:'Үнэр',cr_taste:'Амт',
   nbaNeed:r=>`Танд ${r} байхгүй`,nbaPG:'PG: алдаа багасна, шидэлт +2%',nbaC:'C: самбар, хамгаалалт сайжирна',
   gkHave:'Танд хаалгач аль хэдийн байгаа',gkNeed:'Хаалгачгүй бол хаалга тань сул',foodNew:'Шинэ төрөл: цэс олон янз болно',beerNew:'Шинэ төрөл: 3-4 төрөл цуглуулбал бонус',beerLocal:'Монгол шар айраг: шүүгчдээс нутгийн бонус',
-  rulesCommon:(f,gift)=>['Хоёулаа $20 мөнгөтэй эхэлнэ. Карт нэг нэгээр гарч, ээлжлэн нээнэ.',gift?`Нээх ээлжтэй үедээ $1-ээр нээнэ эсвэл картыг өрсөлдөгчдөө өгнө (2 удаа). Өгөхдөө түүнд $${f} төлнө. Өрсөлдөгчийн хоосон суудал 3-аас эсвэл таныхаас цөөн бол өгч болохгүй. Нээсний дараа нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.`:'Нээх ээлжтэй үедээ $1-ээр нээнэ. Баг жижиг тул картыг өрсөлдөгчдөө өгөх боломжгүй. Нээсний дараа нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.','Мөнгө дуусвал өрсөлдөгч $0-оор өгнө. Нэг талын баг бүрдвэл үлдсэн карт нөгөөд нь дарааллаараа автоматаар очно. Ээлж бүрт 15 секунд.'],
-  rules_f1:['Хүн бүр 2 нисгэгчтэй баг бүрдүүлнэ. Rating нь 2026 оны улирлын оноогоор тооцсон.','Дөрвөн машин 15 тойрог уралдана: гараа, пит-стоп, гүйцэж түрүүлэлт, ховор DNF бий. Хурд нь rating-ээс шалтгаална.','Байр: P1 25, P2 18, P3 15, P4 12 оноо. Нийт оноо их баг ялна. Нэг багийн 2 нисгэгч +3%.'],
+  rulesCommon:(f,gift)=>['Хоёулаа $20 мөнгөтэй эхэлнэ. Карт нэг нэгээр гарч, ээлжлэн нээнэ.',gift?`Нээх ээлжтэй үедээ $1-ээр нээнэ эсвэл картыг өрсөлдөгчдөө өгнө (2 удаа). Өгөхдөө түүнд $${f} төлнө. Өрсөлдөгчийн хоосон суудал 3-аас эсвэл таныхаас цөөн бол өгч болохгүй. Нээсний дараа нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.`:'Нээх ээлжтэй үедээ $1-ээр нээнэ. Баг жижиг тул картыг өрсөлдөгчдөө өгөх боломжгүй. Нээсний дараа нөгөө нь +$1, +$2, +$5, бүх мөнгөөрөө эсвэл бичсэн дүнгээр өсгөнө. Өнжвөл сүүлд үнэ хэлсэн нь авна.','Мөнгө дуусвал өрсөлдөгч $0-оор өгнө. Нэг талын баг бүрдвэл үлдсэн карт нөгөөд нь дарааллаараа автоматаар очно. Хоёулаа санал нийлвэл картыг хэн ч авалгүй алгасаж болно. Ээлж бүрт 15 секунд.'],
+  rules_f1:['Хүн бүр 2 нисгэгч, 2 машин авна. Нисгэгчийн rating нь 2026 оны улирлын оноо, машиных нь тухайн багийн 2 нисгэгчийн онооны нийлбэрээр тооцсон.','Хамгийн сайн нисгэгч хамгийн сайн машинаа унана. Хурд нь нисгэгч, машин хоёрын rating-ийн дундаж. Дөрвөн машин 15 тойрог уралдана: гараа, пит-стоп, гүйцэж түрүүлэлт, ховор DNF бий.','Байр: P1 25, P2 18, P3 15, P4 12 оноо. Нийт оноо их баг ялна. Нэг багийн нисгэгч, машин хоёр хамт байвал +3%, гурав бол +6%.'],
   rules_nba:['3x3 бол 3 тоглогч, 5x5 бол 5 тоглогч. Rating нь NBA 2K27.','5x5: 4 үе, тэнцвэл нэмэлт цаг. 3x3: 21 оноо түрүүлж авсан нь ялна, дотроос 1, гаднаас 2 оноо.','Үүрэг чухал: PG алдааг багасгаж шидэлтийг сайжруулна, C самбар болон хамгаалалтыг сайжруулна. Шидэгчийг rating болон үүргээр сонгоно.'],
   rules_fifa:['5 хүнтэй баг (futsal шиг). Rating нь EA FC 27.','90 минутад довтолгоо бүрийн боломжийг довтлогч, хагас хамгаалагчийн хүч хамгаалалтынхтай харьцуулж тооцно. Хаалгачгүй бол хамгийн сул тоглогч хаалга хамгаална.','Тэнцвэл пенальти цохино. Нэг клубын тоглогчид +3% ба түүнээс дээш.'],
   rules_food:['5 хоолтой цэс бүрдүүлнэ. Амтны оноо нь Draftly-н үнэлгээ.','Хоолнууд дарааллаараа нэг нэгээрээ өрсөлдөнө. 5 шүүгч тус бүр санал өгнө, амт сайн нь илүү санал авах магадлалтай.','Цэс олон янз байвал (4-5 төрөл) хоол бүрт нэмэлт оноо. 5 хоолноос 3-ыг хожсон нь ялна.'],
@@ -715,7 +730,7 @@ mn:{
     'Тамирчдын карт санамсаргүй дарааллаар нэг нэгээр гарна. Карт бүрийг та хоёр ээлжлэн нээнэ.',
     `Нээх ээлжтэй үедээ картыг $1-ээр нээнэ, эсвэл өрсөлдөгчдөө өгнө (2 удаа). Өгөхдөө түүнд $${GIFT_FEE} төлнө. Өрсөлдөгчийн хоосон суудал 3-аас эсвэл таныхаас цөөн бол өгч болохгүй.`,
     'Нээсний дараа нөгөө нь үнээ +$1, +$2, +$5, бүх мөнгөөрөө эсвэл өөрийн бичсэн дүнгээр өсгөнө. Өнжвөл хамгийн сүүлд үнэ хэлсэн нь авна.',
-    'Мөнгө дуусаад суудал үлдсэн бол өрсөлдөгч тань хүсээгүй картаа танд $0-оор өгнө. Нэг талын баг бүрдсэн бол үлдсэн тамирчид нөгөөд нь дарааллаараа автоматаар очно.',
+    'Мөнгө дуусаад суудал үлдсэн бол өрсөлдөгч тань хүсээгүй картаа танд $0-оор өгнө. Нэг талын баг бүрдсэн бол үлдсэн тамирчид нөгөөд нь дарааллаараа автоматаар очно. Хоёулаа санал нийлвэл картыг хэн ч авалгүй алгасаж болно.',
     'Ээлж бүрт 15 секунд. Цаг дуусвал нээх үед $1-ээр авна, хаялцах үед өнжинө.',
     'Хоёр баг бүрдмэгц тоглолт эхэлнэ. 13 раунд түрүүлж хожсон баг ялна. 12:12 болбол овертайм: 6 раундаас 4-ийг түрүүлж авсан нь ялна, 3:3 болбол дахин овертайм.',
     `Раунд бүр 1v1 тулаанаас бүрдэнэ. Тулаан бүрт хожих магадлалыг хоёр тамирчны HLTV rating-ээр тооцно. Жишээ нь 1.30 ба 1.00 бол ${x.a}% ба ${100-x.a}%, 1.10 ба 1.00 бол ${x.b}% ба ${100-x.b}%.`,
@@ -750,6 +765,8 @@ en:{
   metaAvg:'Avg',metaGive:'gifts',metaSkip:'skips',free:'Free',
   openTurnOf:n=>n+' opens',yourOpen:'Your turn to open',
   openSub:o=>`Open at $1 and the other player can raise. Or give the card to ${o} along with $${GIFT_FEE}.`,openSubNoGift:o=>`Open at $1 and ${o} can raise.`,
+  voteSkip:'Vote to skip',voteAgree:'Agree to skip',voteOn:'Skip ✓',voteLocal:n=>`${n}: skip`,voteAsk:n=>`${n} wants to skip this card`,voteNo:n=>`${n} said no`,voteWait:n=>`Waiting for ${n}`,
+  f1car:'Car',constrN:n=>`Constructors P${n}`,seat_drv:'Driver',seat_car:'Car',fullTy_drv:' has no driver seat left',fullTy_car:' has no car seat left',myFull_drv:'Your driver seats are full',myFull_car:'Your car seats are full',
   open1:'Open at $1',give:'Give',giftCost:(f,n)=>`pay $${f}, ${n} left`,giftStamp:f=>`Gift +$${f}`,left:n=>`${n} left`,
   brokeT:' is out of money',brokeSub:(a,o)=>`${a}, take him for $1? Otherwise he goes to ${o} for $0.`,
   take1:'Take for $1',giveHim:'Let them have him',at0:'for $0',
@@ -757,7 +774,7 @@ en:{
   highest:'highest bid',turnOf:n=>n+'’s turn',raiseQ:'Raise?',allIn:m=>`All in $${m}`,
   passBtn:'Pass',passSub:(n,b)=>`${n} gets him for $${b}`,
   custom:'Your amount',say:'Bid',badBid:(a,b)=>`Enter $${a} to $${b}`,
-  skipped:': skipped',gaveFree:f=>`, given with $${f}`,bothBroke:'Both are out of money',autoSub:(p,n)=>`${p} goes to ${n} for $0.`,
+  skipped:': skipped by both',gaveFree:f=>`, given with $${f}`,bothBroke:'Both are out of money',autoSub:(p,n)=>`${p} goes to ${n} for $0.`,
   logSkip:'skipped',logFree:f=>` (+$${f})`,quit:'Quit',cardNo:n=>`Card ${n}`,cardsLeft:n=>`${n} cards left`,recent:'Recent cards',
   goatChance:p=>`Drop chance ${p}%`,firstOpen:n=>`${n} opens the first card`,thenAlt:'Then you take turns',
   streakT:'Win streak',match:'Match',round:n=>`Round ${n}`,to13:'First to 13, overtime at 12:12',otN:n=>`Overtime ${n}`,otAfter:n=>n>1?`${n} overtimes`:'overtime',otShort:'OT',roundDuels:n=>`Round ${n} duels`,
@@ -783,10 +800,10 @@ en:{
   code4:'Enter a 4-character code',copied:'Link copied',lang:'Language',
   hubLede:'Pick a game and build your team with $20.',chooseGame:'Choose a game',gameL:'Game',format:'Format',
   g_cs2:'CS2',g_f1:'F1',g_nba:'NBA',g_fifa:'FIFA',g_food:'Mongolian food',g_beer:'Beer',g_anime:'Anime',g_marvel:'Marvel',
-  gsub_cs2:n=>`${n} pros, 5v5, HLTV rating`,gsub_f1:n=>`${n} drivers, 2 per team`,gsub_nba:n=>`${n} players, 3x3 and 5x5, NBA 2K27`,
+  gsub_cs2:n=>`${n} pros, 5v5, HLTV rating`,gsub_f1:()=>`${F1_DATA.length*2} drivers, ${F1_DATA.length} cars, 2 + 2 each`,gsub_nba:n=>`${n} players, 3x3 and 5x5, NBA 2K27`,
   gsub_fifa:n=>`${n} players, 5v5, EA FC 27`,gsub_food:n=>`${n} dishes, 5v5, judged`,gsub_beer:n=>`${n} beers, 5v5, blind tasting`,gsub_anime:n=>`${n} characters, 5v5 battles`,gsub_marvel:n=>`${n} heroes, 5v5 battles`,
   lede_cs2:n=>`Build a 5-player team from ${n} CS2 pros with $20, then play it out to 13 rounds.`,
-  lede_f1:n=>`Sign 2 of ${n} drivers with $20 and send them into a 15-lap race.`,
+  lede_f1:()=>`Sign 2 drivers and 2 cars with $20 and send them into a 15-lap race.`,
   lede_nba:n=>`Build a 3x3 or 5x5 team from ${n} NBA players with $20 and play the game.`,
   lede_fifa:n=>`Build a 5-a-side team from ${n} footballers with $20 and play 90 minutes.`,
   lede_food:n=>`Put together a 5-dish menu from ${n} Mongolian dishes with $20 and let the judges taste it.`,
@@ -805,8 +822,8 @@ en:{
   courseN:n=>`Dish ${n}`,judgeN:n=>`Judge ${n}`,winsCourse:'wins',fightN:n=>`Fight ${n}`,winsFight:'wins',roundN:n=>`Round ${n}`,winsRound:'wins',cr_foam:'Head',cr_aroma:'Aroma',cr_taste:'Taste',
   nbaNeed:r=>`You have no ${r}`,nbaPG:'PG: fewer turnovers, +2% shooting',nbaC:'C: rebounds and defense',
   gkHave:'You already have a goalkeeper',gkNeed:'Without a goalkeeper your goal is weak',foodNew:'New type: a more varied menu',beerNew:'New style: 3 or 4 styles earn a bonus',beerLocal:'Mongolian beer: home bonus from the judges',
-  rulesCommon:(f,gift)=>['You both start with $20. Cards come up one at a time and you take turns opening them.',gift?`On your turn, open at $1 or give the card to your opponent (twice per game). Giving costs you $${f}, paid to them. You can't give if they have fewer than 3 empty seats, or fewer than you. The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.`:'On your turn, open at $1. Teams are small, so you can\'t give cards to your opponent. The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.','If you run out of money your opponent can hand you cards for $0. Once one team is full, the remaining cards go to the other player automatically, in order. 15 seconds per turn.'],
-  rules_f1:['Each of you signs 2 drivers. Ratings come from 2026 season points.','The four cars race 15 laps with a start, pit stops, overtakes and the odd DNF. Pace depends on rating.','P1 25, P2 18, P3 15, P4 12 points. Most team points wins. Two drivers from the same team get +3%.'],
+  rulesCommon:(f,gift)=>['You both start with $20. Cards come up one at a time and you take turns opening them.',gift?`On your turn, open at $1 or give the card to your opponent (twice per game). Giving costs you $${f}, paid to them. You can't give if they have fewer than 3 empty seats, or fewer than you. The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.`:'On your turn, open at $1. Teams are small, so you can\'t give cards to your opponent. The other player can raise by +$1, +$2, +$5, all in, or any amount typed. Pass and the last bidder gets it.','If you run out of money your opponent can hand you cards for $0. Once one team is full, the remaining cards go to the other player automatically, in order. If you both agree, you can skip a card so nobody gets it. 15 seconds per turn.'],
+  rules_f1:['Each of you signs 2 drivers and 2 cars. Driver ratings come from 2026 season points; a car is rated on its two drivers’ combined points.','Your best driver gets your best car, and pace is the average of driver and car. The four cars race 15 laps with a start, pit stops, overtakes and the odd DNF.','P1 25, P2 18, P3 15, P4 12 points. Most team points wins. A driver and car from the same team get +3%, three from one team +6%.'],
   rules_nba:['3x3 uses 3 players, 5x5 uses 5. Ratings are NBA 2K27.','5x5: four quarters, overtime if tied. 3x3: first to 21, 1 point inside and 2 outside.','Roles matter: a PG cuts turnovers and helps shooting, a C helps rebounds and defense. Shooters are picked by rating and role.'],
   rules_fifa:['5-a-side teams. Ratings are EA FC 27.','Over 90 minutes, each attack’s chance comes from your forwards and midfield against their defense. Without a goalkeeper your weakest player goes in goal.','Penalties if level. Players from the same club get +3% and up.'],
   rules_food:['Build a 5-dish menu. Taste scores are Draftly ratings.','Dishes face off in order. 5 judges each vote, and tastier dishes are more likely to get the vote.','A varied menu (4 or 5 types) adds bonus points to every dish. Win 3 of 5 dishes.'],
@@ -818,7 +835,7 @@ en:{
     'Player cards come up one at a time in random order. You take turns opening them.',
     `On your turn, open the card at $1 or give the player to your opponent (twice per game). Giving costs you $${GIFT_FEE}, paid to them. You can't give if they have fewer than 3 empty seats, or fewer than you.`,
     'After a card is opened, the other player can raise by +$1, +$2, +$5, all in, or any amount you type. Pass and the last bidder gets him.',
-    'If you run out of money with seats left, your opponent can hand you players for $0. Once one team is full, the remaining players go to the other side automatically, in order.',
+    'If you run out of money with seats left, your opponent can hand you players for $0. Once one team is full, the remaining players go to the other side automatically, in order. If you both agree, you can skip a card so nobody gets it.',
     'You get 15 seconds per turn. If time runs out you take the card at $1 when opening, or pass when bidding.',
     'When both teams are full, the match starts. First team to 13 rounds wins. At 12:12 it goes to overtime: first to 4 of 6 rounds, and at 3:3 another overtime starts.',
     `Each round is a series of 1v1 duels. Each duel’s win chance comes from the two players’ HLTV ratings. For example 1.30 vs 1.00 is ${x.a}% vs ${100-x.a}%, and 1.10 vs 1.00 is ${x.b}% vs ${100-x.b}%.`,
@@ -1025,28 +1042,47 @@ function markSettled(g){SETTLED.add(g);ssSet('cs2d.settled',[...SETTLED].slice(-
 
 /* ================= auction engine ================= */
 const slotsLeft=(g,t)=>SLOTS-g.rost[t].length;
-const canBid=(g,t)=>slotsLeft(g,t)>0&&g.money[t]>=1;
+// Typed seats (F1: 2 drivers + 2 cars). Untyped games only check the seat count.
+const typeLeft=(g,t,ty)=>GM.types[ty]-g.rost[t].filter(i=>P[i].ty===ty).length;
+const canHold=(g,t,id)=>slotsLeft(g,t)>0&&(!GM.types||typeLeft(g,t,P[id].ty)>0);
+// Mutual skip: both players can vote to discard the card on offer. Allowed only while the rest of the deck
+// can still fill every empty seat (per seat type in F1), so the draft never runs out of cards.
+function deckCovers(g){
+  const rest=g.deck.slice(g.ptr);
+  if(!GM.types)return rest.length>=slotsLeft(g,0)+slotsLeft(g,1);
+  return Object.keys(GM.types).every(ty=>rest.filter(id=>P[id].ty===ty).length>=typeLeft(g,0,ty)+typeLeft(g,1,ty));
+}
+const canVoteSkip=g=>g.phase==='offer'&&g.cur!=null&&deckCovers(g);
+function voteSkip(g,t,on){
+  if(!canVoteSkip(g))return false;
+  g.votes=g.votes||[0,0];g.votes[t]=on?1:0;
+  if(g.votes[0]&&g.votes[1]){const id=g.cur;g.log.unshift({id,t:-1,price:0,how:'skip'});g.log=g.log.slice(0,10);
+    g.cur=null;g.sold={id,t:-1,price:0,how:'skip'};g.phase='sold';g.actor=-1;g.deadline=Date.now()+900;g.seq++;}
+  return true;
+}
 const openerOf=g=>((g.cardNo-1)%2)^g.first;
 function newGame(mode,names,diff){
   const deck=shuffle(P.filter(p=>!p.special).map(p=>p.id));
   // the rare card goes into the first 10 cards, which are always drawn, so its chance is exactly PRIME_CHANCE per draft
   if(PRIME>=0&&(Math.random()<PRIME_CHANCE||(typeof FORCE_PRIME!=='undefined'&&FORCE_PRIME)))deck.splice(1+Math.floor(Math.random()*Math.min(9,SLOTS*2-1)),0,PRIME);
   const g={mode,gid:rid(8),names,diff:diff||'mid',game:GK,sub:GM.sub,map:GK==='cs2'?MAPKEYS[Math.floor(Math.random()*MAPKEYS.length)]:GK,first:Math.random()<.5?0:1,deck,ptr:0,cur:null,cardNo:0,streak:[0,0],
-    money:[BUDGET,BUDGET],rost:[[],[]],gives:[GIVES,GIVES],phase:'offer',kind:'normal',actor:0,bid:0,hi:-1,
+    money:[BUDGET,BUDGET],rost:[[],[]],gives:[GIVES,GIVES],votes:[0,0],phase:'offer',kind:'normal',actor:0,bid:0,hi:-1,
     deadline:0,log:[],seq:0,res:null,sold:null,autoTo:-1,startedAt:Date.now()};
   nextCard(g,FLIP_MS);
   return g;
 }
 function nextCard(g,extra=0){
-  g.seq++;g.sold=null;g.bid=0;g.hi=-1;g.cur=null;
+  g.seq++;g.sold=null;g.bid=0;g.hi=-1;g.cur=null;g.votes=[0,0];
+  // F1: pass over cards nobody has a seat for (e.g. cars once both garages are full)
+  while(g.ptr<g.deck.length&&!canHold(g,0,g.deck[g.ptr])&&!canHold(g,1,g.deck[g.ptr]))g.ptr++;
   if((slotsLeft(g,0)===0&&slotsLeft(g,1)===0)||g.ptr>=g.deck.length){toMatch(g);return;}
   g.cur=g.deck[g.ptr++];g.cardNo++;
   if(PRIME>=0&&g.cur===PRIME)extra+=GOAT_MS;
-  const o=openerOf(g),x=1-o,now=Date.now(),bo=canBid(g,o),bx=canBid(g,x);
+  const o=openerOf(g),x=1-o,now=Date.now(),c=g.cur,bo=canHold(g,o,c)&&g.money[o]>=1,bx=canHold(g,x,c)&&g.money[x]>=1;
   g.deadline=now+TURN_MS+extra+REVEAL_MS;g.cardAt=now+extra;
   if(bo&&bx){g.phase='offer';g.kind='normal';g.actor=o;}
-  else if((bo||bx)&&slotsLeft(g,bo?x:o)>0){g.phase='offer';g.actor=bo?o:x;g.kind='broke';}
-  else{g.phase='auto';g.autoTo=slotsLeft(g,o)>0?o:x;g.actor=-1;g.deadline=now+AUTO_MS+extra+REVEAL_MS;}
+  else if((bo||bx)&&canHold(g,bo?x:o,c)){g.phase='offer';g.actor=bo?o:x;g.kind='broke';}
+  else{g.phase='auto';g.autoTo=canHold(g,o,c)?o:x;g.actor=-1;g.deadline=now+AUTO_MS+extra+REVEAL_MS;}
 }
 function award(g,t,price,how){
   g.money[t]-=price;g.rost[t].push(g.cur);
@@ -1056,7 +1092,7 @@ function award(g,t,price,how){
 function legalActs(g,t){
   if(g.actor!==t)return [];
   if(g.phase==='offer'){
-    if(g.kind==='normal'){const a=['take'],r=slotsLeft(g,1-t);if(g.gives[t]>0&&r>=GIFT_MIN&&r>=slotsLeft(g,t)&&g.money[t]>=GIFT_FEE)a.push('give');return a;}
+    if(g.kind==='normal'){const a=['take'],r=slotsLeft(g,1-t);if(g.gives[t]>0&&r>=GIFT_MIN&&r>=slotsLeft(g,t)&&g.money[t]>=GIFT_FEE&&canHold(g,1-t,g.cur))a.push('give');return a;}
     if(g.kind==='broke')return ['take','pass'];
   }
   if(g.phase==='bid')return ['raise','pass'];
@@ -1216,6 +1252,14 @@ const BEER_DATA=[
 
 const buildP=(groups,map)=>{const out=[];groups.forEach(g=>g[g.length-1].forEach(a=>out.push(Object.assign({id:out.length,team:g[0]},map(a,g)))));return out;};
 const f1r=pts=>Math.round(75+24*Math.sqrt(pts/390));
+// F1 cars, one per constructor: points = the team's two drivers' points, rated on the same scale against the best team.
+const F1_CAR_PTS=F1_DATA.map(([,,ds])=>ds.reduce((a,d)=>a+d[2],0)),f1cr=pts=>Math.round(75+24*Math.sqrt(pts/Math.max(...F1_CAR_PTS)));
+function mkF1(){
+  const out=buildP(F1_DATA,(a,g)=>({nick:a[0],cc:a[1],pts:a[2],role:'P'+a[3],ty:'drv',tg:g[1],hl:f1r(a[2]),hc:f1r(a[2])}));
+  const rank=F1_CAR_PTS.map((_,i)=>i).sort((a,b)=>F1_CAR_PTS[b]-F1_CAR_PTS[a]);
+  F1_DATA.forEach(([team,tg],i)=>{const pts=F1_CAR_PTS[i];out.push({id:out.length,team,nick:team,cc:'',pts,role:'car',ty:'car',crank:rank.indexOf(i)+1,tg,hl:f1cr(pts),hc:f1cr(pts)});});
+  return out;
+}
 const NBA_POS=['PG','SG','SF','PF','C'];
 const LINE=r=>r==='GK'?'G':/^(CB|LB|RB)$/.test(r)?'D':/^(ST|LW|RW)$/.test(r)?'F':'M';
 
@@ -1225,8 +1269,8 @@ const GAMES={
    groups:()=>TEAMS_CS2,mk:()=>{const p=buildP(TEAMS_CS2.map(([t,ps])=>[t,ps]),a=>({nick:a[0],role:a[1],cc:a[2],hl:a[3],hc:Math.round(a[3]*100)}));
      p.push({id:p.length,nick:'s1mple',tag:'prime',team:'NAVI 2021',role:'AWP',cc:'UA',hl:1.41,hc:141,special:true});return p;},
    tag:p=>TAG[p.team]||''},
- f1:{tile:'f1',acc:'#E8443A',slots:{d:2},dec:0,rar:[97,93,89,85,80],val:[78,.9],rl:'OVR',reveal:'lights',syn:'group',stepMs:320,fan:['Max Verstappen','Kimi Antonelli','Lewis Hamilton'],
-   groups:()=>F1_DATA.map(([t,,ps])=>[t,ps]),mk:()=>buildP(F1_DATA,(a,g)=>({nick:a[0],cc:a[1],pts:a[2],role:'P'+a[3],tg:g[1],hl:f1r(a[2]),hc:f1r(a[2])})),tag:p=>p.tg},
+ f1:{tile:'f1',acc:'#E8443A',slots:{d:4},types:{drv:2,car:2},dec:0,rar:[97,93,89,85,80],val:[78,.9],rl:'OVR',reveal:'lights',syn:'group',stepMs:320,fan:['Max Verstappen','Kimi Antonelli','Lewis Hamilton'],
+   groups:()=>F1_DATA.map(([t,,ps])=>[t,ps]),mk:mkF1,tag:p=>p.tg},
  nba:{tile:'nba',acc:'#F28A2E',slots:{'5x5':5,'3x3':3},dec:0,rar:[96,93,90,87,85],val:[84,.95],rl:'OVR',reveal:'crate',syn:'role',stepMs:55,fan:['Nikola Jokić','Shai Gilgeous-Alexander','Victor Wembanyama'],
    groups:()=>NBA_POS.map(pos=>[pos,NBA_DATA.filter(a=>a[1]===pos)]),mk:()=>buildP(NBA_POS.map(pos=>[pos,NBA_DATA.filter(a=>a[1]===pos)]),a=>({nick:a[0],role:a[1],cc:a[2],hl:a[3],hc:a[3]})),tag:p=>p.role},
  fifa:{tile:'fifa',acc:'#3FCF6E',slots:{d:5},dec:0,rar:[91,90,89,88,87],val:[86,1.2],rl:'OVR',reveal:'walkout',syn:'group',stepMs:240,fan:['Erling Haaland','Kylian Mbappé','Lamine Yamal'],
@@ -1248,8 +1292,8 @@ function useGame(key,sub){
   const s=GM.slots;GM.sub=s[sub]?sub:Object.keys(s)[0];SLOTS=s[GM.sub];
 }
 const gsub=()=>GK==='nba'?' '+GM.sub:'';
-const roleName=p=>GK==='food'?T('cat_'+p.cat):GK==='beer'?T('st_'+p.role):GK==='anime'||GK==='marvel'?T('side_'+p.role):p.role;
-const teamName=p=>GK==='food'?T('cat_'+p.cat):GK==='beer'?p.br:p.team;
+const roleName=p=>p.ty==='car'?T('f1car'):GK==='food'?T('cat_'+p.cat):GK==='beer'?T('st_'+p.role):GK==='anime'||GK==='marvel'?T('side_'+p.role):p.role;
+const teamName=p=>p.ty==='car'?T('constrN',p.crank):GK==='food'?T('cat_'+p.cat):GK==='beer'?p.br:p.team;
 const grpName=k=>GK==='food'?T('cat_'+k):GK==='beer'?T('reg_'+k):k;
 
 /* ================= simulations (seeded, so host and guest replay the same match) ================= */
@@ -1261,7 +1305,10 @@ const grpBuff=(ids,id)=>GM.syn==='group'?BUFF[Math.min(5,teamCounts(ids)[P[id].t
 
 function simF1(R,sub,seed){
   const r=mkRng(seed),L=15,PTS=[25,18,15,12],cars=[];
-  R.forEach((ids,t)=>ids.forEach((id,i)=>cars.push({t,i,id,pace:P[id].hl*(1+grpBuff(ids,id)),time:0,out:false,pit:6+Math.floor(r()*5),best:1e9})));
+  R.forEach((ids,t)=>{   // best driver gets the best car; pace = driver/car average + same-team bonus
+    const pick=ty=>ids.map((id,i)=>({id,i})).filter(x=>(P[x.id].ty||'drv')===ty).sort((a,b)=>P[b.id].hl-P[a.id].hl),car=pick('car');
+    pick('drv').forEach((d,k)=>{const c=car[k];
+      cars.push({t,i:d.i,ci:c?c.i:-1,id:d.id,pace:(c?(P[d.id].hl+P[c.id].hl)/2:P[d.id].hl)*(1+grpBuff(ids,d.id)),time:0,out:false,pit:6+Math.floor(r()*5),best:1e9});});});
   cars.forEach(c=>c.q=c.pace+gauss(r)*1.3);
   const grid=cars.slice().sort((a,b)=>b.q-a.q);grid.forEach((c,k)=>{c.time=k*.45;});
   const steps=[],ordOf=list=>list.map(c=>[c.t,c.i]);
@@ -1285,7 +1332,7 @@ function simF1(R,sub,seed){
   }
   const sc=pts(order);let win=sc[0]===sc[1]?order.find(c=>!c.out).t:sc[0]>sc[1]?0:1;
   if(order.every(c=>c.out))win=0;
-  const stats=[[],[]];order.forEach((c,k)=>{stats[c.t][c.i]=c.out?'DNF':'P'+(k+1);});
+  const stats=[[],[]];order.forEach((c,k)=>{const v=c.out?'DNF':'P'+(k+1);stats[c.t][c.i]=v;if(c.ci>=0)stats[c.t][c.ci]=v;});
   const mv=order.find(c=>c.t===win&&!c.out)||order.find(c=>c.t===win);
   return {score:sc,win,mvp:[mv.t,mv.i],mvpS:stats[mv.t][mv.i],steps,stats,fl:fl?[fl.c.t,fl.c.i]:null};
 }
@@ -1514,7 +1561,7 @@ function revealHtml(style,p){
     case 'pour':return `<div class="rv rv-pour ${p?rcls(p)+' st-'+p.role:''}"><i class="stream"></i><div class="glass"><div class="gin"><b class="liq"></b><b class="foam"></b>${[18,34,52,66,80].map((x,k)=>`<i class="bub" style="--x:${x}%;--d:${220+k*90}ms"></i>`).join('')}</div>`+
       `<svg viewBox="0 0 96 140"><path d="M4 2h88l-10 134H14z"/></svg></div></div>`;
     case 'lights':return `<div class="rv rv-lights">${'<i></i>'.repeat(5)}</div>`;
-    case 'crate':return `<div class="rv rv-crate"><div class="crate"><b class="lid"></b><b class="box"></b></div></div>`;
+    case 'crate':return `<div class="rv rv-crate ${p?rcls(p):''}"><div class="crate"><b class="box"></b><b class="burst"></b><b class="lid"></b></div></div>`;
     case 'walkout':return `<div class="rv rv-walk"><i class="flash"></i></div>`;
     case 'assemble':return `<div class="rv rv-asm">${Array.from({length:9},(_,k)=>`<i style="left:${(k%3)*33.3}%;top:${Math.floor(k/3)*33.3}%;--k:${k};--dx:${((k%3)-1)*90+((k*37)%40-20)}px;--dy:${(Math.floor(k/3)-1)*80+((k*53)%40-20)}px;--rt:${(k*47)%60-30}deg"></i>`).join('')}</div>`;
     case 'capsule':return `<div class="rv rv-cap"><div class="cap"><b class="top"></b><b class="bot"></b></div></div>`;
@@ -1532,7 +1579,7 @@ function startReveal(stage,id,delay){
 /* ================= bot ================= */
 function botValue(g,t,id){
   const p=P[id],left=slotsLeft(g,t),money=g.money[t];
-  if(left<=0)return 0;
+  if(left<=0||!canHold(g,t,id))return 0;
   const cur=g.rost[t].length?g.rost[t].reduce((a,i)=>a+P[i].hc,0)/g.rost[t].length:0,near=GK==='cs2'?4:GK==='beer'?8:2;
   const mates=GM.syn==='group'?g.rost[t].filter(i=>P[i].team===p.team).length:0;
   let v=Math.max(0,(p.hc-GM.val[0])*GM.val[1]);     // cs2: 0.95 → $0, 1.32 → $11.8
@@ -1690,7 +1737,7 @@ function startLocal(){
 /* ================= draft screen ================= */
 function hintsFor(g,id){
   const t=myTeam(),r=g.rost[t],p=P[id];
-  if(slotsLeft(g,t)<=0)return '';
+  if(!canHold(g,t,id))return GM.types&&slotsLeft(g,t)>0?`<div class="hints"><span class="hint">${T('myFull_'+p.ty)}</span></div>`:'';
   const out=[];
   if(r.length){const now=rosterAvg(r),nx=rosterAvg(r.concat(id)),d=nx-now;
     out.push([d>0.0005?'good':d<-0.0005?'bad':'',T('avgArrow',fmtAvg(now),fmtAvg(nx))]);}
@@ -1713,6 +1760,42 @@ function hintsFor(g,id){
   }
   return out.length?`<div class="hints">${out.map(h=>`<span class="hint ${h[0]}">${h[1]}</span>`).join('')}</div>`:'';
 }
+function seatsHtml(g,t,ns){
+  const n=g.rost[t].length;
+  if(!GM.types)return Array.from({length:SLOTS},(_,i)=>`<span class="${i<n?'f':''} ${i===ns?'pop':''}"></span>`).join('');
+  const last=ns>=0?P[g.rost[t][ns]].ty:null;
+  return Object.entries(GM.types).map(([ty,cap],k)=>{const have=g.rost[t].filter(i=>P[i].ty===ty).length;
+    return Array.from({length:cap},(_,j)=>`<span class="${j<have?'f':''} ${k&&!j?'gap':''} ${ty===last&&j===have-1?'pop':''}" title="${T('seat_'+ty)}"></span>`).join('');}).join('');
+}
+// skip-vote row under the offer actions: each side proposes; the card is discarded once both agree
+function skipVoteHtml(g){
+  if(!canVoteSkip(g))return '';
+  const v=g.votes||[0,0],ask=t=>!v[t]&&v[1-t];
+  const btn=t=>`<button class="skipb ${v[t]?'on':''} ${ask(t)?'ask':''}" data-act="vote" data-t="${t}" aria-pressed="${!!v[t]}">${G.mode==='local'?T('voteLocal',esc(g.names[t])):v[t]?T('voteOn'):ask(t)?T('voteAgree'):T('voteSkip')}</button>`;
+  if(G.mode==='local')return `<div class="skipv">${btn(0)}${btn(1)}</div>`;
+  const me=myTeam(),o=1-me;
+  const note=v[o]&&!v[me]?`<span class="vnote ask">${T('voteAsk',nameC(o))}</span>`
+    :v[me]&&UI.voteNo===g.gid+'|'+g.cardNo?`<span class="vnote">${T('voteNo',nameC(o))}</span>`
+    :v[me]?`<span class="vnote">${T('voteWait',nameC(o))}</span>`:'';
+  return `<div class="skipv">${btn(me)}${note}</div>`;
+}
+function humanVote(t){
+  if(!G||!controls(t)||!canVoteSkip(G))return;
+  const on=!(G.votes||[0,0])[t];
+  if(G.mode==='online'&&NET.role==='guest'){
+    G.votes=(G.votes||[0,0]).slice();G.votes[t]=on?1:0;NET.pendingVote={gid:G.gid,card:G.cardNo,on,at:0};netTick();renderDraft();return;
+  }
+  if(voteSkip(G,t,on)){afterChange();if(G.mode==='cpu'&&on&&t===0)botVote();}
+}
+// the computer agrees to skip only cards it would not pay $2 for
+function botVote(){
+  const gid=G.gid,card=G.cardNo;
+  setTimeout(()=>{
+    if(!G||G.gid!==gid||G.cardNo!==card||!canVoteSkip(G)||!G.votes[0]||G.votes[1])return;
+    if(botValue(G,1,G.cur)<2){if(voteSkip(G,1,true))afterChange();}
+    else{UI.voteNo=gid+'|'+card;renderDraft();}
+  },700+Math.random()*500);
+}
 function nameC(t){return `<span class="${t?'tb':'ta'}">${esc(G.names[t])}</span>`;}
 function waitText(t){if(G.mode==='cpu')return T('cpuThinking');if(G.mode==='online')return T('deciding',esc(G.names[t]));return '';}
 function renderDraft(){
@@ -1727,7 +1810,7 @@ function renderDraft(){
   const mgr=t=>{const n=g.rost[t].length,ns=prev&&n>prev.n[t]?n-1:-1;
     return `<section class="mgr ${t?'b':''} ${g.actor===t?'on':''} ${ns>=0?'hit':''}">
       <div class="hd"><span class="nm"><span class="nmt">${esc(g.names[t])}</span>${stk((g.streak||[])[t])}</span><span class="cash num ${g.money[t]?'':'zero'}" data-t="${t}">$${prev?prev.m[t]:g.money[t]}</span></div>
-      <div class="seats" aria-label="${T('seatsAria',n)}">${Array.from({length:SLOTS},(_,i)=>`<span class="${i<n?'f':''} ${i===ns?'pop':''}"></span>`).join('')}</div>
+      <div class="seats" aria-label="${T('seatsAria',n)}">${seatsHtml(g,t,ns)}</div>
       <div class="who">${n?g.rost[t].map(id=>{const q=P[id],bf=buffOf(g.rost[t],id);return `<span class="rp ${rcls(q)}">${avatar(q,'xs')}<i>${esc(pName(q))}</i>${bf?`<em class="bf">+${Math.round(bf*100)}%</em>`:''}<b class="num">${fmtR(q.hl)}</b></span>`;}).join(''):`<span class="muted">${T('empty')}</span>`}</div>
       <div class="meta">${T('metaAvg')} <b class="num">${n?rosterAvg(g.rost[t]).toFixed(3):'—'}</b>${canGiftGame()?`, ${T('metaGive')} ${g.gives[t]}`:''}</div></section>`;};
   const goat=PRIME>=0&&fresh&&showId===PRIME&&g.cur===PRIME;
@@ -1760,6 +1843,7 @@ function renderDraft(){
       if(mine)acts=`<div class="acts g2"><button class="btn ${a?'blue':''}" data-act="do" data-a="take">${T('take1')}</button><button class="btn ghost" data-act="do" data-a="pass">${T('giveHim')}<small>${T('at0')}</small></button></div>`;
     }
     if(!mine)acts=`<p class="status sub">${waitText(a)}</p>`;
+    acts+=skipVoteHtml(g);
   }else if(g.phase==='bid'){
     mid=`<div class="price"><span class="amt num">$${g.bid}</span><span class="by">${nameC(g.hi)}<br>${T('highest')}</span></div>
       <p class="status">${G.mode==='local'||!mine?T('turnOf',nameC(a)):T('raiseQ')}</p>`;
@@ -1776,8 +1860,8 @@ function renderDraft(){
     mid=s.how==='skip'?`<p class="sold muted">${esc(pName(p))}${T('skipped')}</p>`
       :`<p class="sold">${esc(pName(p))} → ${nameC(s.t)}${s.how==='give'?T('gaveFree',GIFT_FEE):`, $${s.price}`}</p>`;
   }else if(g.phase==='auto'){
-    const fullT=slotsLeft(g,1-g.autoTo)===0;
-    mid=`<p class="status">${fullT?nameC(1-g.autoTo)+T('fullT'):T('bothBroke')}</p><p class="status sub">${T('autoSub',esc(pName(P[g.cur])),esc(g.names[g.autoTo]))}</p>`;
+    const fullT=!canHold(g,1-g.autoTo,g.cur);
+    mid=`<p class="status">${fullT?nameC(1-g.autoTo)+(GM.types?T('fullTy_'+P[g.cur].ty):T('fullT')):T('bothBroke')}</p><p class="status sub">${T('autoSub',esc(pName(P[g.cur])),esc(g.names[g.autoTo]))}</p>`;
   }
   const bk=g.gid+'|'+g.cardNo,bump=g.phase==='bid'&&UI.bid&&UI.bid.k===bk&&UI.bid.v!==g.bid;
   UI.bid={k:bk,v:g.phase==='bid'?g.bid:0};
@@ -1949,7 +2033,7 @@ function again(){
 }
 
 /* ================= online ================= */
-const NET={kind:undefined,room:null,tr:null,role:null,code:'',name:'',team:0,opp:null,oppSeen:0,gr:false,ready:false,conn:false,lastSt:0,lastHi:0,lastReady:0,pending:null,full:false,gotSt:0,openedAt:0,noHostShown:false,oppOn:false};
+const NET={kind:undefined,room:null,tr:null,role:null,code:'',name:'',team:0,opp:null,oppSeen:0,gr:false,ready:false,conn:false,lastSt:0,lastHi:0,lastReady:0,pending:null,pendingVote:null,full:false,gotSt:0,openedAt:0,noHostShown:false,oppOn:false};
 async function detectTransport(){
   if(NET.kind!==undefined)return NET.kind;
   let k=null;
@@ -1993,7 +2077,7 @@ function renderOnlineSetup(){
 }
 async function netOpen(role,code){
   const name=myName()||T('player');
-  Object.assign(NET,{role,code,name,team:role==='host'?0:1,opp:null,oppSeen:0,gr:false,ready:false,conn:false,lastSt:0,lastHi:0,pending:null,full:false,gotSt:0,openedAt:Date.now(),noHostShown:false,oppOn:false});
+  Object.assign(NET,{role,code,name,team:role==='host'?0:1,opp:null,oppSeen:0,gr:false,ready:false,conn:false,lastSt:0,lastHi:0,pending:null,pendingVote:null,full:false,gotSt:0,openedAt:Date.now(),noHostShown:false,oppOn:false});
   G=null;
   try{NET.tr=NET.kind==='room'?await roomTransport(code,netMsg,netStatus):wsTransport(code,netMsg,netStatus);}
   catch(e){NET.tr=null;toast(T('connFail'));return;}
@@ -2005,7 +2089,7 @@ function oppStatus(){
   if(!NET.tr)return '';if(!NET.conn)return `<span style="color:var(--loss)">${T('connLost')}</span>`;if(!NET.opp)return '';
   return Date.now()-NET.oppSeen<8000?`<span style="color:var(--money)">${T('oppOnline')}</span>`:`<span style="color:var(--loss)">${T('oppLag')}</span>`;
 }
-const SYNC=['gid','first','deck','ptr','cur','cardNo','money','rost','gives','phase','kind','actor','bid','hi','log','seq','res','sold','autoTo','streak','map','game','sub'];
+const SYNC=['gid','first','deck','ptr','cur','cardNo','money','rost','gives','votes','phase','kind','actor','bid','hi','log','seq','res','sold','autoTo','streak','map','game','sub'];
 function hostSnapshot(){
   let g=null;if(G){g={};SYNC.forEach(k=>g[k]=G[k]);g.rem=Math.max(0,G.deadline-Date.now());g.sa=Math.max(0,Date.now()-G.startedAt);}
   return {t:'st',v:1,pid:PID,code:NET.code,gk:GK,gs:GM.sub,hn:NET.name,gn:NET.opp?NET.opp.name:'',gp:NET.opp?NET.opp.pid:'',gr:NET.gr,g};
@@ -2025,6 +2109,8 @@ function netMsg(d){
     }else if(d.t==='ready'&&NET.opp&&d.pid===NET.opp.pid){
       NET.opp.st=Math.max(0,Math.min(999,+d.st||0));
       if(NET.gr!==!!d.ready){NET.gr=!!d.ready;refreshNet();}hostBroadcast();
+    }else if(d.t==='vote'&&NET.opp&&d.pid===NET.opp.pid&&G&&d.gid===G.gid&&d.card===G.cardNo){
+      if(voteSkip(G,1,!!d.on))afterChange();else hostBroadcast();
     }else if(d.t==='act'&&NET.opp&&d.pid===NET.opp.pid&&G&&d.gid===G.gid&&d.seq===G.seq&&G.actor===1){
       if(act(G,1,d.a,d.v))afterChange();else hostBroadcast();
     }
@@ -2046,14 +2132,15 @@ function guestState(S){
     else refreshNet();
     return;
   }
-  const fresh=!G||G.gid!==g.gid,moved=fresh||G.seq!==g.seq;
+  const fresh=!G||G.gid!==g.gid,moved=fresh||G.seq!==g.seq,votesMoved=!fresh&&String(G.votes)!==String(g.votes);
   if(fresh){G={mode:'online',diff:'mid'};NET.ready=false;NET.pending=null;UI.lastCard=null;}
   SYNC.forEach(k=>G[k]=g[k]);
   G.names=[NET.opp.name,NET.name];G.deadline=now+(+g.rem||0);G.startedAt=now-(+g.sa||0);
   if(NET.pending&&(NET.pending.gid!==G.gid||NET.pending.seq!==G.seq))NET.pending=null;
+  const pv=NET.pendingVote;if(pv&&(pv.gid!==G.gid||pv.card!==G.cardNo||(G.votes||[])[1]===(pv.on?1:0)))NET.pendingVote=null;
   if(G.phase==='match'&&G.res){if(moved||SCREEN!=='match'){settle();go('match');}else refreshNet();}
   else if(moved||SCREEN!=='draft')go('draft');
-  else{refreshNet();if(oppChanged)renderDraft();}
+  else{refreshNet();if(oppChanged||votesMoved)renderDraft();}
 }
 function sendHi(){if(NET.tr){NET.tr.send({t:'hi',role:NET.role,pid:PID,name:NET.name,code:NET.code,st:recOf(NET.name).s||0});NET.lastHi=Date.now();}}
 function sendReady(){if(NET.tr){NET.tr.send({t:'ready',pid:PID,ready:NET.ready,code:NET.code,st:recOf(NET.name).s||0});NET.lastReady=Date.now();}}
@@ -2063,6 +2150,7 @@ function netTick(){
   else{
     if(now-NET.lastHi>3000)sendHi();
     if(NET.pending&&now-NET.pending.at>1200){const p=NET.pending;NET.tr.send({t:'act',pid:PID,gid:p.gid,seq:p.seq,a:p.a,v:p.v,code:NET.code});p.at=now;}
+    if(NET.pendingVote&&now-NET.pendingVote.at>1200){const v=NET.pendingVote;NET.tr.send({t:'vote',pid:PID,gid:v.gid,card:v.card,on:v.on,code:NET.code});v.at=now;}
     if(NET.ready!==NET.gr&&now-NET.lastReady>1500)sendReady();
   }
   const on=!!(NET.oppSeen&&now-NET.oppSeen<8000);if(on!==NET.oppOn){NET.oppOn=on;refreshNet();}
@@ -2155,6 +2243,7 @@ document.addEventListener('click',e=>{
     case 'start-cpu':startCpu();break;
     case 'start-local':startLocal();break;
     case 'do':humanAct(b.dataset.a);break;
+    case 'vote':humanVote(+b.dataset.t);break;
     case 'raise':humanAct('raise',+b.dataset.v);break;
     case 'quit':quitModal();break;
     case 'quit-yes':closeModal();if(G&&G.mode==='online')netLeave();else{G=null;go('home');}break;
